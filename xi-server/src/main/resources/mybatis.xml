@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    
+    <properties>
+        <property name="dialect" value="mysql" />
+		<property name="pageSqlId" value=".*selectList$" />
+    </properties>
+    
+    <typeAliases>
+        <typeAlias alias="ZeroIfNullDouble" type="thu.declan.xi.server.mybatis.typehandler.ZeroIfNullDouble" />
+		<typeAlias alias="JSONHandler" type="thu.declan.xi.server.mybatis.typehandler.JSONHandler" />
+		
+        <typeAlias alias="Admin" type="thu.declan.xi.server.model.Admin" />
+        <typeAlias alias="Product" type="thu.declan.xi.server.model.Product" />
+        <typeAlias alias="News" type="thu.declan.xi.server.model.News" />
+        <typeAlias alias="Receiver" type="thu.declan.xi.server.model.Receiver" />
+        <typeAlias alias="Recharge" type="thu.declan.xi.server.model.Recharge" />
+        <typeAlias alias="Member" type="thu.declan.xi.server.model.Member" />
+        <typeAlias alias="Config" type="thu.declan.xi.server.model.Config" />
+        <typeAlias alias="Shop" type="thu.declan.xi.server.model.Shop" />
+        <typeAlias alias="Order" type="thu.declan.xi.server.model.Order" />
+		<typeAlias alias="OrderPackage" type="thu.declan.xi.server.model.OrderPackage" />
+        <typeAlias alias="Withdraw" type="thu.declan.xi.server.model.Withdraw" />
+		<typeAlias alias="Bonus" type="thu.declan.xi.server.model.Bonus" />
+		<typeAlias alias="ShopBonus" type="thu.declan.xi.server.model.ShopBonus" />
+        <typeAlias alias="DeliveryLog" type="thu.declan.xi.server.model.DeliveryLog" />
+		<typeAlias alias="ScoreLog" type="thu.declan.xi.server.model.ScoreLog" />
+		<typeAlias alias="RScoreLog" type="thu.declan.xi.server.model.RScoreLog" />
+    </typeAliases>
+	
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Admin$Role" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Product$Module" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Product$Status" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Member$Level" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Member$Gender" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Shop$Status" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Order$Status" />
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.ScoreLog$Type" />
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.RScoreLog$Type" />
+		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
+		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
+	</typeHandlers>
+	
+    <plugins>
+        <plugin interceptor="thu.declan.xi.server.mybatis.plugin.PaginationInterceptor" />
+    </plugins>
+    
+</configuration>
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="thu.declan.xi.server.mapper.AdminMapper">
+
+    <resultMap type="Admin" id="adminResult">
+        <result property="id" column="a_id" />
+        <result property="username" column="a_username" />
+        <result property="password" column="a_password" />
+        <result property="password2" column="a_password2" />
+        <result property="name" column="a_name" />
+        <result property="tel" column="a_tel" />
+        <result property="role" column="a_role" />
+    </resultMap>
+	
+    <sql id="insertBaseColumns" >
+        a_username, a_password, a_password2, a_name, a_tel, a_role
+    </sql>
+    
+    <sql id="selectBaseColumns" >
+        a_id, a_username, a_password, a_password2, a_name, a_tel, a_role
+    </sql>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Admin">
+        insert into ew_admin (<include refid="insertBaseColumns" />) 
+        values (#{username}, #{password}, #{password2}, #{name}, #{tel}, #{role})
+    </insert>
+    
+    <update id="update" parameterType="Admin">
+        update ew_admin 
+        <trim prefix="set" suffixOverrides=",">
+            <if test="password != null"> a_password = #{password}, </if>
+            <if test="password2 != null"> a_password2 = #{password2}, </if>
+            <if test="name != null"> a_name = #{name}, </if>
+            <if test="tel != null"> a_tel = #{tel}, </if>
+            <if test="role != null"> a_role = #{role}, </if>
+        </trim>
+        where a_id = #{id}
+    </update>
+
+    <select id="selectOne" parameterType="int" resultMap="adminResult">
+        select <include refid="selectBaseColumns" />
+        from ew_admin
+        where a_id = #{id}
+    </select>
+    	
+    <select id="selectByUsername" parameterType="String" resultMap="adminResult">
+        select <include refid="selectBaseColumns" />
+        from ew_admin
+        where a_username = #{username}
+    </select>
+    
+    <select id="selectList" parameterType="Admin" resultMap="adminResult">
+        select <include refid="selectBaseColumns" />
+        from ew_admin
+        <trim prefix="where" suffixOverrides="and">
+            <if test="username != null"> a_username = #{username} and </if>
+            <if test="role != null"> a_role = #{role} and </if>
+        </trim>
+    </select>
+    
+    <select id="selectCount" parameterType="Admin" resultType="int">
+        select count(*)
+        from ew_admin
+        <trim prefix="where" suffixOverrides="and">
+            <if test="username != null"> a_username = #{username} and </if>
+            <if test="role != null"> a_role = #{role} and </if>
+        </trim>
+    </select>
+	
+    <delete id="delete" parameterType="int">
+        delete from ew_admin where a_id = #{id}
+    </delete>
+   	
+</mapper>
