@@ -7,16 +7,16 @@ package thu.declan.xi.server;
 public class Constant {
 	
     //Auth roles
+
+    public static final String ROLE_ADMIN = "ADMIN";
     
-    public static final String ROLE_USER = "USER";
-    
-	public static final String ADMIN_ROLE_SUPER = "SUPER";
-    
-    public static final String ADMIN_ROLE_FINANCE = "FINANCE";
-    
-    public static final String ADMIN_ROLE_CUSTOMER = "CUSTOMER";
-    
-    public static final String ADMIN_ROLE_DELIVERY = "DELIVERY";
+    public static final String ROLE_STUDENT = "STUDENT";
+
+    public static final String ROLE_COMPANY = "COMPANY";
+	
+	//Session
+	
+	public static final String SESSION_ACCOUNT = "ACCOUNT";
     
     //uploads
 	

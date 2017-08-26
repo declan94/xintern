@@ -70,12 +70,12 @@
                              pointcut-ref="druid-stat-pointcut" />
     </aop:config>
 	
-    <bean id="backupTask" class="thu.declan.xi.server.task.BackupTask" init-method="init">
+<!--    <bean id="backupTask" class="thu.declan.xi.server.task.BackupTask" init-method="init">
 		<property name="directory" value="/opt/web/backup" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
 		<property name="dbName" value="${dbname}" />
-    </bean>
+    </bean>-->
 	
     <!--配置sqlsessionFactory--> 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

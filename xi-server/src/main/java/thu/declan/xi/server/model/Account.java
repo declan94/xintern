@@ -6,13 +6,13 @@ package thu.declan.xi.server.model;
  */
 public class Account {
     
-    public enum Type {
+    public enum Role {
         ADMIN,      //管理员
         COMPANY,    //企业
-        STUDENT;    //学生
+        STUDENT;    //学生//学生
         
-        public static Type fromString(String str) {
-            return Enum.valueOf(Type.class, str.toUpperCase());
+        public static Role fromString(String str) {
+            return Enum.valueOf(Role.class, str.toUpperCase());
         }
     }
     
@@ -26,14 +26,14 @@ public class Account {
         this.id = id;
     }
 
-    private Type type;
+    private Role role;
 
-    public Type getType() {
-        return type;
+    public Role getRole() {
+        return role;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setRole(Role type) {
+        this.role = type;
     }
 
     private String phone;

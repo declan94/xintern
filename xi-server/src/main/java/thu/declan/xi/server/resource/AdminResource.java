@@ -27,7 +27,7 @@ import thu.declan.xi.server.service.AdminService;
  * @author declan
  */
 @Path("admins")
-@RolesAllowed({Constant.ADMIN_ROLE_SUPER})
+@RolesAllowed({Constant.ROLE_ADMIN})
 public class AdminResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminResource.class);
@@ -96,10 +96,6 @@ public class AdminResource extends BaseResource {
 	@PUT
 	@Path("/{adminId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ADMIN_ROLE_SUPER,
-		Constant.ADMIN_ROLE_CUSTOMER,
-		Constant.ADMIN_ROLE_DELIVERY,
-		Constant.ADMIN_ROLE_FINANCE})
 	public Admin editAdmin(@PathParam("adminId") int adminId, Admin admin) throws ApiException {
 		LOGGER.debug("==================== enter AdminResource editAdmin ====================");
 		LOGGER.debug("adminId: " + adminId);

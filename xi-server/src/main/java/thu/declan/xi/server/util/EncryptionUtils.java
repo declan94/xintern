@@ -20,7 +20,22 @@ public class EncryptionUtils {
 
     public static String randomPassword(int length) {
         String seed = String.format("%s%f", new Date(), Math.random());
-        return EncryptionUtils.sha256(seed).substring(0, length);
+        return sha256(seed).substring(0, length);
     }
+	
+	public static String genProtectedPassword(String originPwd) {
+		String seed = CommonUtils.randomString(8);
+		return seed + "$" + md5(seed + originPwd);
+	}
+
+	public static boolean checkPassword(String originPwd, String protectedPwd) {
+		int p = protectedPwd.indexOf("$");
+		if (p == -1) {
+			return false;
+		}
+		String seed = protectedPwd.substring(0, p);
+		String md5 = protectedPwd.substring(p+1);
+		return md5(seed + originPwd).equals(md5);
+	}
 	
 }
