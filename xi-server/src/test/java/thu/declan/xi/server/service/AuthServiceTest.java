@@ -1,7 +1,5 @@
 package thu.declan.xi.server.service;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +27,6 @@ public class AuthServiceTest {
 	
 	@Autowired
 	private AccountMapper accountMapper;
-
-	@Test
-	public void skip() {
-		
-	}
 	
     @Test
     public void testAuthService() {

@@ -4,27 +4,34 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
+import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
-import thu.declan.xi.server.model.Admin;
+import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Account.Role;
+import thu.declan.xi.server.service.AuthService;
 
 /**
  *
  * @author declan
  */
 public class BaseResource {
+	
+	@Autowired
+	protected AuthService authService;
 
-	@Context
-	protected ContainerRequestContext requestContext;
-
-	protected boolean isAdmin() {
-		return requestContext.getProperty("admin") != null;
+	protected Account currentAccount() {
+		return authService.getAccount();
 	}
-
-	protected Admin currentAdmin() {
-		return (Admin) requestContext.getProperty("admin");
+	
+	protected Role currentRole() {
+		Account acc = authService.getAccount();
+		return acc == null ? null : acc.getRole();
+	}
+	
+	protected Integer currentAccountId() {
+		Account acc = authService.getAccount();
+		return acc == null ? null : acc.getId();
 	}
 
 	protected void handleServiceException(ServiceException ex) throws ApiException {
