@@ -37,10 +37,8 @@ public class AccountResource extends BaseResource {
 	private AccountService accountService;
 
 	@POST
-	@PermitAll
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	// 注册账户
 	public Account createAccount(@Valid Account account) throws ApiException {
 		LOGGER.debug("==================== enter AccountResource createAccount ====================");
 		if (account.getRole().equals(Role.ADMIN)) {
