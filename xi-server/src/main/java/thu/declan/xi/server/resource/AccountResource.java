@@ -1,7 +1,6 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

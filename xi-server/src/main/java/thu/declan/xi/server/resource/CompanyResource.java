@@ -27,7 +27,7 @@ import thu.declan.xi.server.service.CompanyService;
  *
  * @author declan
  */
-@Path("companys")
+@Path("companies")
 @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY})
 public class CompanyResource extends BaseResource {
 
@@ -96,7 +96,7 @@ public class CompanyResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ListResponse<Company> getCompanys() throws ApiException {
+    public ListResponse<Company> getCompanies() throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
         Company selector = new Company();
         List<Company> companys = null;
