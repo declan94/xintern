@@ -27,7 +27,7 @@ import thu.declan.xi.server.service.StudentService;
  *
  * @author declan
  */
-@Path("companies")
+@Path("students")
 @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY})
 public class StudentResource extends BaseResource {
 
@@ -96,7 +96,7 @@ public class StudentResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ListResponse<Student> getCompanies() throws ApiException {
+    public ListResponse<Student> getStudents() throws ApiException {
         LOGGER.debug("==================== enter StudentResource getStudents ====================");
         Student selector = new Student();
         List<Student> students = null;
