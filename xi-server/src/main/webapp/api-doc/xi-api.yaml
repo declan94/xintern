@@ -19,30 +19,54 @@ tags:
   description: All about student
 - name: company
   description: All about company
-# schemes:
-# - http
 paths:
   /students:
     post:
       tags:
       - student
-      summary: Student registration
+      summary: 学生注册
       parameters:
       - in: body
-        name: body
-        description: Student object for registration
+        name: student
+        description: 注册学生的信息
         required: true
         schema:
           $ref: '#/definitions/Student'
       responses:
         200:
-          description: Registration succeeded
+          description: 注册成功
           schema:
             $ref: '#/definitions/Student'
-        400:
-          description: Bad request, invalid arguments
+        403:
+          description: 注册失败，手机号已被注册
           schema:
             $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
+  /companies:
+    post:
+      tags:
+      - company
+      summary: 企业注册
+      parameters:
+      - in: body
+        name: company
+        description: 注册企业的信息
+        required: true
+        schema:
+          $ref: '#/definitions/Company'
+      responses:
+        200:
+          description: 注册成功
+          schema:
+            $ref: '#/definitions/Company'
+        403:
+          description: 注册失败，手机号已被注册
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
 
 definitions:
 
