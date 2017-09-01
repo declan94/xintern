@@ -38,5 +38,10 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
 			update.setPassword(EncryptionUtils.genProtectedPassword(update.getPassword()));
 		}
 	}
+
+    @Override
+    public void delete(int id) {
+        accountMapper.delete(id);
+    }
 	
 }

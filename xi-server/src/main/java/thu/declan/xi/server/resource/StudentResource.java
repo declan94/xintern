@@ -44,13 +44,16 @@ public class StudentResource extends BaseResource {
     public Student createStudent(@Valid Student student) throws ApiException {
         LOGGER.debug("==================== enter StudentResource createStudent ====================");
         Account acc = student.getAccount();
+        acc.setRole(Account.Role.STUDENT);
         AccountResource accRes = new AccountResource();
+        beanFactory.autowireBean(accRes);
         acc = accRes.createAccount(acc);
         student.setAccount(acc);
         try {
             student.setAccountId(acc.getId());
             studentService.add(student);
         } catch (ServiceException ex) {
+            accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
             handleServiceException(ex);

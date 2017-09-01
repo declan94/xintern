@@ -44,13 +44,16 @@ public class CompanyResource extends BaseResource {
     public Company createCompany(@Valid Company company) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource createCompany ====================");
         Account acc = company.getAccount();
+        acc.setRole(Account.Role.COMPANY);
         AccountResource accRes = new AccountResource();
+        beanFactory.autowireBean(accRes);
         acc = accRes.createAccount(acc);
         company.setAccount(acc);
         try {
             company.setAccountId(acc.getId());
             companyService.add(company);
         } catch (ServiceException ex) {
+            accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
             handleServiceException(ex);

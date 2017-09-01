@@ -31,7 +31,7 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Student">
         insert into xi_student (<include refid="insertBaseColumns" />) 
-        values (#{s_accountId), #{s_name), #{s_phone), #{s_gender), #{s_education), #{s_major), #{s_area), #{s_email), #{s_school), #{s_language), #{s_langLevel), #{s_grade), #{s_stuCard), #{s_certs), #{s_avatar))
+        values (#{accountId}, #{name}, #{phone}, #{gender}, #{education}, #{major}, #{area}, #{email}, #{school}, #{language}, #{langLevel}, #{grade}, #{stuCard}, #{certs}, #{avatar})
     </insert>
     
     <update id="update" parameterType="Student">

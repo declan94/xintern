@@ -8,4 +8,6 @@ import thu.declan.xi.server.model.Account;;
  */
 public interface AccountService extends BaseTableService<Account> {
 	
+    public void delete(int id);
+    
 }

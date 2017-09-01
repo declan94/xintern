@@ -1,0 +1,215 @@
+swagger: '2.0'
+info:
+  description: |
+    
+  version: 1.0.0
+  title: 享实习API
+  contact:
+    email: chenye94@qq.com
+host: localhost:8080
+basePath: /api
+schemes:
+ - http
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+- name: student
+  description: All about student
+- name: company
+  description: All about company
+# schemes:
+# - http
+paths:
+  /students:
+    post:
+      tags:
+      - student
+      summary: Student registration
+      parameters:
+      - in: body
+        name: body
+        description: Student object for registration
+        required: true
+        schema:
+          $ref: '#/definitions/Student'
+      responses:
+        200:
+          description: Registration succeeded
+          schema:
+            $ref: '#/definitions/Student'
+        400:
+          description: Bad request, invalid arguments
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+
+  BasicModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 123
+        readOnly: true
+
+  AccModel:
+    type: object
+    properties:
+      accountId:
+        type: integer
+        example: 456
+        readOnly: true
+      account:
+        $ref: '#/definitions/BasicAccount'
+
+  BasicAccount:
+    type: object
+    required: 
+      - phone
+      - password
+    properties:
+      phone:
+        type: string
+        description: phone number
+        example: '18810203423'
+
+      password:
+        type: string
+        example: 'password'
+
+  Account:
+    type: object
+    allOf: 
+      - $ref: '#/definitions/BasicAccount'
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          role:
+            type: string
+            enum: 
+              - 'ADMIN'
+              - 'COMPANY'
+              - 'STUDENT'
+            example: 'COMPANY'
+          wechat:
+            type: string
+            description: wechat oauth id
+            example: 'gdalkdsowkdcasdfa'
+
+  CompanyUpdater:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 'Google Inc.'
+      addr:
+        type: string
+        example: 'No123 Bake Street'
+      type:
+        type: string
+        example: 'guoyouqiye'
+      scale:
+        type: string
+        example: 'scale'
+      contact:
+        type: string
+      contactPhone:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      industry:
+        type: string
+      code:
+        type: string
+      intro:
+        type: string
+    
+  Company:
+    allOf: 
+      - $ref: '#/definitions/BasicModel'
+      - $ref: '#/definitions/AccModel'
+      - $ref: '#/definitions/CompanyUpdater'
+     
+  StudentUpdater:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 'Ye'
+      phone:
+        type: string
+      gender:
+        type: string
+        enum: 
+          - MALE
+          - FEMALE
+      education:
+        type: string
+        enum:
+          - COLLEGE
+          - BACHELOR
+          - MASTER
+          - PHD
+      major:
+        type: string
+      area:
+        type: string
+      email:
+        type: string
+      school:
+        type: string
+      language:
+        type: string
+      langLevel:
+        type: string
+        enum:
+          - NORMAL
+          - GOOD
+          - SKILLED
+          - PROFICIENT
+      grade:
+        type: integer
+      stuCard:
+        type: string
+        description: url for the photo of student card
+      certs:
+        type: array
+        description: urls for the photos of certificates
+      avatar:
+        type: string
+        description: url for avatar
+
+  Student:
+    type: object
+    required: 
+      - account
+      - name
+      - phone
+    allOf: 
+      - $ref: '#/definitions/BasicModel'
+      - $ref: '#/definitions/AccModel'
+      - $ref: '#/definitions/StudentUpdater'
+
+
+# Errors
+  Error:
+    type: object
+    required:
+      - status
+      - developerMessage
+      - userMessage
+    properties:
+      status:
+        type: string
+        example: "500"
+      developerMessage:
+        type: string
+        description: Message for developers to locate the problem.
+        example: "Unkown Error."
+      userMessage:
+        type: string
+        description: Message for the end-user.
+        example: "Sorry, We have encounted an unkown error."

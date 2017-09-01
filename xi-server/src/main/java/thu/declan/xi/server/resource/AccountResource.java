@@ -119,6 +119,10 @@ public class AccountResource extends BaseResource {
 		LOGGER.debug("==================== leave AccountResource editAccount ====================");
 		return account;
 	}
+    
+    public void deleteAccount(int accountId) {
+        accountService.delete(accountId);
+    }
 
 }
 

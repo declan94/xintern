@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
@@ -19,6 +20,9 @@ public class BaseResource {
 	
 	@Autowired
 	protected AuthService authService;
+    
+    @Autowired 
+    protected AutowireCapableBeanFactory beanFactory;
 
 	protected Account currentAccount() {
 		return authService.getAccount();
