@@ -24,6 +24,7 @@
 		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Account$Role" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Student$Gender" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Student$Education" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Student$LangLevel" />
         <typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
 		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
 	</typeHandlers>
