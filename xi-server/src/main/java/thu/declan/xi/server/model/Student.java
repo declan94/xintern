@@ -1,5 +1,7 @@
 package thu.declan.xi.server.model;
 
+import java.util.List;
+
 /**
  *
  * @author declan
@@ -187,13 +189,13 @@ public class Student {
         this.stuCard = stuCard;
     }
 
-    private String certs;
+    private List<String> certs;
 
-    public String getCerts() {
+    public List<String> getCerts() {
         return certs;
     }
 
-    public void setCerts(String certs) {
+    public void setCerts(List<String> certs) {
         this.certs = certs;
     }
 

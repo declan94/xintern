@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="thu.declan.xi.server.mapper.PositionMapper">
 
-    <resultMap education="Position" id="positionResult">
+    <resultMap type="Position" id="positionResult">
         <result property="id" column="p_id" />
         <result property="companyId" column="p_companyId" />
         <result property="title" column="p_title" />
