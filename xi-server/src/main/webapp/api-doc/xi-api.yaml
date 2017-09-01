@@ -6,7 +6,7 @@ info:
   title: 享实习API
   contact:
     email: chenye94@qq.com
-host: localhost:8080
+host: yegames.cn:8080
 basePath: /api
 schemes:
  - http
