@@ -198,11 +198,12 @@ definitions:
     properties:
       phone:
         type: string
-        description: phone number
+        description: 登录手机号
         example: '18810203423'
 
       password:
         type: string
+        description: 登录密码
         example: 'password'
 
   Account:
@@ -213,6 +214,7 @@ definitions:
       - properties:
           role:
             type: string
+            description: 账号类型
             enum: 
               - 'ADMIN'
               - 'COMPANY'
@@ -229,29 +231,40 @@ definitions:
       name:
         type: string
         example: 'Google Inc.'
+        description: 公司名
       addr:
         type: string
         example: 'No123 Bake Street'
+        description: 公司地址
       type:
         type: string
-        example: 'guoyouqiye'
+        example: '民营'
+        description: 公司性质
       scale:
         type: string
         example: 'scale'
+        description: 公司规模
       contact:
         type: string
+        description: 公司联系人
       contactPhone:
         type: string
+        description: 联系人电话
       email:
         type: string
+        description: HR邮箱
       phone:
         type: string
+        description: 公司电话
       industry:
         type: string
+        description: 公司所属行业
       code:
         type: string
+        description: 统一社会信用代码
       intro:
         type: string
+        description: 公司简介
     
   Company:
     allOf: 
@@ -265,15 +278,19 @@ definitions:
       name:
         type: string
         example: 'Ye'
+        description: 姓名
       phone:
         type: string
+        description: 电话
       gender:
         type: string
+        description: 性别
         enum: 
           - MALE
           - FEMALE
       education:
         type: string
+        description: 学历
         enum:
           - COLLEGE
           - BACHELOR
@@ -281,16 +298,22 @@ definitions:
           - PHD
       major:
         type: string
+        description: 专业
       area:
         type: string
+        description: 区域
       email:
         type: string
+        description: 邮箱
       school:
         type: string
+        description: 学校
       language:
         type: string
+        description: 语言
       langLevel:
         type: string
+        description: 语言水平
         enum:
           - NORMAL
           - GOOD
@@ -298,15 +321,16 @@ definitions:
           - PROFICIENT
       grade:
         type: integer
+        description: 年级
       stuCard:
         type: string
-        description: url for the photo of student card
+        description: 学生卡照片url
       certs:
         type: array
-        description: urls for the photos of certificates
+        description: 证书照片url数组
       avatar:
         type: string
-        description: url for avatar
+        description: 头像url
 
   Student:
     type: object
