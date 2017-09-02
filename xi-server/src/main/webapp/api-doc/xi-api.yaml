@@ -19,6 +19,8 @@ tags:
   description: All about student
 - name: company
   description: All about company
+- name: other
+  description: Other apis
 paths:
   /students:
     post:
@@ -169,7 +171,43 @@ paths:
           description: 获取失败，此企业不存在
           schema:
             $ref: '#/definitions/Error'
-            
+
+  /upload/{type}:
+    post:
+      tags:
+      - other
+      summary: 上传照片
+      consumes:
+         - multipart/form-data
+      parameters:
+      - in: path
+        name: type
+        type: string
+        enum:
+          - STU_AVATAR
+          - STU_CARD
+          - STU_CERT
+          - COMPANY_LOGO
+          - COMPANY_CERT
+          - OTHER
+        required: true
+        description: 照片分类  
+      - in: formData
+        name: file
+        type: file
+        description: 要上传的照片文件
+      responses:
+        200:
+          description: 成功，返回上传结果
+          schema:
+            $ref: '#/definitions/UploadResult'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+
 definitions:
 
   BasicModel:
@@ -343,6 +381,18 @@ definitions:
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/StudentUpdater'
 
+  UploadResult:
+    type: object
+    properties:
+      success:
+        type: bool
+        description: 是否成功
+      msg:
+        type: string
+        description: 失败时的提示信息
+      url:
+        type: string
+        description: 上传成功时，返回对应的url
 
 # Errors
   Error:
