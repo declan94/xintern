@@ -228,6 +228,31 @@ definitions:
       account:
         $ref: '#/definitions/BasicAccount'
 
+  Gender:
+    type: string
+    description: 性别
+    enum: 
+      - MALE
+      - FEMALE
+
+  Education:
+    type: string
+    description: 学历
+    enum:
+      - COLLEGE
+      - BACHELOR
+      - MASTER
+      - PHD
+
+  LangLevel:
+    type: string
+    description: 语言水平
+    enum:
+      - NORMAL
+      - GOOD
+      - SKILLED
+      - PROFICIENT
+
   BasicAccount:
     type: object
     required: 
@@ -321,19 +346,9 @@ definitions:
         type: string
         description: 电话
       gender:
-        type: string
-        description: 性别
-        enum: 
-          - MALE
-          - FEMALE
+        $ref: '#definitions/Gender'
       education:
-        type: string
-        description: 学历
-        enum:
-          - COLLEGE
-          - BACHELOR
-          - MASTER
-          - PHD
+        $ref: '#definitions/Education'
       major:
         type: string
         description: 专业
@@ -350,13 +365,7 @@ definitions:
         type: string
         description: 语言
       langLevel:
-        type: string
-        description: 语言水平
-        enum:
-          - NORMAL
-          - GOOD
-          - SKILLED
-          - PROFICIENT
+        $ref: '#definitions/LangLevel'
       grade:
         type: integer
         description: 年级
@@ -380,6 +389,68 @@ definitions:
       - $ref: '#/definitions/BasicModel'
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/StudentUpdater'
+
+  PositionUpdater:
+    type: object
+    properties:
+      title:
+        type: string
+      area:
+        type: string
+      addr:
+        type: string
+      startDate:
+        type: string
+        example: 2017-09-01
+      endDate:
+        type: string
+        example: 2017-10-01
+      startTime:
+        type: string
+        example: 08:00
+      endTime:
+        type: string
+        example: 18:00
+      salary:
+        type: integer
+        example: 200
+      unit:
+        type: string
+      minDays:
+        type: integer
+      continuous:
+        type: boolean
+      count:
+        type: integer
+      retention:
+        type: boolean
+      intro:
+        type: string
+      reqGender:
+        $ref: '#definitions/Gender'
+      reqEdu:
+        $ref: '#definitions/Education'
+      reqGrade:
+        type: integer
+      reqMajor:
+        type: string
+      reqLang:
+        type: string
+      reqLangLevel:
+        $ref: '#definitions/LangLevel'
+  
+  Position:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - $ref: '#/definitions/PositionUpdater'
+      - properties:
+          companyId:
+            type: integer
+            readOnly: true
+          stuSalary:
+            type: integer
+            readOnly: true
 
   UploadResult:
     type: object
