@@ -9,7 +9,7 @@ import thu.declan.xi.server.model.Resume;
  */
 public interface ResumeMapper extends BaseMapper<Resume> {
     
-	List<Resume> selectByCompanyId(int companyId);
+	List<Resume> selectByPositionId(int companyId);
 	
 	List<Resume> selectByStudentId(int studentId);
 	
