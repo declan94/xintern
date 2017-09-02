@@ -385,7 +385,7 @@ definitions:
     type: object
     properties:
       success:
-        type: bool
+        type: boolean
         description: 是否成功
       msg:
         type: string

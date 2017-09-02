@@ -1,6 +1,7 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -19,8 +20,10 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
 
 /**
@@ -37,7 +40,7 @@ public class PositionResource extends BaseResource {
 	private PositionService positionService;
 	
 	@Autowired
-	
+	private CompanyService companyService;
 	
 	@POST
 	@PermitAll
@@ -46,11 +49,17 @@ public class PositionResource extends BaseResource {
 	// 职位账号注册
 	public Position createPosition(@Valid Position position) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource createPosition ====================");
+		if (Account.Role.COMPANY.equals(currentRole())) {
+			try {
+				Company comp = companyService.getByAccountId(currentAccountId());
+				position.setCompanyId(comp.getId());
+			} catch (ServiceException ex) {
+				handleServiceException(ex);
+			}
+		}
 		try {
 			positionService.add(position);
 		} catch (ServiceException ex) {
-			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-			LOGGER.debug(devMsg);
 			handleServiceException(ex);
 		}
 		LOGGER.debug("==================== leave PositionResource createPosition ====================");
