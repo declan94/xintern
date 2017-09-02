@@ -26,7 +26,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-        s_accountId, s_name, s_gender, s_education, s_major, s_area, s_school, s_email, s_phone, s_language, s_code, s_intro
+        s_accountId, s_name, s_phone, s_gender, s_education, s_major, s_area, s_email, s_school, s_language, s_langLevel, s_grade, s_stuCard, s_certs, s_avatar
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Student">

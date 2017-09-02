@@ -10,4 +10,6 @@
 
 echo "[package war]"
 cd ../xi-server
+sed -i '' "s/localhost/yegames.cn/g" ./src/main/webapp/api-doc/xi-api.yaml
 mvn clean package -Dmaven.test.skip=true
+sed -i '' "s/yegames.cn/localhost/g" ./src/main/webapp/api-doc/xi-api.yaml

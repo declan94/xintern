@@ -6,7 +6,7 @@ info:
   title: 享实习API
   contact:
     email: chenye94@qq.com
-host: yegames.cn:8080
+host: localhost:8080
 basePath: /api
 schemes:
  - http
@@ -44,6 +44,57 @@ paths:
         400:
           description: Bad request, invalid arguments
 
+  /students/login:
+    post:
+      tags:
+      - student
+      summary: 学生登录
+      parameters:
+      - in: body
+        name: account
+        description: 登录信息
+        required: true
+        schema:
+          $ref: '#/definitions/BasicAccount'
+      responses:
+        200:
+          description: 登录成功，返回学生信息
+          schema:
+            $ref: '#/definitions/Student'
+        403:
+          description: 登录失败，账号不存在或密码错误
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
+  /students/{studentId}:
+    get:
+      tags:
+      - student
+      summary: 获取学生信息
+      parameters:
+      - in: path
+        name: studentId
+        description: 学生Id，若当前登录为学生的账号，只能获取自己的信息，可以设置为0。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回对应学生信息
+          schema:
+            $ref: '#/definitions/Student'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此学生不存在
+          schema:
+            $ref: '#/definitions/Error'
+
   /companies:
     post:
       tags:
@@ -67,7 +118,58 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+  
+  /companies/login:
+    post:
+      tags:
+      - company
+      summary: 企业登录
+      parameters:
+      - in: body
+        name: account
+        description: 登录信息
+        required: true
+        schema:
+          $ref: '#/definitions/BasicAccount'
+      responses:
+        200:
+          description: 登录成功，返回企业信息
+          schema:
+            $ref: '#/definitions/Company'
+        403:
+          description: 登录失败，账号不存在或密码错误
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
 
+  /companies/{companyId}:
+    get:
+      tags:
+      - company
+      summary: 获取企业信息
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，若当前登录为企业的账号，只能获取自己的信息，可以设置为0。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回对应企业信息
+          schema:
+            $ref: '#/definitions/Company'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此企业不存在
+          schema:
+            $ref: '#/definitions/Error'
+            
 definitions:
 
   BasicModel:

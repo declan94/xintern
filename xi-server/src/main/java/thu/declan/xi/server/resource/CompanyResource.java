@@ -1,6 +1,7 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -113,6 +114,24 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource getCompanys ====================");
         return new ListResponse(companys);
     }
+	
+	@POST
+	@Path("/login")
+	@PermitAll
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	public Company login(Account acc) throws ApiException {
+		acc.setRole(Account.Role.COMPANY);
+		acc = loginAccount(acc);
+		try {
+			Company comp = companyService.getByAccountId(acc.getId());
+			comp.setAccount(acc);
+			return comp;
+		} catch (ServiceException ex) {
+			handleServiceException(ex);
+			return null;
+		}
+	}
 
     @GET
     @Path("/{companyId}")
@@ -123,12 +142,19 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("companyId: " + companyId);
         Company company = null;
         try {
-            company = companyService.get(companyId);
+			if (companyId == 0) {
+				company = companyService.getByAccountId(currentAccountId());
+			} else {
+				company = companyService.get(companyId);
+			}
+			if (!Account.Role.ADMIN.equals(currentRole()) && !Objects.equals(company.getAccountId(), currentAccountId())) {
+				throw new ApiException(403, "Access Forbidden", "不允许获取其他学生信息！");
+			}
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
             if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-                throw new ApiException(404, devMsg, "该公司不存在！");
+                throw new ApiException(404, devMsg, "该学生不存在！");
             }
             handleServiceException(ex);
         }
