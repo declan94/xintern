@@ -14,8 +14,8 @@ public class Pagination {
 			this.pageSize = Integer.MAX_VALUE;
 			this.pageIndex = 1;
 		} else {
-			this.pageSize = pageSize;
-			this.pageIndex = pageIndex;
+			this.pageSize = Integer.max(1, pageSize);
+			this.pageIndex = Integer.max(1, pageIndex);
 		}
 	}
 	

@@ -43,7 +43,6 @@ public class PositionResource extends BaseResource {
 	private CompanyService companyService;
 	
 	@POST
-	@PermitAll
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	// 职位账号注册

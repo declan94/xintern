@@ -92,7 +92,7 @@
     <select id="selectCount" parameterType="Position" resultType="int">
         select count(*)
         from xi_position
-        <trim prefix="where" suffixOverrides="and">Ï
+        <trim prefix="where" suffixOverrides="and">
         </trim>
     </select>
 	

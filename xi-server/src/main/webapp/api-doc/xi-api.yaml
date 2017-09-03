@@ -186,6 +186,8 @@ paths:
         description: 企业Id，若当前登录为企业的账号，设置为0代表当前账号的企业。
         required: true
         type: integer
+      - $ref: '#/definitions/QPageSize'
+      - $ref: '#/definitions/QPageIndex'
       responses:
         200:
           description: 成功，返回职位列表信息
@@ -214,6 +216,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/Position'
+
       responses:
         200:
           description: 新增成功
@@ -293,10 +296,25 @@ definitions:
         description: 总页数
       pageIndex:
         type: integer
-        description: 当前页码（从0开始）
+        description: 当前页码（从1开始）
       rowCnt:
         type: integer
         description: item总数目
+  
+  QPageSize:
+    in: query
+    name: pageSize
+    type: integer
+    example: 10
+    description: 分页大小（每页的item数目）
+  
+  QPageIndex:
+    in: query
+    name: pageIndex
+    type: integer
+    example: 1
+    description: 页码（从1开始）
+
 
   Gender:
     type: string
@@ -474,19 +492,19 @@ definitions:
         description: 工作地址
       startDate:
         type: string
-        example: 2017-09-01
+        example: '2017-09-01'
         description: 开始日期
       endDate:
         type: string
-        example: 2017-10-01
+        example: '2017-10-01'
         description: 结束日期
       startTime:
         type: string
-        example: 08:00
+        example: '08:00:00'
         description: 工作开始时间
       endTime:
         type: string
-        example: 18:00
+        example: '18:00:00'
         description: 工作结束时间
       salary:
         type: integer

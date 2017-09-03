@@ -23,7 +23,7 @@
 	</sql>
     
 	<sql id="selectBaseColumns" >
-		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro
+		c_id, c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro
 	</sql>
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Company">
