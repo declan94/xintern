@@ -32,94 +32,94 @@ import thu.declan.xi.server.service.StudentService;
 @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT})
 public class StudentResource extends BaseResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentResource.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentResource.class);
 
-    @Autowired
-    private StudentService studentService;
-	
-    @POST
+	@Autowired
+	private StudentService studentService;
+
+	@POST
 	@PermitAll
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    // 学生账号注册
-    public Student createStudent(@Valid Student student) throws ApiException {
-        LOGGER.debug("==================== enter StudentResource createStudent ====================");
-        Account acc = student.getAccount();
-        acc.setRole(Account.Role.STUDENT);
-        AccountResource accRes = new AccountResource();
-        beanFactory.autowireBean(accRes);
-        acc = accRes.createAccount(acc);
-        student.setAccount(acc);
-        try {
-            student.setAccountId(acc.getId());
-            studentService.add(student);
-        } catch (ServiceException ex) {
-            accRes.deleteAccount(acc.getId());
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave StudentResource createStudent ====================");
-        return student;
-    }
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	// 学生账号注册
+	public Student createStudent(@Valid Student student) throws ApiException {
+		LOGGER.debug("==================== enter StudentResource createStudent ====================");
+		Account acc = student.getAccount();
+		acc.setRole(Account.Role.STUDENT);
+		AccountResource accRes = new AccountResource();
+		beanFactory.autowireBean(accRes);
+		acc = accRes.createAccount(acc);
+		student.setAccount(acc);
+		try {
+			student.setAccountId(acc.getId());
+			studentService.add(student);
+		} catch (ServiceException ex) {
+			accRes.deleteAccount(acc.getId());
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave StudentResource createStudent ====================");
+		return student;
+	}
 
-    @PUT
-    @Path("/{studentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    // 修改学生信息
-    public Student editStudent(@PathParam("studentId") int studentId, Student student) throws ApiException {
-        LOGGER.debug("==================== enter StudentResource editStudent ====================");
-        LOGGER.debug("studentId: " + studentId);
-        if (currentRole() != Account.Role.ADMIN) {
-            try {
-                Student oldComp = studentService.get(studentId);
-                if (studentId == 0) {
-                    studentId = oldComp.getId();
-                }
-                if (oldComp.getId() != studentId) {
-                    throw new ApiException(401, "Student Id not equal to authorized one", "权限不足");
-                }
-            } catch (ServiceException ex) {
-                throw new ApiException(404, "Student not found", "学生id错误");
-            }
-        }
-        try {
-            student.setId(studentId);
-            studentService.update(student);
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-                throw new ApiException(404, devMsg, "该学生不存在！");
-            }
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave StudentResource editStudent ====================");
-        return student;
-    }
+	@PUT
+	@Path("/{studentId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	// 修改学生信息
+	public Student editStudent(@PathParam("studentId") int studentId, Student student) throws ApiException {
+		LOGGER.debug("==================== enter StudentResource editStudent ====================");
+		LOGGER.debug("studentId: " + studentId);
+		if (currentRole() != Account.Role.ADMIN) {
+			try {
+				Student oldComp = studentService.get(studentId);
+				if (studentId == 0) {
+					studentId = oldComp.getId();
+				}
+				if (oldComp.getId() != studentId) {
+					throw new ApiException(401, "Student Id not equal to authorized one", "权限不足");
+				}
+			} catch (ServiceException ex) {
+				throw new ApiException(404, "Student not found", "学生id错误");
+			}
+		}
+		try {
+			student.setId(studentId);
+			studentService.update(student);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+				throw new ApiException(404, devMsg, "该学生不存在！");
+			}
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave StudentResource editStudent ====================");
+		return student;
+	}
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public ListResponse<Student> getStudents() throws ApiException {
-        LOGGER.debug("==================== enter StudentResource getStudents ====================");
-        Student selector = new Student();
-        List<Student> students = null;
-        try {
-            students = studentService.getList(selector);
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave StudentResource getStudents ====================");
-        return new ListResponse(students);
-    }
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListResponse<Student> getStudents() throws ApiException {
+		LOGGER.debug("==================== enter StudentResource getStudents ====================");
+		Student selector = new Student();
+		List<Student> students = null;
+		try {
+			students = studentService.getList(selector);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave StudentResource getStudents ====================");
+		return new ListResponse(students);
+	}
+
 	@POST
 	@Path("/login")
 	@PermitAll
 	@Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Student login(Account acc) throws ApiException {
 		acc.setRole(Account.Role.STUDENT);
 		acc = loginAccount(acc);
@@ -132,34 +132,33 @@ public class StudentResource extends BaseResource {
 			return null;
 		}
 	}
-	
+
 	@GET
-    @Path("/{studentId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Student getStudent(@PathParam("studentId") int studentId) throws ApiException {
-        LOGGER.debug("==================== enter StudentResource getStudent ====================");
-        LOGGER.debug("studentId: " + studentId);
-        Student student = null;
-        try {
-			if (studentId == 0) {
-				student = studentService.getByAccountId(currentAccountId());
-			} else {
-				student = studentService.get(studentId);
-			}
+	@Path("/{studentId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Student getStudent(@PathParam("studentId") int studentId) throws ApiException {
+		LOGGER.debug("==================== enter StudentResource getStudent ====================");
+		LOGGER.debug("studentId: " + studentId);
+		Student student = null;
+		if (studentId == 0) {
+			studentId = currentEntityId();
+		}
+		try {
+			student = studentService.get(studentId);
 			if (!Account.Role.ADMIN.equals(currentRole()) && !Objects.equals(student.getAccountId(), currentAccountId())) {
 				throw new ApiException(403, "Access Forbidden", "不允许获取其他学生信息！");
 			}
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-                throw new ApiException(404, devMsg, "该学生不存在！");
-            }
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave StudentResource getStudent ====================");
-        return student;
-    }
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+				throw new ApiException(404, devMsg, "该学生不存在！");
+			}
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave StudentResource getStudent ====================");
+		return student;
+	}
 
 }

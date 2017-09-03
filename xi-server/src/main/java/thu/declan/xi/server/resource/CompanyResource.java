@@ -77,18 +77,12 @@ public class CompanyResource extends BaseResource {
     public Company editCompany(@PathParam("companyId") int companyId, Company company) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource editCompany ====================");
         LOGGER.debug("companyId: " + companyId);
-        if (currentRole() != Account.Role.ADMIN) {
-            try {
-                Company oldComp = companyService.get(companyId);
-                if (companyId == 0) {
-                    companyId = oldComp.getId();
-                }
-                if (oldComp.getId() != companyId) {
-                    throw new ApiException(401, "Company Id not equal to authorized one", "权限不足");
-                }
-            } catch (ServiceException ex) {
-                throw new ApiException(404, "Company not found", "公司id错误");
-            }
+        if (currentRole() == Account.Role.COMPANY) {
+			if (companyId == 0) {
+				companyId = currentEntityId();
+			} else if (companyId != currentEntityId()) {
+				throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
+			}
         }
         try {
             company.setId(companyId);
@@ -143,24 +137,21 @@ public class CompanyResource extends BaseResource {
     @GET
     @Path("/{companyId}")
     @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
     public Company getCompany(@PathParam("companyId") int companyId) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompany ====================");
         LOGGER.debug("companyId: " + companyId);
         Company company = null;
+		if (Account.Role.COMPANY == currentRole() && companyId == 0) {
+			companyId = currentEntityId();
+		}
         try {
-			if (companyId == 0) {
-				company = companyService.getByAccountId(currentAccountId());
-			} else {
-				company = companyService.get(companyId);
-			}
-			if (!Account.Role.ADMIN.equals(currentRole()) && !Objects.equals(company.getAccountId(), currentAccountId())) {
-				throw new ApiException(403, "Access Forbidden", "不允许获取其他学生信息！");
-			}
+			company = companyService.get(companyId);
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
             if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-                throw new ApiException(404, devMsg, "该学生不存在！");
+                throw new ApiException(404, devMsg, "该企业不存在！");
             }
             handleServiceException(ex);
         }
@@ -175,7 +166,11 @@ public class CompanyResource extends BaseResource {
 			@QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
 		LOGGER.debug("==================== enter CompanyResource getPositiones ====================");
+		if (companyId == 0) {
+			companyId = currentEntityId();
+		}
         Position selector = new Position();
+		selector.setCompanyId(companyId);
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<Position> positions = null;
 		try {

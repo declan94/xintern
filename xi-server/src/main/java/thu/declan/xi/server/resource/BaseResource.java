@@ -40,6 +40,10 @@ public class BaseResource {
 		return acc == null ? null : acc.getId();
 	}
 	
+	protected Integer currentEntityId() {
+		return authService.getEntityId();
+	}
+	
 	protected Account loginAccount(Account acc) throws ApiException {
 		try {
 			return authService.login(acc.getPhone(), acc.getPassword(), acc.getRole());

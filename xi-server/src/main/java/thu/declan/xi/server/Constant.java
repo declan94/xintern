@@ -17,6 +17,8 @@ public class Constant {
 	//Session
 	
 	public static final String SESSION_ACCOUNT = "ACCOUNT";
+	
+	public static final String SESSION_ENTITY_ID = "ENTITY_ID";
     
     //uploads
 	
@@ -26,13 +28,6 @@ public class Constant {
     
     // rate configurations
     
-    public static final Double WITHDRAW_FEE_RATE = 0.05;
+    public static final Double SERVICE_FEE_RATE = 0.1;
     
-    public static final Double REWARD_SCORE_RATE = 0.9;
-	
-	public static final Double SHOP_BONUS_RATE = 0.05;
-    
-	public static final Integer MAX_ACCOUNT_CNT_PER_PERSON = 11;
-    
-    public static final Double SINGLE_RECHARGE_MAX = 50000.0;
 }

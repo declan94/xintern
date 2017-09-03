@@ -16,7 +16,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-        r_positionId, r_stuId, r_state, r_commentStu, r_commentComp
+        r_id, r_positionId, r_stuId, r_state, r_commentStu, r_commentComp
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Resume">

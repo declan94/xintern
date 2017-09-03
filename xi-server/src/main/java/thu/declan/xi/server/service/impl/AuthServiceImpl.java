@@ -9,7 +9,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.AccountMapper;
+import thu.declan.xi.server.mapper.CompanyMapper;
+import thu.declan.xi.server.mapper.StudentMapper;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Company;
+import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.service.AuthService;
 import thu.declan.xi.server.util.EncryptionUtils;
 
@@ -23,6 +27,12 @@ public class AuthServiceImpl implements AuthService {
 	
 	@Autowired
 	AccountMapper accountMapper;
+	
+	@Autowired
+	StudentMapper studentMapper;
+	
+	@Autowired
+	CompanyMapper companyMapper;
     
     private HttpSession session() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -34,6 +44,13 @@ public class AuthServiceImpl implements AuthService {
 	public Account getAccount() {
 		return (Account) session().getAttribute(Constant.SESSION_ACCOUNT);
 	}
+	
+	
+	@Override
+	public Integer getEntityId() {
+		return (Integer) session().getAttribute(Constant.SESSION_ENTITY_ID);
+	}
+
 
 	@Override
 	public Account login(String phone, String password, Account.Role authType) throws ServiceException {
@@ -47,9 +64,21 @@ public class AuthServiceImpl implements AuthService {
 		if (!EncryptionUtils.checkPassword(password, account.getPassword())) {
 			throw new ServiceException(ServiceException.CODE_WRONG_PASSWORD, "Wrong password");
 		}
-		session().setAttribute(Constant.SESSION_ACCOUNT, account);
+		HttpSession sess = session();
+		sess.setAttribute(Constant.SESSION_ACCOUNT, account);
+		switch (authType) {
+			case STUDENT:
+				Student stu = studentMapper.selectByAccountId(account.getId());
+				sess.setAttribute(Constant.SESSION_ENTITY_ID, stu.getId());
+				break;
+			case COMPANY:
+				Company comp = companyMapper.selectByAccountId(account.getId());
+				sess.setAttribute(Constant.SESSION_ENTITY_ID, comp.getId());
+				break;
+			default:
+				sess.removeAttribute(Constant.SESSION_ENTITY_ID);
+		}
 		return account;
 	}
-
     
 }

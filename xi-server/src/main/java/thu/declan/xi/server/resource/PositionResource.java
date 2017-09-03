@@ -1,8 +1,7 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
-import java.util.logging.Level;
-import javax.annotation.security.PermitAll;
+import java.util.Objects;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -67,19 +66,17 @@ public class PositionResource extends BaseResource {
 
 	@PUT
 	@Path("/{positionId}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	// 修改职位信息
 	public Position editPosition(@PathParam("positionId") int positionId, Position position) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource editPosition ====================");
 		LOGGER.debug("positionId: " + positionId);
-		if (currentRole() != Account.Role.ADMIN) {
+		if (currentRole() == Account.Role.COMPANY) {
 			try {
-				Position oldComp = positionService.get(positionId);
-				if (positionId == 0) {
-					positionId = oldComp.getId();
-				}
-				if (oldComp.getId() != positionId) {
-					throw new ApiException(401, "Position Id not equal to authorized one", "权限不足");
+				Position oldPos = positionService.get(positionId);
+				if (!Objects.equals(oldPos.getCompanyId(), currentEntityId())) {
+					throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
 				}
 			} catch (ServiceException ex) {
 				throw new ApiException(404, "Position not found", "职位id错误");

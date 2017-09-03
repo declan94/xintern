@@ -10,6 +10,8 @@ import thu.declan.xi.server.model.Account;
 public interface AuthService {
     
     public Account getAccount();
+	
+	public Integer getEntityId();
 
     public Account login(String phone, String password, Account.Role authType) throws ServiceException;
     

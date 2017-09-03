@@ -155,7 +155,7 @@ paths:
       parameters:
       - in: path
         name: companyId
-        description: 企业Id，若当前登录为企业的账号，只能获取自己的信息，可以设置为0。
+        description: 企业Id，若当前登录为企业的账号，设置为0表示获取自己的信息。
         required: true
         type: integer
       responses:
@@ -216,10 +216,62 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/Position'
-
       responses:
         200:
           description: 新增成功
+          schema:
+            $ref: '#/definitions/Position'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
+  /positions/{positionId}:
+    get:
+      tags:
+      - position
+      summary: 获取职位信息
+      parameters:
+      - in: path
+        name: positionId
+        description: 职位Id。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回对应职位信息
+          schema:
+            $ref: '#/definitions/Position'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        404:
+          description: 获取失败，此职位不存在
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+      - position
+      summary: 修改职位信息
+      description: 企业账号只能修改属于自己的职位信息。
+      parameters:
+      - in: path
+        name: positionId
+        description: 职位Id
+        required: true
+        type: integer
+      - in: body
+        name: position
+        description: 职位信息的修改
+        required: true
+        schema:
+          $ref: '#/definitions/PositionUpdater'
+      responses:
+        200:
+          description: 修改成功，返回修改后的职位信息
           schema:
             $ref: '#/definitions/Position'
         401:
@@ -510,7 +562,7 @@ definitions:
       salary:
         type: integer
         example: 200
-        description: 薪资（元）
+        description: 企业发放薪资（元），学生获得的薪资由后端自动计算扣除平台手续费
       unit:
         type: string
         description: 薪资单位（每天/每周/每月等）
@@ -556,6 +608,7 @@ definitions:
             readOnly: true
           stuSalary:
             type: integer
+            description: 学生获得的薪资（扣除平台手续费）
             readOnly: true
 
   List-Position:
