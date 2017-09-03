@@ -16,11 +16,13 @@ produces:
   - application/json
 tags:
 - name: student
-  description: All about student
+  description: 学生相关
 - name: company
-  description: All about company
+  description: 企业相关
+- name: position
+  description: 职位相关
 - name: other
-  description: Other apis
+  description: 其他
 paths:
   /students:
     post:
@@ -172,6 +174,58 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /companies/{companyId}/positions:
+    get:
+      tags:
+      - company
+      - position
+      summary: 获取企业的职位信息
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，若当前登录为企业的账号，设置为0代表当前账号的企业。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回职位列表信息
+          schema:
+            $ref: '#/definitions/List-Position'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此企业不存在
+          schema:
+            $ref: '#/definitions/Error'
+
+  /positions:
+    post:
+      tags:
+      - position
+      summary: 新增职位信息
+      parameters:
+      - in: body
+        name: position
+        description: 职位信息
+        required: true
+        schema:
+          $ref: '#/definitions/Position'
+      responses:
+        200:
+          description: 新增成功
+          schema:
+            $ref: '#/definitions/Position'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
   /upload/{type}:
     post:
       tags:
@@ -227,6 +281,22 @@ definitions:
         readOnly: true
       account:
         $ref: '#/definitions/BasicAccount'
+
+  Pagination:
+    type: object
+    properties:
+      pageSize:
+        type: integer
+        description: 单页显示item数量
+      pageCnt:
+        type: integer
+        description: 总页数
+      pageIndex:
+        type: integer
+        description: 当前页码（从0开始）
+      rowCnt:
+        type: integer
+        description: item总数目
 
   Gender:
     type: string
@@ -395,47 +465,64 @@ definitions:
     properties:
       title:
         type: string
+        description: 职位标题
       area:
         type: string
+        description: 工作地区
       addr:
         type: string
+        description: 工作地址
       startDate:
         type: string
         example: 2017-09-01
+        description: 开始日期
       endDate:
         type: string
         example: 2017-10-01
+        description: 结束日期
       startTime:
         type: string
         example: 08:00
+        description: 工作开始时间
       endTime:
         type: string
         example: 18:00
+        description: 工作结束时间
       salary:
         type: integer
         example: 200
+        description: 薪资（元）
       unit:
         type: string
+        description: 薪资单位（每天/每周/每月等）
       minDays:
         type: integer
+        description: 最少工作天数
       continuous:
         type: boolean
+        description: 是否要求连续工作
       count:
         type: integer
+        description: 剩余招聘人数
       retention:
         type: boolean
+        description: 是否可留任
       intro:
         type: string
+        description: 职位简介
       reqGender:
         $ref: '#definitions/Gender'
       reqEdu:
         $ref: '#definitions/Education'
       reqGrade:
         type: integer
+        description: 年级
       reqMajor:
         type: string
+        description: 专业
       reqLang:
         type: string
+        description: 语言
       reqLangLevel:
         $ref: '#definitions/LangLevel'
   
@@ -451,6 +538,16 @@ definitions:
           stuSalary:
             type: integer
             readOnly: true
+
+  List-Position:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Position'
 
   UploadResult:
     type: object
