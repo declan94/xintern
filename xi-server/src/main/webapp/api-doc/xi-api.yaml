@@ -186,8 +186,8 @@ paths:
         description: 企业Id，若当前登录为企业的账号，设置为0代表当前账号的企业。
         required: true
         type: integer
-      - $ref: '#/definitions/QPageSize'
-      - $ref: '#/definitions/QPageIndex'
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
       responses:
         200:
           description: 成功，返回职位列表信息
@@ -265,6 +265,22 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+
+parameters:
+  
+  PageSize:
+    in: query
+    name: pageSize
+    type: integer
+    description: 分页大小（每页的item数目）
+  
+  PageIndex:
+    in: query
+    name: pageIndex
+    type: integer
+    description: 页码（从1开始）
+
+
 definitions:
 
   BasicModel:
@@ -300,21 +316,6 @@ definitions:
       rowCnt:
         type: integer
         description: item总数目
-  
-  QPageSize:
-    in: query
-    name: pageSize
-    type: integer
-    example: 10
-    description: 分页大小（每页的item数目）
-  
-  QPageIndex:
-    in: query
-    name: pageIndex
-    type: integer
-    example: 1
-    description: 页码（从1开始）
-
 
   Gender:
     type: string
