@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "DROP USER 'xintern'@'%'; DROP DATABASE xintern;" | mysql -uroot -p
+echo "DROP USER 'xintern'@'localhost'; DROP DATABASE xintern;" | mysql -uroot -p
