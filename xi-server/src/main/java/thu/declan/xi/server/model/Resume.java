@@ -1,5 +1,8 @@
 package thu.declan.xi.server.model;
 
+import java.sql.Date;
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author declan
@@ -34,6 +37,7 @@ public class Resume {
 
     private Integer positionId;
 
+    @NotNull
     public Integer getPositionId() {
         return positionId;
     }
@@ -80,6 +84,26 @@ public class Resume {
 
     public void setCommentComp(String commentComp) {
         this.commentComp = commentComp;
+    }
+
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    private Date updateTime;
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
     
 }

@@ -21,6 +21,8 @@ tags:
   description: 企业相关
 - name: position
   description: 职位相关
+- name: resume
+  description: 简历相关
 - name: other
   description: 其他
 paths:
@@ -281,6 +283,86 @@ paths:
         400:
           description: Bad request, invalid arguments
 
+  /resumes:
+    post:
+      tags:
+      - resume
+      summary: 学生投递简历
+      description: 须登陆学生账号，简历的stuId会自动设置为当前学生的id
+      parameters:
+      - in: body
+        name: resume
+        description: 简历信息
+        required: true
+        schema:
+          $ref: '#/definitions/Resume'
+      responses:
+        200:
+          description: 投递成功
+          schema:
+            $ref: '#/definitions/Resume'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
+  /resumes/{resumeId}:
+    get:
+      tags:
+      - resume
+      summary: 获取简历信息
+      parameters:
+      - in: path
+        name: resumeId
+        description: 简历Id。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回对应简历信息
+          schema:
+            $ref: '#/definitions/Resume'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        404:
+          description: 获取失败，此简历不存在
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+      - resume
+      summary: 修改简历信息
+      description: |
+        企业账号只能修改属于自己职位下的简历，学生也只能修改自己投出的简历。
+        对于状态的修改须遵守状态转移图.
+      parameters:
+      - in: path
+        name: resumeId
+        description: 简历Id
+        required: true
+        type: integer
+      - in: body
+        name: resume
+        description: 简历信息的修改
+        required: true
+        schema:
+          $ref: '#/definitions/ResumeUpdater'
+      responses:
+        200:
+          description: 修改成功，返回修改后的简历信息
+          schema:
+            $ref: '#/definitions/Resume'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
   /upload/{type}:
     post:
       tags:
@@ -334,65 +416,6 @@ parameters:
 
 
 definitions:
-
-  BasicModel:
-    type: object
-    properties:
-      id:
-        type: integer
-        example: 123
-        readOnly: true
-
-  AccModel:
-    type: object
-    properties:
-      accountId:
-        type: integer
-        example: 456
-        readOnly: true
-      account:
-        $ref: '#/definitions/BasicAccount'
-
-  Pagination:
-    type: object
-    properties:
-      pageSize:
-        type: integer
-        description: 单页显示item数量
-      pageCnt:
-        type: integer
-        description: 总页数
-      pageIndex:
-        type: integer
-        description: 当前页码（从1开始）
-      rowCnt:
-        type: integer
-        description: item总数目
-
-  Gender:
-    type: string
-    description: 性别
-    enum: 
-      - MALE
-      - FEMALE
-
-  Education:
-    type: string
-    description: 学历
-    enum:
-      - COLLEGE
-      - BACHELOR
-      - MASTER
-      - PHD
-
-  LangLevel:
-    type: string
-    description: 语言水平
-    enum:
-      - NORMAL
-      - GOOD
-      - SKILLED
-      - PROFICIENT
 
   BasicAccount:
     type: object
@@ -475,6 +498,9 @@ definitions:
       - $ref: '#/definitions/BasicModel'
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/CompanyUpdater'
+      - properties:
+          createTime:
+            $ref: '#definitions/Timestamp'
      
   StudentUpdater:
     type: object
@@ -530,6 +556,9 @@ definitions:
       - $ref: '#/definitions/BasicModel'
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/StudentUpdater'
+      - properties:
+          createTime:
+            $ref: '#definitions/Timestamp'
 
   PositionUpdater:
     type: object
@@ -596,7 +625,7 @@ definitions:
         description: 语言
       reqLangLevel:
         $ref: '#definitions/LangLevel'
-  
+      
   Position:
     type: object
     allOf:
@@ -610,6 +639,8 @@ definitions:
             type: integer
             description: 学生获得的薪资（扣除平台手续费）
             readOnly: true
+          createTime:
+            $ref: '#definitions/Timestamp'
 
   List-Position:
     type: object
@@ -620,6 +651,42 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Position'
+
+  ResumeUpdater:
+    type: object
+    properties:
+      state:
+        type: string
+        enum:
+          - NEW
+          - WAIT_STU_CONFIRM
+          - CONFIRMED
+          - OFFERED
+          - WORKING
+          - ENDED
+          - CANCELED
+      commentStu:
+        type: string
+        description: 学生对企业的评价
+      commentComp:
+        type: string
+        description: 企业对学生的评价
+
+  Resume:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - $ref: '#/definitions/ResumeUpdater'
+      - properties:
+          positionId:
+            type: integer
+          stuId:
+            type: integer
+            readOnly: true
+          createTime:
+            $ref: '#/definitions/Timestamp'
+          updateTime:
+            $ref: '#/definitions/Timestamp'
 
   UploadResult:
     type: object
@@ -653,3 +720,70 @@ definitions:
         type: string
         description: Message for the end-user.
         example: "Sorry, We have encounted an unkown error."
+
+
+# others:
+
+  BasicModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 123
+        readOnly: true
+
+  AccModel:
+    type: object
+    properties:
+      accountId:
+        type: integer
+        example: 456
+        readOnly: true
+      account:
+        $ref: '#/definitions/BasicAccount'
+
+  Pagination:
+    type: object
+    properties:
+      pageSize:
+        type: integer
+        description: 单页显示item数量
+      pageCnt:
+        type: integer
+        description: 总页数
+      pageIndex:
+        type: integer
+        description: 当前页码（从1开始）
+      rowCnt:
+        type: integer
+        description: item总数目
+
+  Gender:
+    type: string
+    description: 性别
+    enum: 
+      - MALE
+      - FEMALE
+
+  Education:
+    type: string
+    description: 学历
+    enum:
+      - COLLEGE
+      - BACHELOR
+      - MASTER
+      - PHD
+
+  LangLevel:
+    type: string
+    description: 语言水平
+    enum:
+      - NORMAL
+      - GOOD
+      - SKILLED
+      - PROFICIENT
+
+  Timestamp:
+    type: string
+    example: '2017-10-01 08:00:00'
+    readOnly: true

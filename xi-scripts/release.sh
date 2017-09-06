@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -d xi-scripts ]]; then
+    cd xi-scripts
+fi
+
 ./package-war.sh
 
 if [[ $? -ne 0 ]]; then

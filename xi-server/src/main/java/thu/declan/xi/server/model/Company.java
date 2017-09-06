@@ -1,5 +1,7 @@
 package thu.declan.xi.server.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author declan
@@ -145,5 +147,35 @@ public class Company {
     public void setIntro(String intro) {
         this.intro = intro;
     }    
+    
+    private String logo;
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    private Boolean verified;
+
+    public Boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+    
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
     
 }

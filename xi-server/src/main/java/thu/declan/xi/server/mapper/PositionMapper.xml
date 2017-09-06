@@ -26,6 +26,7 @@
         <result property="reqMajor" column="p_reqMajor" />
         <result property="reqLang" column="p_reqLang" />
         <result property="reqLangLevel" column="p_reqLangLevel" />
+        <result property="createTime" column="p_createTime" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -33,7 +34,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-        p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel
+        p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
