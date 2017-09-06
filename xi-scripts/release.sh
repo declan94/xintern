@@ -13,7 +13,7 @@ fi
 rm -rf ../dist
 
 mkdir ../dist
-mkdir ../dist/scripts
+mkdir ../dist/xi-scripts
 
-cp ./* ../dist/scripts/
+cp ./* ../dist/xi-scripts/
 cp ../xi-server/target/xi-server-0.1.0.war ../dist/
