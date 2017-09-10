@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="thu.declan.xi.server.mapper.NewsMapper">
+
+    <resultMap type="News" id="newsResult">
+        <result property="id" column="n_id" />
+        <result property="title" column="n_title" />
+        <result property="content" column="n_content" />
+        <result property="view" column="n_view" />
+        <result property="star" column="n_star" />
+        <result property="createTime" column="n_createTime" />
+    </resultMap>
+	
+    <sql id="insertBaseColumns" >
+        n_title, n_content, n_view, n_star
+    </sql>
+    
+    <sql id="selectBaseColumns" >
+		n_id, n_title, n_content, n_view, n_star, n_createTime
+    </sql>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="News">
+        insert into xi_news (<include refid="insertBaseColumns" />) 
+        values (#{title}, #{content}, #{view}, #{star})
+    </insert>
+	
+	<update id="incViewCnt" parameterType="int">
+        update xi_news set n_view = n_view + 1 where n_id = #{id}
+    </update>
+    
+    <update id="update" parameterType="News">
+        update xi_news 
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null"> n_title = #{title}, </if>
+            <if test="content != null"> n_content = #{content}, </if>
+            <if test="view != null"> n_view = #{view}, </if>
+            <if test="star != null"> n_star = #{star}, </if>
+        </trim>
+        where n_id = #{id}
+    </update>
+
+    <select id="selectOne" parameterType="int" resultMap="newsResult">
+        select <include refid="selectBaseColumns" />
+        from xi_news
+        where n_id = #{id}
+    </select>
+    	
+    <select id="selectList" parameterType="News" resultMap="newsResult">
+        select <include refid="selectBaseColumns" />
+        from xi_news
+        <trim prefix="where" suffixOverrides="and">
+			<if test="title != null">  n_title like %#{title}% and </if>
+        </trim>
+		order by n_createTime desc
+    </select>
+    
+    <select id="selectCount" parameterType="News" resultType="int">
+        select count(*)
+        from xi_news
+        <trim prefix="where" suffixOverrides="and">
+			<if test="title != null">  n_title like %#{title}% and </if>
+        </trim>
+    </select>
+	
+    <delete id="delete" parameterType="int">
+        delete from xi_news where n_id = #{id}
+    </delete>
+   	
+</mapper>
+

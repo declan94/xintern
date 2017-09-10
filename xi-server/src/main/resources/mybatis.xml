@@ -18,6 +18,7 @@
         <typeAlias alias="Company" type="thu.declan.xi.server.model.Company" />
         <typeAlias alias="Position" type="thu.declan.xi.server.model.Position" />
 		<typeAlias alias="Resume" type="thu.declan.xi.server.model.Resume" />
+		<typeAlias alias="News" type="thu.declan.xi.server.model.News" />
     </typeAliases>
 	
     <typeHandlers>

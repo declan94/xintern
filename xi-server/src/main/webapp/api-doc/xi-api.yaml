@@ -22,7 +22,9 @@ tags:
 - name: position
   description: 职位相关
 - name: resume
-  description: 简历相关
+  description: 简历（实习关系）相关
+- name: news
+  description: 资讯相关
 - name: other
   description: 其他
 paths:
@@ -449,6 +451,51 @@ paths:
         400:
           description: Bad request, invalid arguments
 
+  /news:
+    get:
+      tags:
+      - news
+      summary: 获取资讯列表
+      parameters:
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回资讯列表信息
+          schema:
+            $ref: '#/definitions/List-News'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+
+  /news/{newsId}:
+    get:
+      tags:
+      - news
+      summary: 获取资讯信息（同时浏览量+1）
+      parameters:
+      - in: path
+        name: newsId
+        description: 资讯Id。
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回对应资讯信息
+          schema:
+            $ref: '#/definitions/Resume'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        404:
+          description: 获取失败，此资讯不存在
+          schema:
+            $ref: '#/definitions/Error'
+            
   /upload/{type}:
     post:
       tags:
@@ -783,6 +830,37 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Resume'
+
+  News:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          title:
+            type: string
+            description: 标题
+          content:
+            type: string
+            description: 内容，富文本（html)
+          view:
+            type: integer
+            description: 浏览量
+          star:
+            type: integer
+            description: 点赞量
+          createTime:
+            type: string
+            example: '2017-10-01 10:00:00'
+
+  List-News:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/News'
 
   UploadResult:
     type: object
