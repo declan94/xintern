@@ -1,7 +1,6 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -25,8 +24,10 @@ import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
+import thu.declan.xi.server.service.ResumeService;
 
 /**
  *
@@ -44,6 +45,9 @@ public class CompanyResource extends BaseResource {
 	@Autowired
 	private PositionService positionService;
 
+	@Autowired
+	private ResumeService resumeService;
+	
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -181,5 +185,34 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource getPositiones ====================");
         return new ListResponse(positions, pagination);
 	}
+	
+	@GET
+	@Path("/{companyId}/resumes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListResponse<Resume> getCompanyResumes(@PathParam("companyId") int companyId,
+			@QueryParam("state") List<Resume.RState>states,
+			@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+		if (companyId == 0) {
+			companyId = currentEntityId();
+		}
+        Resume selector = new Resume();
+		if (!states.isEmpty()) {
+			selector.setQueryStates(states);
+		}
+		selector.setCompanyId(companyId);
+        List<Resume> resumes = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            resumes = resumeService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+        return new ListResponse(resumes, pagination);
+    }
 
 }

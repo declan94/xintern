@@ -67,19 +67,22 @@
         from xi_student
         where s_accountId = #{accountId}
     </select>
+	
+	<sql id="whereList" >
+        <trim prefix="where" suffixOverrides="and">
+        </trim>
+    </sql>
     
     <select id="selectList" parameterType="Student" resultMap="studentResult">
         select <include refid="selectBaseColumns" />
         from xi_student
-        <trim prefix="where" suffixOverrides="and">
-        </trim>
+        <include refid="whereList" />
     </select>
     
     <select id="selectCount" parameterType="Student" resultType="int">
         select count(*)
         from xi_student
-        <trim prefix="where" suffixOverrides="and">Ï
-        </trim>
+		<include refid="whereList" />
     </select>
 	
     <delete id="delete" parameterType="int">

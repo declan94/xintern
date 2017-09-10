@@ -1,5 +1,6 @@
 package thu.declan.xi.server.resource;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.security.RolesAllowed;
@@ -11,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +24,12 @@ import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Pagination;
+import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
+import thu.declan.xi.server.service.ResumeService;
 
 /**
  *
@@ -40,6 +46,9 @@ public class PositionResource extends BaseResource {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private ResumeService resumeService;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -116,7 +125,6 @@ public class PositionResource extends BaseResource {
 
 	@GET
 	@Path("/{positionId}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Position getPosition(@PathParam("positionId") int positionId) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource getPosition ====================");
@@ -135,5 +143,32 @@ public class PositionResource extends BaseResource {
 		LOGGER.debug("==================== leave PositionResource getPosition ====================");
 		return position;
 	}
+	
+	@GET
+	@Path("/{positionId}/resumes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListResponse<Resume> getPositionResumes(@PathParam("positionId") int positionId,
+			@QueryParam("state") List<RState>states,
+			@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+		LOGGER.debug(states.toString());
+        Resume selector = new Resume();
+		if (!states.isEmpty()) {
+			selector.setQueryStates(states);
+		}
+		selector.setPositionId(positionId);
+        List<Resume> resumes = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            resumes = resumeService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+        return new ListResponse(resumes, pagination);
+    }
 
 }

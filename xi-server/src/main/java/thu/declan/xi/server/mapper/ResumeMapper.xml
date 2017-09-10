@@ -54,19 +54,34 @@
         from xi_resume
         where r_stuId = #{studentId}
     </select>
+	
+	<sql id="whereList" >
+        <trim prefix="where" suffixOverrides="and">
+			<if test="positionId != null"> r_positionId = #{positionId} and </if>
+			<if test="companyId != null"> p_companyId = #{companyId} and </if>
+			<if test="stuId != null"> r_stuId = #{stuId} and </if>
+			<if test="queryStates != null"> 
+				r_state in 
+				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">
+                   #{item}
+				</foreach>
+				and 
+			</if>
+        </trim>
+    </sql>
     
     <select id="selectList" parameterType="Resume" resultMap="resumeResult">
         select <include refid="selectBaseColumns" />
         from xi_resume
-        <trim prefix="where" suffixOverrides="and">
-        </trim>
+		inner join xi_position on xi_resume.r_positionId = xi_position.p_id
+        <include refid="whereList" />
     </select>
     
     <select id="selectCount" parameterType="Resume" resultType="int">
         select count(*)
         from xi_resume
-        <trim prefix="where" suffixOverrides="and">Ï
-        </trim>
+		inner join xi_position on xi_resume.r_positionId = xi_position.p_id
+        <include refid="whereList" />
     </select>
    	
 </mapper>

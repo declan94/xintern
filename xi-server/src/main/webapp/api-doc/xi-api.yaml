@@ -206,6 +206,49 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /companies/{companyId}/resumes:
+    get:
+      tags:
+      - company
+      - resume
+      summary: 获取企业收到的简历信息
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，设置为0则代表当前登录企业
+        required: true
+        type: integer
+      - in: query
+        name: state
+        description: 筛选简历状态，可以提供多个值。 （例如：?state=ENDED&state=CANCELD 可同时获取两种状态）
+        type: string
+        enum:
+          - NEW
+          - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
+          - CONFIRMED
+          - OFFERED
+          - WORKING
+          - ENDED
+          - CANCELED
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回简历列表信息
+          schema:
+            $ref: '#/definitions/List-Resume'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此职位不存在
+          schema:
+            $ref: '#/definitions/Error'
+
   /positions:
     post:
       tags:
@@ -282,6 +325,49 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+
+  /positions/{positionId}/resumes:
+    get:
+      tags:
+      - position
+      - resume
+      summary: 获取职位的简历信息
+      parameters:
+      - in: path
+        name: positionId
+        description: 职位Id
+        required: true
+        type: integer
+      - in: query
+        name: state
+        description: 筛选简历状态，可以提供多个值。 （例如：?state=ENDED&state=CANCELD 可同时获取两种状态）
+        type: string
+        enum:
+          - NEW
+          - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
+          - CONFIRMED
+          - OFFERED
+          - WORKING
+          - ENDED
+          - CANCELED
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回简历列表信息
+          schema:
+            $ref: '#/definitions/List-Resume'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此职位不存在
+          schema:
+            $ref: '#/definitions/Error'
 
   /resumes:
     post:
@@ -687,6 +773,16 @@ definitions:
             $ref: '#/definitions/Timestamp'
           updateTime:
             $ref: '#/definitions/Timestamp'
+
+  List-Resume:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Resume'
 
   UploadResult:
     type: object
