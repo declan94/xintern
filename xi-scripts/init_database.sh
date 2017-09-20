@@ -4,4 +4,9 @@ if [[ -d xi-scripts ]]; then
     cd xi-scripts
 fi
 
-cat xintern.sql | mysql -uroot -p
+host="localhost"
+if [[ "$1" != "" ]]; then
+    host=$1
+fi
+echo "Host: $host"
+cat xintern.sql | mysql -uroot -h $host -p
