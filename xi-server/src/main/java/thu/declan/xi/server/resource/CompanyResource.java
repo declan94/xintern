@@ -105,19 +105,24 @@ public class CompanyResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ListResponse<Company> getCompanies() throws ApiException {
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
+    public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize,
+			@QueryParam("verified") Boolean verified) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
         Company selector = new Company();
+		selector.setVerified(verified);
         List<Company> companys = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
-            companys = companyService.getList(selector);
+            companys = companyService.getList(selector, pagination);
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
             handleServiceException(ex);
         }
         LOGGER.debug("==================== leave CompanyResource getCompanys ====================");
-        return new ListResponse(companys);
+        return new ListResponse(companys, pagination);
     }
 	
 	@POST

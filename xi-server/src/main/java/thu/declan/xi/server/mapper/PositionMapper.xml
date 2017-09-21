@@ -36,6 +36,15 @@
     <sql id="selectBaseColumns" >
         p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime
     </sql>
+	
+	<sql id="selectExtColumns">
+		<include refid="selectBaseColumns" />,
+		c_name,  c_type, c_verified, c_priority
+	</sql>
+	
+	<sql id="joinedTable" >
+		xi_position join xi_company on p_companyid = c_id
+	</sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
         insert into xi_position (<include refid="insertBaseColumns" />) 
@@ -72,8 +81,8 @@
     </update>
 
     <select id="selectOne" parameterType="int" resultMap="positionResult">
-        select <include refid="selectBaseColumns" />
-        from xi_position
+        select <include refid="selectExtColumns" />
+        from <include refid="joinedTable" />
         where p_id = #{id}
     </select>
     	
@@ -82,19 +91,29 @@
         from xi_position
         where p_companyId = #{companyId}
     </select>
+	
+	<sql id="whereList">
+		<trim prefix="where" suffixOverrides="and">
+			<if test="company != null"> 
+				<if test="company.verified != null"> c_verified = #{company.verified} and </if>
+				<if test="company.industry != null"> c_industry = #{company.industry} and </if>
+				<if test="company.type != null"> c_type = #{company.type} and </if>
+			</if>
+			<if test="area != null"> p_area = #{area} and </if>
+        </trim>
+	</sql>
     
     <select id="selectList" parameterType="Position" resultMap="positionResult">
-        select <include refid="selectBaseColumns" />
-        from xi_position
-        <trim prefix="where" suffixOverrides="and">
-        </trim>
+        select <include refid="selectExtColumns" />
+        from <include refid="joinedTable" />
+        <include refid="whereList" />
+		order by c_priority desc, p_priority desc, p_createtime desc
     </select>
     
     <select id="selectCount" parameterType="Position" resultType="int">
         select count(*)
-        from xi_position
-        <trim prefix="where" suffixOverrides="and">
-        </trim>
+        from <include refid="joinedTable" />
+        <include refid="whereList" />
     </select>
 	
     <delete id="delete" parameterType="int">

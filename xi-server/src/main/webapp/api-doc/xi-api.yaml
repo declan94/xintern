@@ -274,6 +274,40 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+    get:
+      tags:
+      - position
+      summary: 筛选职位列表
+      parameters:
+      - in: query
+        name: verified
+        type: boolean
+        description: 是否认证
+      - in: query
+        name: industry
+        type: string
+        description: 行业
+      - in: query
+        name: area
+        type: string
+        description: 地点
+      - in: query
+        name: type
+        type: string
+        description: 公司性质
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回职位列表信息
+          schema:
+            $ref: '#/definitions/List-Position'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
 
   /positions/{positionId}:
     get:
@@ -767,6 +801,9 @@ definitions:
       - properties:
           companyId:
             type: integer
+            readOnly: true
+          company:
+            $ref: '#/definitions/Company'
             readOnly: true
           stuSalary:
             type: integer

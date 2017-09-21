@@ -1,6 +1,5 @@
 package thu.declan.xi.server.resource;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.security.RolesAllowed;
@@ -108,19 +107,32 @@ public class PositionResource extends BaseResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListResponse<Position> getPositions() throws ApiException {
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
+	public ListResponse<Position> getPositions(@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize,
+			@QueryParam("verified") Boolean verified,
+			@QueryParam("industry") String industry,
+			@QueryParam("type") String type,
+			@QueryParam("area") String area) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource getPositions ====================");
 		Position selector = new Position();
+		Company compSel = new Company();
+		compSel.setVerified(verified);
+		compSel.setIndustry(industry);
+		compSel.setType(type);
+		selector.setArea(area);
+		selector.setCompany(compSel);
 		List<Position> positions = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
 		try {
-			positions = positionService.getList(selector);
+			positions = positionService.getList(selector, pagination);
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			handleServiceException(ex);
 		}
 		LOGGER.debug("==================== leave PositionResource getPositions ====================");
-		return new ListResponse(positions);
+		return new ListResponse(positions, pagination);
 	}
 
 	@GET
