@@ -51,7 +51,7 @@
         <trim prefix="where" suffixOverrides="and">
 			<if test="title != null">  n_title like %#{title}% and </if>
         </trim>
-		order by n_createTime desc
+		order by n_priority desc, n_createTime desc
     </select>
     
     <select id="selectCount" parameterType="News" resultType="int">
