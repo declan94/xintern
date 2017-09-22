@@ -8,7 +8,7 @@
         <result property="phone" column="a_phone" />
         <result property="wechat" column="a_wechat" />
 		<result property="password" column="a_password" />
-        
+        <result property="point" column="a_point" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -16,7 +16,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-		a_id, a_role, a_phone, a_wechat, a_password
+		a_id, a_role, a_phone, a_wechat, a_password, a_point
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Account">
@@ -34,6 +34,12 @@
         where a_id = #{id}
     </update>
 
+    <update id="addPoint">
+        update xi_account
+        set a_point = a_point + #{point}
+        where a_id = #{id}
+    </update>
+    
     <select id="selectOne" parameterType="int" resultMap="accountResult">
         select <include refid="selectBaseColumns" />
         from xi_account

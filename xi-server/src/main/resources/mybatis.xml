@@ -19,6 +19,8 @@
         <typeAlias alias="Position" type="thu.declan.xi.server.model.Position" />
 		<typeAlias alias="Resume" type="thu.declan.xi.server.model.Resume" />
 		<typeAlias alias="News" type="thu.declan.xi.server.model.News" />
+        <typeAlias alias="PointLog" type="thu.declan.xi.server.model.PointLog" />
+        <typeAlias alias="Notification" type="thu.declan.xi.server.model.Notification" />
     </typeAliases>
 	
     <typeHandlers>
@@ -28,6 +30,8 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Student$Education" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Student$LangLevel" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Resume$RState" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.PointLog$LType" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Notification$NType" />
         <typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
 		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
 	</typeHandlers>

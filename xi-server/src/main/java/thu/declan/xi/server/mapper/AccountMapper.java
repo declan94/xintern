@@ -1,5 +1,6 @@
 package thu.declan.xi.server.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import thu.declan.xi.server.model.Account;
 
 /**
@@ -9,5 +10,7 @@ import thu.declan.xi.server.model.Account;
 public interface AccountMapper extends BaseMapper<Account> {
 	
 	public Account selectByIdentity(Account matcher);
+    
+    public void addPoint(@Param(value="id") int accountId, @Param(value="point") int point);
 	
 }

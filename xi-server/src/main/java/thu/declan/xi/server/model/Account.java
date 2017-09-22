@@ -65,5 +65,15 @@ public class Account {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    private Integer point;
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
     
 }
