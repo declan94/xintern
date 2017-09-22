@@ -7,20 +7,21 @@
         <result property="accountId" column="p_accountId" />
         <result property="type" column="p_type" />
         <result property="value" column="p_value" />
+        <result property="refId" column="p_refId" />
         <result property="createTime" column="p_createTime" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        p_accountId, p_type, p_value
+        p_accountId, p_type, p_value, p_refId
     </sql>
     
     <sql id="selectBaseColumns" >
-        p_id, p_accountId, p_type, p_value, p_createTime
+        p_id, p_accountId, p_type, p_value, p_refId, p_createTime
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="PointLog">
         insert into xi_pointlog (<include refid="insertBaseColumns" />) 
-        values (#{accountId}, #{type}, #{value})
+        values (#{accountId}, #{type}, #{value}, #{refId})
     </insert>
     
     <update id="update" parameterType="PointLog">
@@ -55,6 +56,7 @@
         <trim prefix="where" suffixOverrides="and">Ï
             <if test="accountId != null"> p_accountId = #{accountId} and </if>
             <if test="type != null"> p_type = #{type} and </if>
+            <if test="refId != null"> p_refId = #{refId} and </if>
         </trim>
     </select>
 	

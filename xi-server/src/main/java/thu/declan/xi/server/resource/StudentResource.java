@@ -22,6 +22,7 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.service.StudentService;
 
 /**
@@ -53,6 +54,7 @@ public class StudentResource extends BaseResource {
 		try {
 			student.setAccountId(acc.getId());
 			studentService.add(student);
+            addPoint(PointLog.PType.REGISTER, false, acc.getId());
 		} catch (ServiceException ex) {
 			accRes.deleteAccount(acc.getId());
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

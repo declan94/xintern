@@ -4,15 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Account.Role;
+import thu.declan.xi.server.model.PointLog;
+import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.service.AuthService;
+import thu.declan.xi.server.service.PointLogService;
 
 /**
  *
@@ -22,6 +23,9 @@ public class BaseResource {
 	
 	@Autowired
 	protected AuthService authService;
+    
+    @Autowired
+    protected PointLogService plogService;
     
     @Autowired 
     protected AutowireCapableBeanFactory beanFactory;
@@ -52,6 +56,55 @@ public class BaseResource {
 			return null;
 		}
 	}
+    
+    protected void addPoint(PType type, boolean isCompany, Integer refId) throws ApiException {
+        if (currentAccountId() == null) {
+            return;
+        }
+        int value = pointValue(type, isCompany);
+        if (value == 0) {
+            return;
+        }
+        try {
+            plogService.add(new PointLog(currentAccountId(), type, value, refId));
+        } catch (ServiceException ex) {
+            if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
+                return;
+            }
+            handleServiceException(ex);
+        }
+    }
+    
+    private int pointValue(PType type, boolean isCompany) {
+        if (isCompany) {
+            switch (type) {
+                case REGISTER:
+                case POSITION:
+                    return 20;
+                case RESUME:
+                    return 10;
+                case EMPLOY:
+                case COMMENT:
+                    return 50;
+                default:
+                    return 0;
+            }
+        } else {
+            switch (type) {
+                case REGISTER:
+                case LOGIN:
+                case PROFILE:
+                case COMMENT:
+                case STAR5:
+                    return 10;
+                case EMPLOY:
+                case RECOMMEND:
+                    return 20;
+                default:
+                    return 0;
+            }
+        }
+    }
 
 	protected void handleServiceException(ServiceException ex) throws ApiException {
 		String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

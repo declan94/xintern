@@ -23,24 +23,37 @@ public class PointLog {
             return Enum.valueOf(PType.class, str.toUpperCase());
         }
     }
-    
-    private Long id;
 
-    public Long getId() {
+    public PointLog(Integer accountId, PType type, Integer refId) {
+        this.accountId = accountId;
+        this.type = type;
+        this.refId = refId;
+    }
+
+    public PointLog(Integer accountId, PType type, Integer value, Integer refId) {
+        this.accountId = accountId;
+        this.type = type;
+        this.value = value;
+        this.refId = refId;
+    }
+    
+    private Integer id;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    private Long accountId;
+    private Integer accountId;
 
-    public Long getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
@@ -62,6 +75,16 @@ public class PointLog {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    private Integer refId;
+
+    public Integer getRefId() {
+        return refId;
+    }
+
+    public void setRefId(Integer refId) {
+        this.refId = refId;
     }
 
     private Date createTime;
