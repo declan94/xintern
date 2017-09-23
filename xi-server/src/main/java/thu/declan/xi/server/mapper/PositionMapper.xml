@@ -37,18 +37,23 @@
         p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime
     </sql>
 	
-	<sql id="selectExtColumns">
-		<include refid="selectBaseColumns" />,
-		c_name,  c_type, c_verified, c_priority
-	</sql>
+    <sql id="selectExtColumns">
+        <include refid="selectBaseColumns" />,
+        c_name,  c_type, c_verified, c_priority
+    </sql>
 	
-	<sql id="joinedTable" >
-		xi_position join xi_company on p_companyid = c_id
-	</sql>
+    <sql id="joinedTable" >
+        xi_position join xi_company on p_companyid = c_id
+    </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
         insert into xi_position (<include refid="insertBaseColumns" />) 
         values (#{companyId}, #{title}, #{area}, #{addr}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{salary}, #{stuSalary}, #{unit}, #{minDays}, #{continuous}, #{count}, #{retention}, #{intro}, #{reqGender}, #{reqEdu}, #{reqGrade}, #{reqMajor}, #{reqLang}, #{reqLangLevel})
+    </insert>
+    
+    <insert id="collect">
+        insert into xi_stuPosCollection (c_stuId, c_posId) 
+        values (#{stuId}, #{posId});
     </insert>
     
     <update id="update" parameterType="Position">
@@ -92,28 +97,43 @@
         where p_companyId = #{companyId}
     </select>
 	
-	<sql id="whereList">
-		<trim prefix="where" suffixOverrides="and">
-			<if test="company != null"> 
-				<if test="company.verified != null"> c_verified = #{company.verified} and </if>
-				<if test="company.industry != null"> c_industry = #{company.industry} and </if>
-				<if test="company.type != null"> c_type = #{company.type} and </if>
-			</if>
-			<if test="area != null"> p_area = #{area} and </if>
+    <sql id="whereList">
+        <trim prefix="where" suffixOverrides="and">
+            <if test="company != null"> 
+                <if test="company.verified != null"> c_verified = #{company.verified} and </if>
+                <if test="company.industry != null"> c_industry = #{company.industry} and </if>
+                <if test="company.type != null"> c_type = #{company.type} and </if>
+            </if>
+            <if test="area != null"> p_area = #{area} and </if>
         </trim>
-	</sql>
+    </sql>
     
     <select id="selectList" parameterType="Position" resultMap="positionResult">
         select <include refid="selectExtColumns" />
         from <include refid="joinedTable" />
         <include refid="whereList" />
-		order by c_priority desc, p_priority desc, p_createtime desc
+        order by c_priority desc, p_priority desc, p_createtime desc
     </select>
     
     <select id="selectCount" parameterType="Position" resultType="int">
         select count(*)
         from <include refid="joinedTable" />
         <include refid="whereList" />
+    </select>
+    
+    <select id="selectCollectedList" resultMap="positionResult">
+        select <include refid="selectExtColumns" />
+        from <include refid="joinedTable" />
+        join xi_stuPosCollection on c_posId = p_id
+        where c_stuId = #{stuId}
+        order by c_id desc;
+    </select>
+    
+    <select id="selectCollectedCount" parameterType="Position" resultType="int">
+        select count(*)
+        from xi_position
+        join xi_stuPosCollection on c_posId = p_id
+        where c_stuId = #{stuId}
     </select>
 	
     <delete id="delete" parameterType="int">

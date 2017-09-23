@@ -23,7 +23,7 @@
         insert into xi_pointlog (<include refid="insertBaseColumns" />) 
         values (#{accountId}, #{type}, #{value}, #{refId})
     </insert>
-    
+        
     <update id="update" parameterType="PointLog">
         update xi_pointlog 
         where p_id = #{id}
