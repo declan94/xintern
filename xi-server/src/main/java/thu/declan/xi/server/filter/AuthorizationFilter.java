@@ -1,11 +1,13 @@
 package thu.declan.xi.server.filter;
 
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import javax.annotation.Priority;
 import javax.annotation.security.DenyAll;
@@ -25,9 +27,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ErrorMessage;
+import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.PointLog;
+import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.service.AuthService;
-
+import thu.declan.xi.server.service.PointLogService;
 
 /**
  *
@@ -36,24 +41,27 @@ import thu.declan.xi.server.service.AuthService;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationFilter.class);
-    
+
     @Autowired
     AuthService authService;
-    
+
+    @Autowired
+    PointLogService plogService;
+
     @Context
     private ResourceInfo resourceInfo;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        
+
         // Let OPTIONS request go. for CORS request.
         // Maybe we should delete this before release.
         if (requestContext.getMethod().equals("OPTIONS")) {
             return;
         }
-        
+
         Method method = resourceInfo.getResourceMethod();
         Class cls = resourceInfo.getResourceClass();
 
@@ -74,7 +82,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                 }
             }
         }
-        
+
         if (permitAll) {
             return;
         }
@@ -87,7 +95,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             requestContext.abortWith(ACCESS_FORBIDDEN);
             return;
         }
-            
+
         final Response ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
                 .type(MediaType.APPLICATION_JSON)
                 .entity(new ErrorMessage(new ApiException(401, "Access Denied", "请登录")))
@@ -99,7 +107,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             requestContext.abortWith(ACCESS_DENIED);
             return;
         }
-        
+
         Account.Role type = account.getRole();
         if (type == null) {
             requestContext.abortWith(ACCESS_DENIED);
@@ -108,7 +116,22 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         if (!rolesSet.contains(type.toString())) {
             requestContext.abortWith(ACCESS_DENIED);
         }
-        
+
+        if (type != Account.Role.ADMIN) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+            try {
+                long refid = sdf.parse(date).getTime() / 1000;
+                switch (type) {
+                    case COMPANY:
+                        plogService.addPoint(new PointLog(account.getId(), PType.LOGIN, (int) refid), true);
+                    default:
+                        plogService.addPoint(new PointLog(account.getId(), PType.LOGIN, (int) refid), false);
+                }
+            } catch (ParseException | ServiceException ex) {
+            }
+        }
+
     }
 
 }

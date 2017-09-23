@@ -24,6 +24,8 @@ import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
+import thu.declan.xi.server.model.PointLog;
+import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.service.CompanyService;
@@ -65,6 +67,7 @@ public class PositionResource extends BaseResource {
 		}
 		try {
 			positionService.add(position);
+            addPoint(PType.POSITION, position.getId());
 		} catch (ServiceException ex) {
 			handleServiceException(ex);
 		}

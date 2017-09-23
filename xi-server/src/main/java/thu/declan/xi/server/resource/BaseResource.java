@@ -57,52 +57,18 @@ public class BaseResource {
 		}
 	}
     
-    protected void addPoint(PType type, boolean isCompany, Integer refId) throws ApiException {
-        if (currentAccountId() == null) {
+    protected void addPoint(PType type, Integer refId) throws ApiException {
+        if (currentAccountId() == null || Role.ADMIN.equals(currentRole())) {
             return;
         }
-        int value = pointValue(type, isCompany);
-        if (value == 0) {
-            return;
-        }
+        boolean isCompany = (Role.COMPANY.equals(currentRole()));
         try {
-            plogService.add(new PointLog(currentAccountId(), type, value, refId));
+            plogService.addPoint(new PointLog(currentAccountId(), type, refId), isCompany);
         } catch (ServiceException ex) {
             if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
                 return;
             }
             handleServiceException(ex);
-        }
-    }
-    
-    private int pointValue(PType type, boolean isCompany) {
-        if (isCompany) {
-            switch (type) {
-                case REGISTER:
-                case POSITION:
-                    return 20;
-                case RESUME:
-                    return 10;
-                case EMPLOY:
-                case COMMENT:
-                    return 50;
-                default:
-                    return 0;
-            }
-        } else {
-            switch (type) {
-                case REGISTER:
-                case LOGIN:
-                case PROFILE:
-                case COMMENT:
-                case STAR5:
-                    return 10;
-                case EMPLOY:
-                case RECOMMEND:
-                    return 20;
-                default:
-                    return 0;
-            }
         }
     }
 

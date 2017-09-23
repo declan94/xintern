@@ -60,12 +60,14 @@ public class CompanyResource extends BaseResource {
         acc.setRole(Account.Role.COMPANY);
         AccountResource accRes = new AccountResource();
         beanFactory.autowireBean(accRes);
+        String pwd = acc.getPassword();
         acc = accRes.createAccount(acc);
         company.setAccount(acc);
         try {
             company.setAccountId(acc.getId());
             companyService.add(company);
-            addPoint(PointLog.PType.REGISTER, true, acc.getId());
+            authService.login(acc.getPhone(), pwd, Account.Role.COMPANY);
+            addPoint(PointLog.PType.REGISTER, acc.getId());
         } catch (ServiceException ex) {
             accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

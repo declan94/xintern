@@ -21,7 +21,9 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.service.PositionService;
 import thu.declan.xi.server.service.ResumeService;
 
@@ -87,7 +89,12 @@ public class ResumeResource extends BaseResource {
         } catch (ServiceException ex) {
             throw new ApiException(404, "Resume not found", "简历id错误");
         }
-
+        if (resume.getState() == RState.OFFERED || resume.getState() == RState.WORKING) {
+            addPoint(PType.EMPLOY, resumeId);
+        }
+        if (resume.getCommentComp() != null || resume.getCommentStu() != null) {
+            addPoint(PType.COMMENT, resumeId);
+        }
         try {
             resume.setId(resumeId);
             resumeService.update(resume);
@@ -130,6 +137,7 @@ public class ResumeResource extends BaseResource {
         Resume resume = null;
         try {
             resume = resumeService.get(resumeId);
+            addPoint(PType.RESUME, resume.getId());
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
