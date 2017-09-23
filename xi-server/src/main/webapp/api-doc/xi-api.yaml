@@ -498,8 +498,6 @@ paths:
           description: 成功，返回资讯列表信息
           schema:
             $ref: '#/definitions/List-News'
-        400:
-          description: Bad request, invalid arguments
         401:
           description: 当前未登录
           schema:
@@ -521,14 +519,35 @@ paths:
           description: 成功，返回对应资讯信息
           schema:
             $ref: '#/definitions/Resume'
-        400:
-          description: Bad request, invalid arguments
         401:
           description: 当前未登录
         404:
           description: 获取失败，此资讯不存在
           schema:
             $ref: '#/definitions/Error'
+
+  /accounts/{accountId}/pointLogs:
+    get:
+      tags:
+      - other
+      summary: 获取积分记录
+      parameters:
+      - in: path
+        name: accountId
+        description: 账号id，若为0表示当前登陆账号。
+        required: true
+        type: integer
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回积分记录列表。
+          schema:
+            $ref: '#/definitions/List-PointLog'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
             
   /upload/{type}:
     post:
@@ -898,6 +917,46 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/News'
+
+  PointLog:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          accountId:
+            type: integer
+            example: 456
+          type:
+            type: string
+            enum:
+              - REGISTER
+              - PROFILE
+              - LOGIN
+              - POSITION
+              - RESUME
+              - EMPLOY
+              - COMMENT
+              - STAR5
+              - RECOMMEND
+          value:
+            type: integer
+            description: 积分值
+          refid:
+            type: integer
+            description: 相关id，登陆为当日时间戳，注册为学生/公司id，等等。
+          createTime:
+            type: string
+            example: '2017-10-01 10:00:00'
+
+  List-PointLog:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/PointLog'
 
   UploadResult:
     type: object

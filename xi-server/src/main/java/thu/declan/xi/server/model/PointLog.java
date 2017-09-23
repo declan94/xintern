@@ -8,6 +8,9 @@ import java.sql.Date;
  */
 public class PointLog {
 
+    public PointLog() {
+    }
+
     public enum PType {
         REGISTER, //注册
         PROFILE, //完善资料（简历）

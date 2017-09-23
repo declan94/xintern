@@ -47,7 +47,9 @@
         <trim prefix="where" suffixOverrides="and">
             <if test="accountId != null"> p_accountId = #{accountId} and </if>
             <if test="type != null"> p_type = #{type} and </if>
+            <if test="refId != null"> p_refId = #{refId} and </if>
         </trim>
+        order by p_createTime desc
     </select>
     
     <select id="selectCount" parameterType="PointLog" resultType="int">

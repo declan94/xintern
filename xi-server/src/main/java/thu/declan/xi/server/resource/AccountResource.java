@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,9 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Account.Role;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.News;
+import thu.declan.xi.server.model.Pagination;
+import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.service.AccountService;
 
 /**
@@ -95,6 +99,32 @@ public class AccountResource extends BaseResource {
 		LOGGER.debug("==================== leave AccountResource getAccount ====================");
 		return account;
 	}
+    
+    @GET
+    @Path("/{accountId}/pointLogs")
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+    public ListResponse<News> getPointLogs(@PathParam("accountId") int accountId,
+            @QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter AccountResource getPointLogs ====================");
+        if (accountId == 0) {
+            accountId = currentAccountId();
+        }
+        PointLog selector = new PointLog();
+        selector.setAccountId(accountId);
+        Pagination pagination = new Pagination(pageSize, pageIndex);
+        List<PointLog> pls = null;
+        try {
+             pls = plogService.getList(selector, pagination);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave AccountResource getPointLogs ====================");
+        return new ListResponse(pls, pagination);
+    }
 
 	@PUT
 	@Path("/{accountId}")
