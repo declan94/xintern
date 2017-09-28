@@ -7,12 +7,15 @@ import java.sql.Date;
  * @author declan
  */
 public class Code {
-    
-    private Integer id;
+
+    public Code() {
+    }
 
     public Code(String phone) {
         this.phone = phone;
     }
+
+    private Integer id;
 
     public Integer getId() {
         return id;
