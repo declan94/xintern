@@ -173,6 +173,7 @@ public class CompanyResource extends BaseResource {
     }
 	
 	@GET
+	@PermitAll
     @Path("/{companyId}/positions")
     @Produces(MediaType.APPLICATION_JSON)
 	public ListResponse<Position> getCompanyPositions(@PathParam("companyId") int companyId,

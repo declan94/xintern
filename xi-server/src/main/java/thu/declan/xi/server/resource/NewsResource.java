@@ -1,6 +1,7 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -54,6 +55,7 @@ public class NewsResource extends BaseResource {
     }
     
     @GET
+	@PermitAll
     @Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
     public ListResponse<News> getNewsList(@QueryParam("pageIndex") Integer pageIndex,
@@ -74,6 +76,7 @@ public class NewsResource extends BaseResource {
     }
     
     @GET
+	@PermitAll
     @Path("/{newsId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

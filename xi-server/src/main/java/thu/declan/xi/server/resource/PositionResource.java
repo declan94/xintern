@@ -2,6 +2,7 @@ package thu.declan.xi.server.resource;
 
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -109,6 +110,7 @@ public class PositionResource extends BaseResource {
 	}
 
 	@GET
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
 	public ListResponse<Position> getPositions(@QueryParam("pageIndex") Integer pageIndex,
@@ -139,6 +141,7 @@ public class PositionResource extends BaseResource {
 	}
 
 	@GET
+	@PermitAll
 	@Path("/{positionId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Position getPosition(@PathParam("positionId") int positionId) throws ApiException {
