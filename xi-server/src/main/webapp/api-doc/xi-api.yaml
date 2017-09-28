@@ -548,7 +548,54 @@ paths:
           description: 当前未登录
           schema:
             $ref: '#/definitions/Error' 
-            
+
+  /codes:
+    post:
+      tags:
+      - other
+      summary: 发送验证码
+      parameters:
+      - in: query
+        name: phone
+        type: string
+        description: 手机号
+        required: true
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/Code'
+        400:
+          description: Bad request, invalid arguments
+          schema:
+            $ref: '#/definitions/Error'
+
+    get:
+      tags:
+      - other
+      summary: 验证验证码
+      parameters:
+      - in: query
+        name: phone
+        type: string
+        description: 手机号
+        required: true
+      - in: query
+        name: code
+        type: string
+        description: 验证码
+        required: true
+      responses:
+        200:
+          description: 成功
+          schema:
+            $ref: '#/definitions/Code'
+        404:
+          description: 验证失败
+          schema:
+            $ref: '#/definitions/Error'
+
+
   /upload/{type}:
     post:
       tags:
@@ -947,6 +994,7 @@ definitions:
           createTime:
             type: string
             example: '2017-10-01 10:00:00'
+            readOnly: true
 
   List-PointLog:
     type: object
@@ -970,6 +1018,22 @@ definitions:
       url:
         type: string
         description: 上传成功时，返回对应的url
+  
+  Code:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          phone:
+            type: string
+          code:
+            type: string
+            readOnly: true
+          createTime:
+            type: string
+            example: '2017-10-01 10:00:00'
+            readOnly: true
+
 
 # Errors
   Error:
