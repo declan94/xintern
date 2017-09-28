@@ -59,7 +59,7 @@
 		<trim prefix="where" suffixOverrides="and">
 			<if test="phone != null"> c_phone = #{phone} and </if>
             <if test="code != null"> c_code = #{code} and </if>
-            c_createTime >= DATE_SUB（NOW(), INTERVAL 10 MINUTE）and
+            c_createTime >= DATE_SUB(NOW(), INTERVAL 10 MINUTE) and
 		</trim>
         limit 1
 	</select>
