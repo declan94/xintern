@@ -876,6 +876,10 @@ definitions:
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/CompanyUpdater'
       - properties:
+          verified:
+            type: boolean
+            description: 是否已认证
+            readOnly: true
           createTime:
             $ref: '#definitions/Timestamp'
      
