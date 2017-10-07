@@ -14,5 +14,11 @@ public interface PositionService extends BaseTableService<Position> {
     public List<Position> getCollectedList(int stuId, Pagination pagination) throws ServiceException;
     
     public int getCollectedCount(int stuId);
+	
+	public void collect(int stuId, int id) throws ServiceException;
+	
+	public void uncollect(int stuId, int id) throws ServiceException;
     
+	public void setCollected(int stuId, Position pos);
+	
 }

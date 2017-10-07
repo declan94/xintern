@@ -102,6 +102,37 @@ paths:
           description: 获取失败，此学生不存在
           schema:
             $ref: '#/definitions/Error'
+    put:
+      tags:
+      - student
+      summary: 修改学生信息
+      parameters:
+      - in: path
+        name: studentId
+        description: 学生Id，若当前登录为学生的账号，只能获取自己的信息，可以设置为0。
+        required: true
+        type: integer
+      - in: body
+        name: student
+        description: 修改内容
+        required: true
+        schema:
+            $ref: '#/definitions/StudentUpdater' 
+      responses:
+        200:
+          description: 修改成功，返回对应学生信息
+          schema:
+            $ref: '#/definitions/Student'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此学生不存在
+          schema:
+            $ref: '#/definitions/Error'
 
   /companies:
     post:
@@ -402,6 +433,68 @@ paths:
           description: 获取失败，权限不允许
         404:
           description: 获取失败，此职位不存在
+          schema:
+            $ref: '#/definitions/Error'
+
+  /positions/{positionId}/collect:
+    post:
+      tags:
+      - position
+      summary: 收藏职位（必须以学生身份登录）
+      parameters:
+      - in: path
+        name: positionId
+        description: 职位Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 收藏成功，返回职位信息
+          schema:
+            $ref: '#/definitions/Position'
+        401:
+          description: 当前未登录
+        403:
+          description: 已经收藏
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+      - position
+      summary: 取消收藏职位（必须以学生身份登录）
+      parameters:
+      - in: path
+        name: positionId
+        description: 职位Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 取消收藏成功，返回职位信息
+          schema:
+            $ref: '#/definitions/Position'
+        401:
+          description: 当前未登录
+        403:
+          description: 当前未收藏
+          schema:
+            $ref: '#/definitions/Error'
+
+  /positions/collect:
+    get:
+      tags:
+      - position
+      summary: 获取收藏的职位（必须以学生身份登录）
+      parameters:
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回职位列表信息
+          schema:
+            $ref: '#/definitions/List-Position'
+        401:
+          description: 当前未登录
           schema:
             $ref: '#/definitions/Error'
 
@@ -933,11 +1026,15 @@ definitions:
             type: integer
             readOnly: true
           company:
-            $ref: '#/definitions/Company'
+            type: object
             readOnly: true
           stuSalary:
             type: integer
             description: 学生获得的薪资（扣除平台手续费）
+            readOnly: true
+          collected:
+            type: boolean
+            description: 当前是否已收藏（只对学生账户有效）
             readOnly: true
           createTime:
             $ref: '#definitions/Timestamp'

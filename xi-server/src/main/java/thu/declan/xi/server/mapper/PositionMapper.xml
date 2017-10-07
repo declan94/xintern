@@ -52,9 +52,17 @@
     </insert>
     
     <insert id="collect">
-        insert into xi_stuPosCollection (c_stuId, c_posId) 
+        insert into xi_stuPosCollect (c_stuId, c_posId) 
         values (#{stuId}, #{posId});
     </insert>
+	
+	<select id="selectCollected" resultType="int">
+		select count(*) from xi_stuPosCollect where c_stuId = #{stuId} and c_posId = #{posId}
+	</select>
+	
+	<delete id="uncollect">
+		delete from xi_stuPosCollect where c_stuId = #{stuId} and c_posId = #{posId}
+	</delete>
     
     <update id="update" parameterType="Position">
         update xi_position 
@@ -124,15 +132,15 @@
     <select id="selectCollectedList" resultMap="positionResult">
         select <include refid="selectExtColumns" />
         from <include refid="joinedTable" />
-        join xi_stuPosCollection on c_posId = p_id
+        join xi_stuPosCollect on c_posId = p_id
         where c_stuId = #{stuId}
-        order by c_id desc;
+        order by xi_stuPosCollect.c_id desc;
     </select>
     
     <select id="selectCollectedCount" parameterType="Position" resultType="int">
         select count(*)
         from xi_position
-        join xi_stuPosCollection on c_posId = p_id
+        join xi_stuPosCollect on c_posId = p_id
         where c_stuId = #{stuId}
     </select>
 	

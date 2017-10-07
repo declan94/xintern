@@ -6,6 +6,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -25,7 +26,6 @@ import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
-import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Resume.RState;
@@ -131,6 +131,11 @@ public class PositionResource extends BaseResource {
 		Pagination pagination = new Pagination(pageSize, pageIndex);
 		try {
 			positions = positionService.getList(selector, pagination);
+			if (Account.Role.STUDENT.equals(currentRole())) {
+				for (Position position : positions) {
+					positionService.setCollected(currentEntityId(), position);
+				}
+			}
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
@@ -150,6 +155,9 @@ public class PositionResource extends BaseResource {
 		Position position = null;
 		try {
 			position = positionService.get(positionId);
+			if (Account.Role.STUDENT.equals(currentRole())) {
+				positionService.setCollected(currentEntityId(), position);
+			}
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
@@ -169,7 +177,7 @@ public class PositionResource extends BaseResource {
 			@QueryParam("state") List<RState>states,
 			@QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
-        LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+        LOGGER.debug("==================== enter PositionResource getResumes ====================");
 		LOGGER.debug(states.toString());
         Resume selector = new Resume();
 		if (!states.isEmpty()) {
@@ -185,8 +193,75 @@ public class PositionResource extends BaseResource {
             LOGGER.debug(devMsg);
             handleServiceException(ex);
         }
-        LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+        LOGGER.debug("==================== leave PositionResource getResumes ====================");
         return new ListResponse(resumes, pagination);
     }
 
+	@POST
+	@Path("/{positionId}/collect")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT})
+	public Position collectPosition(@PathParam("positionId") int positionId) throws ApiException {
+        LOGGER.debug("==================== enter PositionResource collectPosition ====================");
+        try {
+			Position pos = positionService.get(positionId);
+			positionService.collect(currentEntityId(), positionId);
+			pos.setCollected(true);
+			return pos;
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
+                throw new ApiException(403, devMsg, "已经收藏！");
+            }
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave PositionResource collectPosition ====================");
+        return null;
+    }
+	
+	@DELETE
+	@Path("/{positionId}/collect")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT})
+	public Position uncollectPosition(@PathParam("positionId") int positionId) throws ApiException {
+        LOGGER.debug("==================== enter PositionResource uncollectPosition ====================");
+        try {
+			Position pos = positionService.get(positionId);
+			positionService.uncollect(currentEntityId(), positionId);
+			pos.setCollected(false);
+			return pos;
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
+                throw new ApiException(403, devMsg, "未收藏！");
+            }
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave PositionResource uncollectPosition ====================");
+        return null;
+    }
+	
+	@GET
+	@Path("/collect")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT})
+	public ListResponse<Position> collectedPositions(
+			@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+		LOGGER.debug("==================== enter PositionResource collectedPositions ====================");
+        List<Position> positions = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            positions = positionService.getCollectedList(currentEntityId(), pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+		LOGGER.debug("==================== leave PositionResource collectedPositions ====================");
+		return new ListResponse(positions, pagination);
+	}
+	
 }

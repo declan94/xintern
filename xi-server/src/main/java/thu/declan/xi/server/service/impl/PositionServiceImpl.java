@@ -61,5 +61,26 @@ public class PositionServiceImpl extends BaseTableServiceImpl<Position> implemen
     public int getCollectedCount(int stuId) {
         return positionMapper.selectCollectedCount(stuId);
     }
+
+	@Override
+	public void collect(int stuId, int id) throws ServiceException {
+		if (positionMapper.selectCollected(stuId, id) > 0) {
+			throw new ServiceException(ServiceException.CODE_UK_CONSTRAINT, "Already collected");
+		}
+		positionMapper.collect(stuId, id);
+	}
+
+	@Override
+	public void uncollect(int stuId, int id) throws ServiceException {
+//		if (positionMapper.selectCollected(stuId, id) == 0) {
+//			throw new ServiceException(ServiceException.CODE_UK_CONSTRAINT, "Already uncollected");
+//		}
+		positionMapper.uncollect(stuId, id);
+	}
+
+	@Override
+	public void setCollected(int stuId, Position pos) {
+		pos.setCollected(positionMapper.selectCollected(stuId, pos.getId()) > 0);
+	}
 	
 }

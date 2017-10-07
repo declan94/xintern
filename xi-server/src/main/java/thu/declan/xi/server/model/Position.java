@@ -252,6 +252,16 @@ public class Position {
         this.reqLangLevel = reqLangLevel;
     }
 
+	private Boolean collected;
+
+	public Boolean isCollected() {
+		return collected;
+	}
+
+	public void setCollected(Boolean collected) {
+		this.collected = collected;
+	}
+
     private Date createTime;
 
     public Date getCreateTime() {
