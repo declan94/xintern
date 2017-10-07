@@ -16,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,6 +134,31 @@ public class StudentResource extends BaseResource {
         acc.setRole(Account.Role.STUDENT);
         acc = loginAccount(acc);
         try {
+            Student stu = studentService.getByAccountId(acc.getId());
+            stu.setAccount(acc);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+            try {
+                long refid = sdf.parse(date).getTime() / 1000;
+                addPoint(PType.LOGIN, (int) refid);
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(StudentResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return stu;
+        } catch (ServiceException ex) {
+            handleServiceException(ex);
+            return null;
+        }
+    }
+	
+	@POST
+    @Path("login/wechat")
+    @PermitAll
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Student wechatLogin(@QueryParam("openid") String openid) throws ApiException {
+        try {
+			Account acc = authService.wechatLogin(openid, Account.Role.STUDENT);
             Student stu = studentService.getByAccountId(acc.getId());
             stu.setAccount(acc);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

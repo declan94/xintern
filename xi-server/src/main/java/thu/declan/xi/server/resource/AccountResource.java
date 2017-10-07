@@ -125,6 +125,32 @@ public class AccountResource extends BaseResource {
 		LOGGER.debug("==================== leave AccountResource getPointLogs ====================");
         return new ListResponse(pls, pagination);
     }
+	
+	@PUT
+    @Path("/{accountId}/wechat")
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+    public Account bindWechat(@PathParam("accountId") int accountId,
+			@QueryParam("openid") String openid) throws ApiException {
+        LOGGER.debug("==================== enter AccountResource bindWechat ====================");
+        if (accountId == 0) {
+            accountId = currentAccountId();
+        }
+        Account updater = new Account();
+		updater.setId(accountId);
+		updater.setWechat(openid);
+		Account acc = null;
+        try {
+			accountService.update(updater);
+			acc = accountService.get(accountId);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave AccountResource bindWechat ====================");
+        return acc;
+    }
 
 	@PUT
 	@Path("/{accountId}")

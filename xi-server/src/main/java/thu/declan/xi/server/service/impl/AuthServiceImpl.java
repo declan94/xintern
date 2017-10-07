@@ -50,20 +50,8 @@ public class AuthServiceImpl implements AuthService {
 	public Integer getEntityId() {
 		return (Integer) session().getAttribute(Constant.SESSION_ENTITY_ID);
 	}
-
-
-	@Override
-	public Account login(String phone, String password, Account.Role authType) throws ServiceException {
-		Account matcher = new Account();
-		matcher.setPhone(phone);
-		matcher.setRole(authType);
-		Account account = accountMapper.selectByIdentity(matcher);
-		if (account == null) {
-			throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account");
-		}
-		if (!EncryptionUtils.checkPassword(password, account.getPassword())) {
-			throw new ServiceException(ServiceException.CODE_WRONG_PASSWORD, "Wrong password");
-		}
+	
+	private void setSession(Account account, Account.Role authType) {
 		HttpSession sess = session();
 		sess.setAttribute(Constant.SESSION_ACCOUNT, account);
 		switch (authType) {
@@ -78,6 +66,35 @@ public class AuthServiceImpl implements AuthService {
 			default:
 				sess.removeAttribute(Constant.SESSION_ENTITY_ID);
 		}
+	}
+
+
+	@Override
+	public Account login(String phone, String password, Account.Role authType) throws ServiceException {
+		Account matcher = new Account();
+		matcher.setPhone(phone);
+		matcher.setRole(authType);
+		Account account = accountMapper.selectByIdentity(matcher);
+		if (account == null) {
+			throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account");
+		}
+		if (!EncryptionUtils.checkPassword(password, account.getPassword())) {
+			throw new ServiceException(ServiceException.CODE_WRONG_PASSWORD, "Wrong password");
+		}
+		setSession(account, authType);
+		return account;
+	}
+
+	@Override
+	public Account wechatLogin(String openid, Account.Role authType) throws ServiceException {
+		Account matcher = new Account();
+		matcher.setWechat(openid);
+		matcher.setRole(authType);
+		Account account = accountMapper.selectByIdentity(matcher);
+		if (account == null) {
+			throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account");
+		}
+		setSession(account, authType);
 		return account;
 	}
     

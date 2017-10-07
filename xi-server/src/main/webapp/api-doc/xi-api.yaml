@@ -76,6 +76,29 @@ paths:
         400:
           description: Bad request, invalid arguments
 
+  /students/login/wechat:
+    post:
+      tags:
+      - student
+      summary: 学生微信登录
+      parameters:
+      - in: query
+        name: openid
+        description: 微信授权openid
+        required: true
+        type: string
+      responses:
+        200:
+          description: 登录成功，返回学生信息
+          schema:
+            $ref: '#/definitions/Student'
+        403:
+          description: 登录失败，账号不存在
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
   /students/{studentId}:
     get:
       tags:
@@ -686,6 +709,32 @@ paths:
             $ref: '#/definitions/List-PointLog'
         401:
           description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
+
+  /accounts/{accountId}/wechat:
+    put:
+      tags:
+      - other
+      summary: 绑定微信openid
+      parameters:
+      - in: path
+        name: accountId
+        description: 账号id，若为0表示当前登陆账号。
+        required: true
+        type: integer
+      - in: query
+        name: openid
+        description: wechat openid
+        required: true
+        type: string
+      responses:
+        200:
+          description: 成功，返回账号信息
+          schema:
+            $ref: '#/definitions/Account'
+        404:
+          description: 账号不存在
           schema:
             $ref: '#/definitions/Error' 
 

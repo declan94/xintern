@@ -12,6 +12,8 @@ public interface AuthService {
     public Account getAccount();
 	
 	public Integer getEntityId();
+	
+	public Account wechatLogin(String openid, Account.Role authType) throws ServiceException;
 
     public Account login(String phone, String password, Account.Role authType) throws ServiceException;
     
