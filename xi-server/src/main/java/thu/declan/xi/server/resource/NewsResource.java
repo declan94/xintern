@@ -57,7 +57,6 @@ public class NewsResource extends BaseResource {
     @GET
 	@PermitAll
     @Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
     public ListResponse<News> getNewsList(@QueryParam("pageIndex") Integer pageIndex,
 			@QueryParam("pageSize") Integer pageSize) throws ApiException {
         LOGGER.debug("==================== enter NewsResource getNewses ====================");
@@ -66,6 +65,11 @@ public class NewsResource extends BaseResource {
         List<News> newses = null;
         try {
              newses = newsService.getList(selector, pagination);
+			 if (currentAccountId() != null) {
+				 for (News n : newses) {
+					newsService.setStarred(currentAccountId(), n);					 
+				 }
+			}
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
@@ -80,7 +84,6 @@ public class NewsResource extends BaseResource {
     @Path("/{newsId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
     public News getNews(@PathParam("newsId") int newsId) throws ApiException {
         LOGGER.debug("==================== enter NewsResource getNews ====================");
         LOGGER.debug("newsId: " + newsId);
@@ -88,6 +91,9 @@ public class NewsResource extends BaseResource {
         try {
 			newsService.incView(newsId);
 			news = newsService.get(newsId);
+			if (currentAccountId() != null) {
+				newsService.setStarred(currentAccountId(), news);
+			}
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
@@ -120,16 +126,66 @@ public class NewsResource extends BaseResource {
 		LOGGER.debug("==================== leave NewsResource editNews ====================");
         return news;
     }
-    
-    @DELETE
-    @Path("/{newsId}")
+	
+	@POST
+    @Path("/{newsId}/star")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public News deleteNews(@PathParam("newsId") int newsId) throws ApiException {
-        LOGGER.debug("==================== enter NewsResource deleteNews ====================");
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+    public News starNews(@PathParam("newsId") int newsId) throws ApiException {
+        LOGGER.debug("==================== enter NewsResource starNews ====================");
         LOGGER.debug("newsId: " + newsId);
-        News news = getNews(newsId);
-		newsService.delete(newsId);
-		LOGGER.debug("==================== leave NewsResource deleteNews ====================");
+        News news = null;
+        try {
+			news = newsService.get(newsId);
+			newsService.incStar(currentAccountId(), newsId);
+			news.setStarred(true);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
+                throw new ApiException(403, devMsg, "已经点赞！");
+            }
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave NewsResource starNews ====================");
         return news;
-    }	
+    }
+	
+	@DELETE
+    @Path("/{newsId}/star")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+    public News unstarNews(@PathParam("newsId") int newsId) throws ApiException {
+        LOGGER.debug("==================== enter NewsResource unstarNews ====================");
+        LOGGER.debug("newsId: " + newsId);
+        News news = null;
+        try {
+			news = newsService.get(newsId);
+			newsService.decStar(currentAccountId(), newsId);
+			news.setStarred(false);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
+                throw new ApiException(403, devMsg, "已经取消点赞！");
+            }
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave NewsResource unstarNews ====================");
+        return news;
+    }
+    
+//    @DELETE
+//    @Path("/{newsId}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public News deleteNews(@PathParam("newsId") int newsId) throws ApiException {
+//        LOGGER.debug("==================== enter NewsResource deleteNews ====================");
+//        LOGGER.debug("newsId: " + newsId);
+//        News news = getNews(newsId);
+//		newsService.delete(newsId);
+//		LOGGER.debug("==================== leave NewsResource deleteNews ====================");
+//        return news;
+//    }	
 }

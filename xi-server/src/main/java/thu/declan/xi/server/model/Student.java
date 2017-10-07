@@ -79,6 +79,16 @@ public class Student {
         this.name = name;
     }
 
+	private String idNo;
+
+	public String getIdNo() {
+		return idNo;
+	}
+
+	public void setIdNo(String idNo) {
+		this.idNo = idNo;
+	}
+
     private String phone;
 
     public String getPhone() {
@@ -198,6 +208,36 @@ public class Student {
     public void setCerts(List<String> certs) {
         this.certs = certs;
     }
+
+	private String selfEval;
+
+	public String getSelfEval() {
+		return selfEval;
+	}
+
+	public void setSelfEval(String selfEval) {
+		this.selfEval = selfEval;
+	}
+
+	private String socialExp;
+
+	public String getSocialExp() {
+		return socialExp;
+	}
+
+	public void setSocialExp(String socialExp) {
+		this.socialExp = socialExp;
+	}
+
+	private String workExp;
+
+	public String getWorkExp() {
+		return workExp;
+	}
+
+	public void setWorkExp(String workExp) {
+		this.workExp = workExp;
+	}	
 
     private String avatar;
 

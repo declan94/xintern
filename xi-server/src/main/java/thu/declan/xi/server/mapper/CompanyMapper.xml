@@ -16,22 +16,23 @@
 		<result property="industry" column="c_industry" />
 		<result property="code" column="c_code" />
 		<result property="intro" column="c_intro" />
+		<result property="link" column="c_link" />
         <result property="logo" column="c_logo" />
         <result property="verified" column="c_verified" />
         <result property="createTime" column="c_createTime" />
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
-		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_logo
+		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo
 	</sql>
     
 	<sql id="selectBaseColumns" >
-		c_id, c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_logo, c_verified, c_createTime
+		c_id, c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo, c_verified, c_createTime
 	</sql>
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Company">
 		insert into xi_company (<include refid="insertBaseColumns" />) 
-		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPhone}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{logo})
+		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPhone}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{link}, #{logo})
 	</insert>
     
 	<update id="update" parameterType="Company">
@@ -48,6 +49,7 @@
 			<if test="industry != null"> c_industry = #{industry}, </if>
 			<if test="code != null"> c_code = #{code}, </if>
 			<if test="intro != null"> c_intro = #{intro}, </if>
+			<if test="intro != null"> c_link = #{link}, </if>
             <if test="logo != null"> c_logo = #{logo}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
 		</trim>

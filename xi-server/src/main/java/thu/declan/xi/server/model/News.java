@@ -38,6 +38,16 @@ public class News {
 		this.content = content;
 	}
 
+	private String author;
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	private Integer view;
 
 	public Integer getView() {
@@ -58,6 +68,16 @@ public class News {
 		this.star = star;
 	}
 
+	private Boolean published;
+
+	public Boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(Boolean published) {
+		this.published = published;
+	}
+
 	private Date createTime;
 
 	public Date getCreateTime() {
@@ -66,6 +86,16 @@ public class News {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	private Boolean starred;
+
+	public Boolean isStarred() {
+		return starred;
+	}
+
+	public void setStarred(Boolean starred) {
+		this.starred = starred;
 	}
 	
 }

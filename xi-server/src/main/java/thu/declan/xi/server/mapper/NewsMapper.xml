@@ -5,27 +5,29 @@
     <resultMap type="News" id="newsResult">
         <result property="id" column="n_id" />
         <result property="title" column="n_title" />
+		<result property="author" column="n_author" />
         <result property="content" column="n_content" />
         <result property="view" column="n_view" />
         <result property="star" column="n_star" />
+		<result property="published" column="n_published" />
         <result property="createTime" column="n_createTime" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        n_title, n_content, n_view, n_star
+        n_title, n_content, n_author, n_view, n_star, n_published
     </sql>
     
     <sql id="selectBaseColumns" >
-		n_id, n_title, n_content, n_view, n_star, n_createTime
+		n_id, n_title, n_content, n_author, n_view, n_star, n_published, n_createTime
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="News">
         insert into xi_news (<include refid="insertBaseColumns" />) 
-        values (#{title}, #{content}, #{view}, #{star})
+        values (#{title}, #{content}, #{author}, #{view}, #{star}, #{published})
     </insert>
 	
-	<update id="incViewCnt" parameterType="int">
-        update xi_news set n_view = n_view + 1 where n_id = #{id}
+	<update id="decStarCnt" parameterType="int">
+        update xi_news set n_star = n_star - 1 where n_id = #{id}
     </update>
     
     <update id="update" parameterType="News">
@@ -66,5 +68,26 @@
         delete from xi_news where n_id = #{id}
     </delete>
    	
+<!--	star relative-->
+	<update id="incViewCnt" parameterType="int">
+        update xi_news set n_view = n_view + 1 where n_id = #{id}
+    </update>
+		
+	<update id="incStarCnt">
+        update xi_news set n_star = n_star + 1 where n_id = #{id};
+    </update>
+	
+	<insert id="insertStar">
+		insert xi_newsstar (s_accountid, s_newsid) values (#{accountId}, #{id});
+	</insert>
+		
+	<delete id="deleteStar">
+		delete from xi_newsstar where s_accountid = #{accountId} and s_newsid = #{id};
+	</delete>
+	
+	<select id="selectStar" resultType="int">
+		select count(*) from xi_newsstar where s_accountid = #{accountId} and s_newsid = #{id};
+	</select>
+	
 </mapper>
 

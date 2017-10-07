@@ -147,6 +147,16 @@ public class Company {
     public void setIntro(String intro) {
         this.intro = intro;
     }    
+
+	private String link;
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
     
     private String logo;
 

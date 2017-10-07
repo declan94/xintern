@@ -13,6 +13,7 @@ public class ServiceException extends Throwable {
 	public static final int CODE_WRONG_PASSWORD = 104;
     public static final int CODE_ACCOUNT_FROZEN = 105;
 	public static final int CODE_FK_CONSTRAINT = 106;
+	public static final int CODE_UK_CONSTRAINT = 107;
 
 	
 
