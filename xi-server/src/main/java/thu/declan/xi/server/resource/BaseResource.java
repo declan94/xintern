@@ -10,9 +10,12 @@ import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Account.Role;
+import thu.declan.xi.server.model.Notification;
+import thu.declan.xi.server.model.Notification.NType;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.service.AuthService;
+import thu.declan.xi.server.service.NotificationService;
 import thu.declan.xi.server.service.PointLogService;
 
 /**
@@ -26,6 +29,9 @@ public class BaseResource {
     
     @Autowired
     protected PointLogService plogService;
+	
+	@Autowired
+	protected NotificationService notiService;
     
     @Autowired 
     protected AutowireCapableBeanFactory beanFactory;
@@ -63,7 +69,9 @@ public class BaseResource {
         }
         boolean isCompany = (Role.COMPANY.equals(currentRole()));
         try {
-            plogService.addPoint(new PointLog(currentAccountId(), type, refId), isCompany);
+			PointLog pl = new PointLog(currentAccountId(), type, refId);
+            plogService.addPoint(pl, isCompany);
+			notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT);
         } catch (ServiceException ex) {
             if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
                 return;
@@ -71,6 +79,13 @@ public class BaseResource {
             handleServiceException(ex);
         }
     }
+	
+	protected void addNoti(NType type, Integer refId, String tpl, Object ... args) {
+		if (currentAccountId() == null || Role.ADMIN.equals(currentRole())) {
+            return;
+        }
+		notiService.addNoti(currentAccountId(), type, refId, String.format(tpl, args));
+	}
 
 	protected void handleServiceException(ServiceException ex) throws ApiException {
 		String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

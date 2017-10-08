@@ -7,6 +7,7 @@ import thu.declan.xi.server.mapper.AccountMapper;
 import thu.declan.xi.server.mapper.PointLogMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.model.PointLog;
+import thu.declan.xi.server.service.NotificationService;
 import thu.declan.xi.server.service.PointLogService;
 
 /**
@@ -21,6 +22,9 @@ public class PointLogServiceImpl extends BaseTableServiceImpl<PointLog> implemen
     
     @Autowired
     AccountMapper accountMapper;
+	
+	@Autowired
+	NotificationService notiService;
 
 	@Override
 	protected BaseMapper<PointLog> getMapper() {
@@ -34,6 +38,11 @@ public class PointLogServiceImpl extends BaseTableServiceImpl<PointLog> implemen
             throw new ServiceException(ServiceException.CODE_DUPLICATE_ELEMENT, "Already added");
         }
         accountMapper.addPoint(pointLog.getAccountId(), pointLog.getValue());
+	}
+	
+	@Override
+	public void postAdd(PointLog pointLog) {
+		
 	}
 
     @Override

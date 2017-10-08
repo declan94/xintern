@@ -29,9 +29,11 @@ import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ErrorMessage;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.service.AuthService;
+import thu.declan.xi.server.service.NotificationService;
 import thu.declan.xi.server.service.PointLogService;
 
 /**
@@ -45,10 +47,13 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationFilter.class);
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
 
     @Autowired
-    PointLogService plogService;
+    private PointLogService plogService;
+	
+	@Autowired
+	private NotificationService notiService;
 
     @Context
     private ResourceInfo resourceInfo;
@@ -122,12 +127,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             String date = sdf.format(new Date());
             try {
                 long refid = sdf.parse(date).getTime() / 1000;
+				PointLog pl = null;
                 switch (type) {
                     case COMPANY:
-                        plogService.addPoint(new PointLog(account.getId(), PType.LOGIN, (int) refid), true);
+						pl = new PointLog(account.getId(), PType.LOGIN, (int) refid);
+                        plogService.addPoint(pl, true);
                     default:
-                        plogService.addPoint(new PointLog(account.getId(), PType.LOGIN, (int) refid), false);
+						pl = new PointLog(account.getId(), PType.LOGIN, (int) refid);
+                        plogService.addPoint(pl, false);
                 }
+				notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT);
             } catch (ParseException | ServiceException ex) {
             }
         }

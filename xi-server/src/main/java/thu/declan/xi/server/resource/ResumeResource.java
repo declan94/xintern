@@ -21,6 +21,7 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.Rate;
@@ -66,6 +67,9 @@ public class ResumeResource extends BaseResource {
         } catch (ServiceException ex) {
             handleServiceException(ex);
         }
+		if (Account.Role.STUDENT.equals(currentRole())) {
+			addNoti(Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_ADD);
+		}
         LOGGER.debug("==================== leave ResumeResource createResume ====================");
         return resume;
     }
@@ -78,8 +82,9 @@ public class ResumeResource extends BaseResource {
     public Resume editResume(@PathParam("resumeId") int resumeId, Resume resume) throws ApiException {
         LOGGER.debug("==================== enter ResumeResource editResume ====================");
         LOGGER.debug("resumeId: " + resumeId);
+		Resume oldRes = null;
         try {
-            Resume oldRes = resumeService.get(resumeId);
+            oldRes = resumeService.get(resumeId);
             switch (currentRole()) {
                 case STUDENT:
                     if (!Objects.equals(oldRes.getStuId(), currentEntityId())) {
@@ -99,11 +104,24 @@ public class ResumeResource extends BaseResource {
             throw new ApiException(404, "Resume not found", "简历id错误");
         }
         if (resume.getState() == RState.OFFERED || resume.getState() == RState.WORKING) {
-            addPoint(PType.EMPLOY, resumeId);
+            this.addPoint(PType.EMPLOY, resumeId);
         }
         if (resume.getCommentComp() != null || resume.getCommentStu() != null) {
-            addPoint(PType.COMMENT, resumeId);
+            this.addPoint(PType.COMMENT, resumeId);
         }
+		switch (resume.getState()) {
+			case CANCELED:
+				this.addNoti(Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL);			
+				break;
+			case WAIT_STU_CONFIRM:
+				if (oldRes.getState() == RState.NEW) {
+					this.addNoti(Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW);
+				} else {
+					this.addNoti(Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME);
+				}
+			case OFFERED:
+				this.addNoti(Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN);
+		}
         try {
             resume.setId(resumeId);
             resumeService.update(resume);
