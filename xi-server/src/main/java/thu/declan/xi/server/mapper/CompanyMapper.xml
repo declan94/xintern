@@ -10,8 +10,10 @@
 		<result property="type" column="c_type" />
 		<result property="scale" column="c_scale" />
 		<result property="contact" column="c_contact" />
+		<result property="contactPos" column="c_contactPos" />
 		<result property="contactPhone" column="c_contactPhone" />
 		<result property="email" column="c_email" />
+		<result property="avatar" column="c_avatar" />
 		<result property="phone" column="c_phone" />
 		<result property="industry" column="c_industry" />
 		<result property="code" column="c_code" />
@@ -30,7 +32,7 @@
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
-		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo
+		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPos, c_contactPhone, c_avatar, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo
 	</sql>
     
 	<sql id="selectBaseColumns" >
@@ -40,7 +42,7 @@
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Company">
 		insert into xi_company (<include refid="insertBaseColumns" />) 
-		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPhone}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{link}, #{logo})
+		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPos}, #{contactPhone},  #{avatar}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{link}, #{logo})
 	</insert>
     
 	<update id="update" parameterType="Company">

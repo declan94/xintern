@@ -27,6 +27,21 @@
         <result property="reqLang" column="p_reqLang" />
         <result property="reqLangLevel" column="p_reqLangLevel" />
         <result property="createTime" column="p_createTime" />
+		<association property="company" javaType="Company">
+			<id property="id" column="p_companyId"/>
+			<result property="name" column="c_name" />
+			<result property="addr" column="c_addr" />
+			<result property="type" column="c_type" />
+			<result property="contact" column="c_contact" />
+			<result property="contactPos" column="c_contactPos" />
+			<result property="contactPhone" column="c_contactPhone" />
+			<result property="avatar" column="c_avatar" />
+			<result property="phone" column="c_phone" />
+			<result property="industry" column="c_industry" />
+			<result property="link" column="c_link" />
+			<result property="logo" column="c_logo" />
+			<result property="verified" column="c_verified" />
+		</association>
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -39,7 +54,7 @@
 	
     <sql id="selectExtColumns">
         <include refid="selectBaseColumns" />,
-        c_name,  c_type, c_verified, c_priority
+        c_name, c_addr,  c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified, c_priority
     </sql>
 	
     <sql id="joinedTable" >

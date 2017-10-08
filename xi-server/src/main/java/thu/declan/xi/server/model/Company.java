@@ -88,6 +88,16 @@ public class Company {
         this.contact = contact;
     }
 
+	private String contactPos;
+
+	public String getContactPos() {
+		return contactPos;
+	}
+
+	public void setContactPos(String contactPos) {
+		this.contactPos = contactPos;
+	}
+
     private String contactPhone;
 
     public String getContactPhone() {
@@ -97,6 +107,16 @@ public class Company {
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
     }
+
+	private String avatar;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
     private String email;
 
