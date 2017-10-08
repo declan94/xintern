@@ -25,6 +25,10 @@ tags:
   description: 简历（实习关系）相关
 - name: news
   description: 资讯相关
+- name: pointlog
+  description: 积分记录
+- name: notification
+  description: 通知消息
 - name: other
   description: 其他
 paths:
@@ -755,6 +759,7 @@ paths:
     get:
       tags:
       - other
+      - pointlog
       summary: 获取积分记录
       parameters:
       - in: path
@@ -797,6 +802,80 @@ paths:
             $ref: '#/definitions/Account'
         404:
           description: 账号不存在
+          schema:
+            $ref: '#/definitions/Error' 
+  /pointLogs:
+    get:
+      tags:
+      - pointlog
+      summary: 获取积分记录
+      parameters:
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回积分记录列表。
+          schema:
+            $ref: '#/definitions/List-PointLog'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
+  /pointLogs/{plogId}:
+    get:
+      tags:
+      - pointlog
+      summary: 获取指定积分记录
+      parameters:
+      - in: path
+        name: plogId
+        type: integer
+        description: 积分记录的id
+        example: 1
+      responses:
+        200:
+          description: 成功，返回积分记录。
+          schema:
+            $ref: '#/definitions/PointLog'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
+  /notifications:
+    get:
+      tags:
+      - notification
+      summary: 获取通知
+      parameters:
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回通知列表。
+          schema:
+            $ref: '#/definitions/List-PointLog'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
+  /notifications/{notiId}:
+    get:
+      tags:
+      - notification
+      summary: 获取指定通知，并标记为已读。
+      parameters:
+      - in: path
+        name: notiId
+        type: integer
+        description: 通知的id
+        example: 1
+      responses:
+        200:
+          description: 成功，返回通知。
+          schema:
+            $ref: '#/definitions/PointLog'
+        401:
+          description: 当前未登录
           schema:
             $ref: '#/definitions/Error' 
 
@@ -1359,6 +1438,45 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/PointLog'
+  
+  Notification:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          accountId:
+            type: integer
+            example: 456
+          type:
+            type: string
+            description: 通知类型，用于确定refid指定的实体类型
+            enum:
+              - POINT
+              - RESUME
+              - SALARY
+              - WITHDRAW
+              - COMMENT
+              - BACKEND
+          msg:
+            type: string
+            description: 消息内容
+          refid:
+            type: integer
+            description: 相关实体id。
+          createTime:
+            type: string
+            example: '2017-10-01 10:00:00'
+            readOnly: true
+
+  List-Notification:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Notification'
 
   UploadResult:
     type: object
