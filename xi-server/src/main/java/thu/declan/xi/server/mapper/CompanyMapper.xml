@@ -20,6 +20,13 @@
         <result property="logo" column="c_logo" />
         <result property="verified" column="c_verified" />
         <result property="createTime" column="c_createTime" />
+		<association property="avgRate" javaType="AvgRate">
+			<result property="score1" column="c_score1" />
+			<result property="score2" column="c_score2" />
+			<result property="score3" column="c_score3" />
+			<result property="score4" column="c_score4" />
+			<result property="score5" column="c_score5" />
+		</association>
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
@@ -27,7 +34,8 @@
 	</sql>
     
 	<sql id="selectBaseColumns" >
-		c_id, c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo, c_verified, c_createTime
+		xi_company.*
+		<!--c_id, c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPhone, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo, c_verified, c_createTime-->
 	</sql>
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Company">
@@ -52,6 +60,13 @@
 			<if test="intro != null"> c_link = #{link}, </if>
             <if test="logo != null"> c_logo = #{logo}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
+			<if test="avgRate != null"> 
+				<if test="avgRate.score1 != null"> c_score1 = #{avgRate.score1}, </if>
+				<if test="avgRate.score2 != null"> c_score2 = #{avgRate.score2}, </if>
+				<if test="avgRate.score3 != null"> c_score3 = #{avgRate.score3}, </if>
+				<if test="avgRate.score4 != null"> c_score4 = #{avgRate.score4}, </if>
+				<if test="avgRate.score5 != null"> c_score5 = #{avgRate.score5}, </if>
+			</if>
 		</trim>
 		where c_id = #{id}
 	</update>

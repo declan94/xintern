@@ -600,6 +600,37 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+  
+  /resumes/{resumeId}/rate:
+    post:
+      tags:
+      - resume
+      summary: 实习互评
+      parameters:
+      - in: path
+        name: resumeId
+        description: 简历Id
+        required: true
+        type: integer
+      - in: body
+        name: rate
+        description: 评价实体
+        required: true
+        schema:
+          $ref: '#/definitions/Rate'
+      responses:
+        200:
+          description: 评价成功，返回成功的评价实体
+          schema:
+            $ref: '#/definitions/Rate'
+        401:
+          description: 当前未登录或者当前登陆账号和Resume不匹配
+        403:
+          description: 已经评价过该次实习，或者本次实习状态不是ENDED
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
 
   /news:
     get:
@@ -918,6 +949,72 @@ definitions:
         type: string
         description: 公司网页
         example: 'http://www.baidu.com'
+
+  Rate:
+    allOf: 
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          resumeId:
+            type: integer
+            readOnly: true
+          companyId:
+            type: integer
+            readOnly: true
+          stuId:
+            type: integer
+            readOnly: true
+          score1:
+            type: integer
+            description: 评分1
+            example: 3
+          score2:
+            type: integer
+            description: 评分2
+            example: 3
+          score3:
+            type: integer
+            description: 评分3
+            example: 3
+          score4:
+            type: integer
+            description: 评分4
+            example: 3
+          score5:
+            type: integer
+            description: 评分5
+            example: 3
+          comment:
+            type: string
+            description: 文字评价
+  
+  AvgRate:
+    type: object
+    properties:
+      score1:
+        type: float
+        description: 评分1
+        example: 2.5
+        readOnly: true
+      score2:
+        type: float
+        description: 评分2
+        example: 2.5
+        readOnly: true
+      score3:
+        type: float
+        description: 评分3
+        example: 2.5
+        readOnly: true
+      score4:
+        type: float
+        description: 评分4
+        example: 2.5
+        readOnly: true
+      score5:
+        type: float
+        description: 评分5
+        example: 2.5
+        readOnly: true
     
   Company:
     allOf: 
@@ -925,6 +1022,8 @@ definitions:
       - $ref: '#/definitions/AccModel'
       - $ref: '#/definitions/CompanyUpdater'
       - properties:
+          avgRate:
+            $ref: '#/definitions/AvgRate'
           verified:
             type: boolean
             description: 是否已认证

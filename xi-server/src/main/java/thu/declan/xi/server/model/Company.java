@@ -187,5 +187,16 @@ public class Company {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
-    
+	
+	private AvgRate avgRate;
+
+	public AvgRate getAvgRate() {
+		return avgRate;
+	}
+
+	public void setAvgRate(AvgRate avgRate) {
+		this.avgRate = avgRate;
+	}
+	
+       
 }

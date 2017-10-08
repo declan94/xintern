@@ -9,4 +9,4 @@ if [[ "$1" != "" ]]; then
     host=$1
 fi
 echo "Host: $host"
-cat xintern.sql | mysql -uroot -h $host -p
+cat xintern.sql fakedata.sql | mysql -uroot -h $host -p

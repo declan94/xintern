@@ -18,6 +18,8 @@
         <typeAlias alias="Company" type="thu.declan.xi.server.model.Company" />
         <typeAlias alias="Position" type="thu.declan.xi.server.model.Position" />
 		<typeAlias alias="Resume" type="thu.declan.xi.server.model.Resume" />
+		<typeAlias alias="Rate" type="thu.declan.xi.server.model.Rate" />
+		<typeAlias alias="AvgRate" type="thu.declan.xi.server.model.AvgRate" />
 		<typeAlias alias="News" type="thu.declan.xi.server.model.News" />
         <typeAlias alias="PointLog" type="thu.declan.xi.server.model.PointLog" />
         <typeAlias alias="Notification" type="thu.declan.xi.server.model.Notification" />
@@ -33,6 +35,7 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Resume$RState" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.PointLog$PType" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Notification$NType" />
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Rate$Direction" />
         <typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
 		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
 	</typeHandlers>

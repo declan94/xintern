@@ -23,9 +23,12 @@ import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.Rate;
 import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.service.PositionService;
+import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
+import thu.declan.xi.server.task.AsyncTask;
 
 /**
  *
@@ -42,6 +45,12 @@ public class ResumeResource extends BaseResource {
 
     @Autowired
     private PositionService positionService;
+	
+	@Autowired
+	private RateService rateService;
+	
+	@Autowired
+	private AsyncTask asyncTask;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -149,5 +158,49 @@ public class ResumeResource extends BaseResource {
         LOGGER.debug("==================== leave ResumeResource getResume ====================");
         return resume;
     }
+	
+	@POST
+	@Path("/{resumeId}/rate")
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+	public Rate addRate(@PathParam("resumeId") int resumeId, Rate rate) throws ApiException {
+		LOGGER.debug("==================== enter ResumeResource addRate ====================");
+		Resume resume = getResume(resumeId);
+		if (resume.getState() != Resume.RState.ENDED) {
+			throw new ApiException(403, "Resume wrong state", "实习未结束");
+		}
+		if (Account.Role.STUDENT.equals(currentRole())) {
+			rate.setDirection(Rate.Direction.STU_TO_COMP);
+			if (!Objects.equals(resume.getStuId(), currentEntityId())) {
+				throw new ApiException(401, "Stu id not match", "无权限");
+			}
+		} else {
+			rate.setDirection(Rate.Direction.COMP_TO_STU);
+			if (!Objects.equals(resume.getCompanyId(), currentEntityId())) {
+				throw new ApiException(401, "Company id not match", "无权限");
+			}
+		}
+		rate.setCompanyId(resume.getCompanyId());
+		rate.setStuId(resume.getStuId());
+		rate.setResumeId(resumeId);
+		try {
+			rateService.add(rate);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
+                throw new ApiException(403, devMsg, "已经进行过评价！");
+            }
+            handleServiceException(ex);
+        }
+		if (rate.getDirection() == Rate.Direction.STU_TO_COMP) {
+			asyncTask.refreshCompanyRate(rate.getCompanyId());
+		} else {
+			asyncTask.refreashStuRate(rate.getStuId());
+		}
+		LOGGER.debug("==================== leave ResumeResource addRate ====================");
+		return rate;
+	}
 
 }

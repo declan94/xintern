@@ -4,6 +4,7 @@
 
     <resultMap type="Resume" id="resumeResult">
         <result property="id" column="r_id" />
+		<result property="companyId" column="p_companyId" />
         <result property="positionId" column="r_positionId" />
         <result property="stuId" column="r_stuId" />
         <result property="state" column="r_state" />
@@ -38,8 +39,9 @@
     </update>
 
     <select id="selectOne" parameterType="int" resultMap="resumeResult">
-        select <include refid="selectBaseColumns" />
+        select <include refid="selectBaseColumns" />, p_companyId
         from xi_resume
+		inner join xi_position on xi_resume.r_positionId = xi_position.p_id
         where r_id = #{id}
     </select>
     	
@@ -71,7 +73,7 @@
     </sql>
     
     <select id="selectList" parameterType="Resume" resultMap="resumeResult">
-        select <include refid="selectBaseColumns" />
+        select <include refid="selectBaseColumns" />, p_companyId
         from xi_resume
 		inner join xi_position on xi_resume.r_positionId = xi_position.p_id
         <include refid="whereList" />
