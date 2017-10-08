@@ -151,9 +151,9 @@ paths:
         401:
           description: 当前未登录
         403:
-          description: 获取失败，权限不允许
+          description: 修改失败，权限不允许
         404:
-          description: 获取失败，此学生不存在
+          description: 修改失败，此学生不存在
           schema:
             $ref: '#/definitions/Error'
 
@@ -229,6 +229,37 @@ paths:
           description: 获取失败，权限不允许
         404:
           description: 获取失败，此企业不存在
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+      - company
+      summary: 修改企业信息
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，若当前登录为企业的账号，只能获取自己的信息，可以设置为0。
+        required: true
+        type: integer
+      - in: body
+        name: company
+        description: 修改内容
+        required: true
+        schema:
+            $ref: '#/definitions/CompanyUpdater' 
+      responses:
+        200:
+          description: 修改成功，返回对应企业信息
+          schema:
+            $ref: '#/definitions/Company'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 修改失败，权限不允许
+        404:
+          description: 修改失败，此企业不存在
           schema:
             $ref: '#/definitions/Error'
 
@@ -927,9 +958,15 @@ definitions:
       contact:
         type: string
         description: 公司联系人
+      contactPos:
+        type: string
+        description: 联系人职位
       contactPhone:
         type: string
         description: 联系人电话
+      avatar:
+        type: string
+        description: 联系人头像
       email:
         type: string
         description: HR邮箱
