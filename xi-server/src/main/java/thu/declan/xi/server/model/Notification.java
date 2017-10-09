@@ -16,11 +16,11 @@ public class Notification {
 	public final static String TPL_RESUME_CANCEL2 = "很抱歉，您参加的%s公司面试未通过，让我们继续在享实习寻找机会吧！";
 	public final static String TPL_RESUME_INTERVIEW = "你收到来自%s公司的面试邀请，请尽快确认面试时间。";
 	public final static String TPL_RESUME_TIME = "您的%s公司面试时间已修改为%s，请准时参加。";
-	public final static String TPL_RESUME_JOIN = "入职通知";
+	public final static String TPL_RESUME_JOIN = "恭喜你已通过%s公司面试，请尽快确认入职";
 	public final static String TPL_SALARY_GET = "工资到账";
 	public final static String TPL_WITHDRAW = "提现成功通知";
 	public final static String TPL_WITHDRAW_FAIL = "提现失败通知";
-	public final static String TPL_COMMENT = "实习结束评价通知";
+	public final static String TPL_COMMENT = "实习结束啦，请及时对该公司进行评价。";
 	
     
     public enum NType {

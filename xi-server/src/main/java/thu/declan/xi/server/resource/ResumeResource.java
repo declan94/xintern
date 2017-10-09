@@ -20,7 +20,6 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
-import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
@@ -126,7 +125,7 @@ public class ResumeResource extends BaseResource {
 			this.addPoint(PType.COMMENT, resumeId);
 		}
 		String compName = oldRes.getPosition().getCompany().getName();
-		if (curStu && stu != null) {
+		if (!curStu && stu != null) {
 			switch (resume.getState()) {
 				case CANCELED:
 					if (oldRes.getState() == RState.NEW) {
@@ -144,7 +143,7 @@ public class ResumeResource extends BaseResource {
 					}
 					break;
 				case OFFERED:
-					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN);
+					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, compName);
 					break;
 			}
 		}
