@@ -961,6 +961,45 @@ paths:
           description: 当前未登录
           schema:
             $ref: '#/definitions/Error'
+  
+  /meta:
+    post:
+      tags:
+      - other
+      summary: 添加或修改meta
+      parameters:
+      - in: body
+        name: meta
+        schema:
+          $ref: '#/definitions/Meta'
+        required: true
+        description: meta实体  
+      responses:
+        200:
+          description: 成功，返回结果
+          schema:
+            $ref: '#/definitions/Meta'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录管理员账号
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      tags:
+      - other
+      summary: 获取meta
+      parameters:
+      - in: query
+        name: key
+        type: string
+        required: true
+        description: key
+      responses:
+        200:
+          description: 成功，返回结果
+          schema:
+            $ref: '#/definitions/Meta'
 
 
 parameters:
@@ -1510,6 +1549,13 @@ definitions:
             example: '2017-10-01 10:00:00'
             readOnly: true
 
+  Meta:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
 
 # Errors
   Error:
