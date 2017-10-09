@@ -1,9 +1,13 @@
 package thu.declan.xi.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.sql.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import thu.declan.xi.server.util.CustomJsonDateDeserializer;
+import thu.declan.xi.server.util.CustomJsonDateSerializer;
 
 /**
  *
@@ -48,6 +52,16 @@ public class Resume {
         this.positionId = positionId;
     }	
 
+	private Position position;
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
 	@JsonIgnore
 	private Integer companyId;
 
@@ -58,7 +72,7 @@ public class Resume {
 	public void setCompanyId(Integer companyId) {
 		this.companyId = companyId;
 	}
-
+	
     private Integer stuId;
 
     public Integer getStuId() {
@@ -78,6 +92,18 @@ public class Resume {
     public void setState(RState state) {
         this.state = state;
     }
+
+	private Date interviewTime;
+
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
+	public Date getInterviewTime() {
+		return interviewTime;
+	}
+
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	public void setInterviewTime(Date interviewTime) {
+		this.interviewTime = interviewTime;
+	}
 	
 	@JsonIgnore
 	private List<RState> queryStates;
@@ -112,6 +138,7 @@ public class Resume {
 
     private Date createTime;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getCreateTime() {
         return createTime;
     }
@@ -122,6 +149,7 @@ public class Resume {
 
     private Date updateTime;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getUpdateTime() {
         return updateTime;
     }

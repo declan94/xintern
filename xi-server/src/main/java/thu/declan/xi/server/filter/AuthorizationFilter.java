@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.annotation.Priority;
 import javax.annotation.security.DenyAll;
@@ -136,7 +135,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 						pl = new PointLog(account.getId(), PType.LOGIN, (int) refid);
                         plogService.addPoint(pl, false);
                 }
-				notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT);
+				notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT, pl.getValue());
             } catch (ParseException | ServiceException ex) {
             }
         }

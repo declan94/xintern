@@ -1,10 +1,12 @@
 package thu.declan.xi.server.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.sql.Time;
-import java.sql.Date;
+import java.util.Date;
 import thu.declan.xi.server.model.Student.Education;
 import thu.declan.xi.server.model.Student.Gender;
 import thu.declan.xi.server.model.Student.LangLevel;
+import thu.declan.xi.server.util.CustomJsonDateSerializer;
 
 /**
  *
@@ -74,6 +76,7 @@ public class Position {
 
     private Date startDate;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getStartDate() {
         return startDate;
     }
@@ -84,6 +87,7 @@ public class Position {
 
     private Date endDate;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getEndDate() {
         return endDate;
     }
@@ -264,6 +268,7 @@ public class Position {
 
     private Date createTime;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getCreateTime() {
         return createTime;
     }

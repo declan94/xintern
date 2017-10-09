@@ -8,6 +8,6 @@ import thu.declan.xi.server.model.Notification;
  */
 public interface NotificationService extends BaseTableService<Notification> {
 
-	public void addNoti(int accountId, Notification.NType type, int relativeId, String msg);
+	public void addNoti(int accountId, Notification.NType type, int relativeId, String msgTpl, Object... args);
 	
 }

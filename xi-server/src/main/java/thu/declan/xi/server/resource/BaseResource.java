@@ -71,7 +71,7 @@ public class BaseResource {
         try {
 			PointLog pl = new PointLog(currentAccountId(), type, refId);
             plogService.addPoint(pl, isCompany);
-			notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT);
+			notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT, pl.getValue());
         } catch (ServiceException ex) {
             if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
                 return;
@@ -84,7 +84,7 @@ public class BaseResource {
 		if (currentAccountId() == null || Role.ADMIN.equals(currentRole())) {
             return;
         }
-		notiService.addNoti(currentAccountId(), type, refId, String.format(tpl, args));
+		notiService.addNoti(currentAccountId(), type, refId, tpl, args);
 	}
 
 	protected void handleServiceException(ServiceException ex) throws ApiException {

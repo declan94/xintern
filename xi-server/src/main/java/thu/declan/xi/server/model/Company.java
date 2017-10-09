@@ -1,6 +1,8 @@
 package thu.declan.xi.server.model;
 
-import java.sql.Date;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import thu.declan.xi.server.util.CustomJsonDateSerializer;
 
 /**
  *
@@ -200,6 +202,7 @@ public class Company {
     
     private Date createTime;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getCreateTime() {
         return createTime;
     }

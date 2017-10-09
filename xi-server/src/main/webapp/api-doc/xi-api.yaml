@@ -1330,6 +1330,10 @@ definitions:
           - WORKING
           - ENDED
           - CANCELED
+      interviewTime:
+        type: string
+        example: '2017-10-01 08:00:00'
+        description: '面试时间'
       commentStu:
         type: string
         description: 学生对企业的评价

@@ -26,11 +26,11 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	}
 
 	@Override
-	public void addNoti(int accountId, Notification.NType type, int refId, String msg) {
+	public void addNoti(int accountId, Notification.NType type, int refId, String msgTpl, Object... args) {
 		Notification noti = new Notification();
 		noti.setAccountId(accountId);
 		noti.setType(type);
-		noti.setMsg(msg);
+		noti.setMsg(String.format(msgTpl, args));
 		noti.setRefId(refId);
 		try {
 			add(noti);

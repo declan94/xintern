@@ -1,6 +1,8 @@
 package thu.declan.xi.server.model;
 
-import java.sql.Date;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import thu.declan.xi.server.util.CustomJsonDateSerializer;
 
 /**
  *
@@ -8,11 +10,12 @@ import java.sql.Date;
  */
 public class Notification {
 	
-	public final static String TPL_POINT = "获得积分";
-	public final static String TPL_RESUME_ADD = "简历投递成功";
-	public final static String TPL_RESUME_CANCEL = "简历淘汰";
-	public final static String TPL_RESUME_INTERVIEW = "面试邀请";
-	public final static String TPL_RESUME_TIME = "面试时间修改";
+	public final static String TPL_POINT = "恭喜你获得%d个积分";
+	public final static String TPL_RESUME_ADD = "简历投递成功，请等待面试通知。";
+	public final static String TPL_RESUME_CANCEL = "您的简历与企业相关要求不符，让我们再接再厉吧。";
+	public final static String TPL_RESUME_CANCEL2 = "很抱歉，您参加的%s公司面试未通过，让我们继续在享实习寻找机会吧！";
+	public final static String TPL_RESUME_INTERVIEW = "你收到来自%s公司的面试邀请，请尽快确认面试时间。";
+	public final static String TPL_RESUME_TIME = "您的%s公司面试时间已修改为%s，请准时参加。";
 	public final static String TPL_RESUME_JOIN = "入职通知";
 	public final static String TPL_SALARY_GET = "工资到账";
 	public final static String TPL_WITHDRAW = "提现成功通知";
@@ -86,6 +89,7 @@ public class Notification {
 
     private Date createTime;
 
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getCreateTime() {
         return createTime;
     }
