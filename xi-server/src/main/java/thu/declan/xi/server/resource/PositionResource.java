@@ -1,7 +1,9 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -29,9 +31,11 @@ import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Resume.RState;
+import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
 import thu.declan.xi.server.service.ResumeService;
+import thu.declan.xi.server.service.StudentService;
 
 /**
  *
@@ -43,6 +47,9 @@ public class PositionResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PositionResource.class);
 
+	@Autowired
+	private StudentService studentService;
+			
 	@Autowired
 	private PositionService positionService;
 	
@@ -143,6 +150,36 @@ public class PositionResource extends BaseResource {
 		}
 		LOGGER.debug("==================== leave PositionResource getPositions ====================");
 		return new ListResponse(positions, pagination);
+	}
+	
+	@GET
+	@Path("/subscription")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT})
+	public ListResponse<Position> getSubscribedPositions(@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+		LOGGER.debug("==================== enter PositionResource getSubscribedPositions ====================");
+		Student stu = null;
+		try {
+			stu = studentService.get(currentEntityId());
+		} catch (ServiceException ex) {
+			java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		Boolean verified = null;
+		String industry = null;
+		String type = null;
+		String area = null;
+		Map<String, String> sub = null;
+		if (stu != null) {
+			sub = stu.getSubscription();
+		}
+		if (sub != null) {
+			industry = sub.get("industry");
+			type = sub.get("type");
+			area = sub.get("area");
+		}
+		LOGGER.debug("==================== leave PositionResource getSubscribedPositions ====================");
+		return this.getPositions(pageIndex, pageSize, verified, industry, type, area);
 	}
 
 	@GET

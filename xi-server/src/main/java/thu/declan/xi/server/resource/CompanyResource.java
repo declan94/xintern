@@ -1,6 +1,8 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -26,9 +28,11 @@ import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
 import thu.declan.xi.server.service.ResumeService;
+import thu.declan.xi.server.service.StudentService;
 
 /**
  *
@@ -42,6 +46,9 @@ public class CompanyResource extends BaseResource {
 
     @Autowired
     private CompanyService companyService;
+	
+	@Autowired
+	private StudentService studentService;
 	
 	@Autowired
 	private PositionService positionService;
@@ -112,10 +119,16 @@ public class CompanyResource extends BaseResource {
 	@PermitAll
     public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
 			@QueryParam("pageSize") Integer pageSize,
-			@QueryParam("verified") Boolean verified) throws ApiException {
+			@QueryParam("verified") Boolean verified,
+			@QueryParam("industry") String industry,
+			@QueryParam("type") String type,
+			@QueryParam("scale") String scale) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
         Company selector = new Company();
 		selector.setVerified(verified);
+		selector.setIndustry(industry);
+		selector.setType(type);
+		selector.setScale(scale);
         List<Company> companys = null;
 		Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
@@ -128,6 +141,36 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource getCompanys ====================");
         return new ListResponse(companys, pagination);
     }
+	
+	@GET
+	@Path("/subscription")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_STUDENT})
+	public ListResponse<Company> getSubscribedCompanies(@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+		LOGGER.debug("==================== enter PositionResource getSubscribedCompanies ====================");
+		Student stu = null;
+		try {
+			stu = studentService.get(currentEntityId());
+		} catch (ServiceException ex) {
+			java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		Boolean verified = null;
+		String industry = null;
+		String type = null;
+		String scale = null;
+		Map<String, String> sub = null;
+		if (stu != null) {
+			sub = stu.getSubscription();
+		}
+		if (sub != null) {
+			industry = sub.get("industry");
+			type = sub.get("type");
+			scale = sub.get("scale");
+		}
+		LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
+		return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale);
+	}
 	
 	@POST
 	@Path("/login")

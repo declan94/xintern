@@ -6,7 +6,7 @@ info:
   title: 享实习API
   contact:
     email: chenye94@qq.com
-host: yegames.cn:8080
+host: localhost:8080
 basePath: /api
 schemes:
  - http
@@ -427,6 +427,27 @@ paths:
         name: type
         type: string
         description: 公司性质
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回职位列表信息
+          schema:
+            $ref: '#/definitions/List-Position'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /positions/subscription:
+    get:
+      tags:
+      - position
+      summary: 获取订阅的职位列表。
+      description: 必须由学生发起。若当前账号订阅信息为空，等价于get /positions。
+      parameters:
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:
@@ -1285,6 +1306,19 @@ definitions:
       avatar:
         type: string
         description: 头像url
+      subscription:
+        type: object
+        description: 订阅
+        properties:
+          industry:
+            type: string
+            example: 互联网行业
+          type:
+            type: string
+            example: 国营企业
+          area:
+            type: string
+            example: 闵行区
 
   Student:
     type: object

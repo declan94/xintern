@@ -1,6 +1,8 @@
 package thu.declan.xi.server.model;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -248,5 +250,25 @@ public class Student {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }    
+
+	private Map<String, String> subscription;
+
+	public Map<String, String> getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(Map<String, String> subscription) {
+		this.subscription = subscription;
+	}
+	
+	private Date createTime;
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
     
 }
