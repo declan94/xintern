@@ -109,7 +109,7 @@ public class CompanyResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
+	@PermitAll
     public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
 			@QueryParam("pageSize") Integer pageSize,
 			@QueryParam("verified") Boolean verified) throws ApiException {
