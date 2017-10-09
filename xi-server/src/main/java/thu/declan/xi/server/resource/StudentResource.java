@@ -27,8 +27,11 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
+import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.service.ResumeService;
 import thu.declan.xi.server.service.StudentService;
 
 /**
@@ -43,6 +46,9 @@ public class StudentResource extends BaseResource {
 
     @Autowired
     private StudentService studentService;
+	
+	@Autowired
+	private ResumeService resumeService;
 
     @POST
     @PermitAll
@@ -203,5 +209,34 @@ public class StudentResource extends BaseResource {
         LOGGER.debug("==================== leave StudentResource getStudent ====================");
         return student;
     }
-
+	
+	@GET
+    @Path("/{studentId}/resumes")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	public ListResponse<Resume> getResumes(@PathParam("studentId") int studentId,
+			@QueryParam("state") List<Resume.RState>states,
+			@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+		LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+		if (studentId == 0) {
+            studentId = currentEntityId();
+        }
+		Resume selector = new Resume();
+		if (!states.isEmpty()) {
+			selector.setQueryStates(states);
+		}
+		selector.setStuId(studentId);
+		List<Resume> resumes = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
+		try {
+			resumes = resumeService.getList(selector, pagination);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+		return new ListResponse(resumes, pagination);
+	}
 }

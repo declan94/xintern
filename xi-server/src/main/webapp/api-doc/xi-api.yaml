@@ -6,7 +6,7 @@ info:
   title: 享实习API
   contact:
     email: chenye94@qq.com
-host: localhost:8080
+host: yegames.cn:8080
 basePath: /api
 schemes:
  - http
@@ -158,6 +158,49 @@ paths:
           description: 修改失败，权限不允许
         404:
           description: 修改失败，此学生不存在
+          schema:
+            $ref: '#/definitions/Error'
+
+  /students/{studentId}/resumes:
+    get:
+      tags:
+      - student
+      - resume
+      summary: 获取学生投出的简历信息
+      parameters:
+      - in: path
+        name: studentId
+        description: 学生Id，设置为0则代表当前登录学生
+        required: true
+        type: integer
+      - in: query
+        name: state
+        description: 筛选简历状态，可以提供多个值。 （例如：?state=ENDED&state=CANCELD 可同时获取两种状态）
+        type: string
+        enum:
+          - NEW
+          - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
+          - CONFIRMED
+          - OFFERED
+          - WORKING
+          - ENDED
+          - CANCELED
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回简历列表信息
+          schema:
+            $ref: '#/definitions/List-Resume'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此学生不存在
           schema:
             $ref: '#/definitions/Error'
 
@@ -336,7 +379,7 @@ paths:
         403:
           description: 获取失败，权限不允许
         404:
-          description: 获取失败，此职位不存在
+          description: 获取失败，此公司不存在
           schema:
             $ref: '#/definitions/Error'
 
