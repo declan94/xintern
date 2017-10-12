@@ -44,9 +44,9 @@ public class AccountResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Account createAccount(@Valid Account account) throws ApiException {
 		LOGGER.debug("==================== enter AccountResource createAccount ====================");
-		if (account.getRole().equals(Role.ADMIN)) {
-			throw new ApiException(403, "access forbidden.", "不可以创建管理员账户");
-		}
+//		if (account.getRole().equals(Role.ADMIN)) {
+//			throw new ApiException(403, "access forbidden.", "不可以创建管理员账户");
+//		}
 		try {
 			accountService.add(account);
 		} catch (ServiceException ex) {

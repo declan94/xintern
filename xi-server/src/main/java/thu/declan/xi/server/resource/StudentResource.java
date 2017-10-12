@@ -111,19 +111,21 @@ public class StudentResource extends BaseResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListResponse<Student> getStudents() throws ApiException {
+	public ListResponse<Student> getStudents(@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
 		LOGGER.debug("==================== enter StudentResource getStudents ====================");
 		Student selector = new Student();
 		List<Student> students = null;
+		Pagination pagination = new Pagination(pageSize, pageIndex);
 		try {
-			students = studentService.getList(selector);
+			students = studentService.getList(selector, pagination);
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			handleServiceException(ex);
 		}
 		LOGGER.debug("==================== leave StudentResource getStudents ====================");
-		return new ListResponse(students);
+		return new ListResponse(students, pagination);
 	}
 
 	@POST

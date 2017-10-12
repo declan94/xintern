@@ -31,6 +31,9 @@ tags:
   description: 通知消息
 - name: other
   description: 其他
+- name: admin
+  description: 管理员相关
+
 paths:
   /students:
     post:
@@ -55,6 +58,22 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+    get:
+      tags:
+      - admin
+      summary: 获取学生列表
+      parameters:
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回学生列表。
+          schema:
+            $ref: '#/definitions/List-Student'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
 
   /students/login:
     post:
@@ -107,6 +126,7 @@ paths:
     get:
       tags:
       - student
+      - admin
       summary: 获取学生信息
       parameters:
       - in: path
@@ -132,6 +152,7 @@ paths:
     put:
       tags:
       - student
+      - admin
       summary: 修改学生信息
       parameters:
       - in: path
@@ -166,6 +187,7 @@ paths:
       tags:
       - student
       - resume
+      - admin
       summary: 获取学生投出的简历信息
       parameters:
       - in: path
@@ -227,6 +249,39 @@ paths:
             $ref: '#/definitions/Error'
         400:
           description: Bad request, invalid arguments
+    get:
+      tags:
+      - company
+      - admin
+      summary: 筛选企业列表
+      parameters:
+      - in: query
+        name: verified
+        type: boolean
+        description: 是否认证
+      - in: query
+        name: industry
+        type: string
+        description: 行业
+      - in: query
+        name: type
+        type: string
+        description: 公司性质
+      - in: query
+        name: scale
+        type: string
+        description: 公司大小
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回公司列表信息
+          schema:
+            $ref: '#/definitions/List-Company'
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   
   /companies/login:
     post:
@@ -245,17 +300,18 @@ paths:
           description: 登录成功，返回企业信息
           schema:
             $ref: '#/definitions/Company'
+        400:
+          description: Bad request, invalid arguments
         403:
           description: 登录失败，账号不存在或密码错误
           schema:
             $ref: '#/definitions/Error'
-        400:
-          description: Bad request, invalid arguments
 
   /companies/{companyId}:
     get:
       tags:
       - company
+      - admin
       summary: 获取企业信息
       parameters:
       - in: path
@@ -281,6 +337,7 @@ paths:
     put:
       tags:
       - company
+      - admin
       summary: 修改企业信息
       parameters:
       - in: path
@@ -315,6 +372,7 @@ paths:
       tags:
       - company
       - position
+      - admin
       summary: 获取企业的职位信息
       parameters:
       - in: path
@@ -345,6 +403,7 @@ paths:
       tags:
       - company
       - resume
+      - admin
       summary: 获取企业收到的简历信息
       parameters:
       - in: path
@@ -409,6 +468,7 @@ paths:
     get:
       tags:
       - position
+      - admin
       summary: 筛选职位列表
       parameters:
       - in: query
@@ -466,6 +526,7 @@ paths:
     get:
       tags:
       - position
+      - admin
       summary: 获取职位信息
       parameters:
       - in: path
@@ -489,6 +550,7 @@ paths:
     put:
       tags:
       - position
+      - admin
       summary: 修改职位信息
       description: 企业账号只能修改属于自己的职位信息。
       parameters:
@@ -520,6 +582,7 @@ paths:
       tags:
       - position
       - resume
+      - admin
       summary: 获取职位的简历信息
       parameters:
       - in: path
@@ -649,6 +712,7 @@ paths:
     get:
       tags:
       - resume
+      - admin
       summary: 获取简历信息
       parameters:
       - in: path
@@ -672,6 +736,7 @@ paths:
     put:
       tags:
       - resume
+      - admin
       summary: 修改简历信息
       description: |
         企业账号只能修改属于自己职位下的简历，学生也只能修改自己投出的简历。
@@ -732,9 +797,32 @@ paths:
           description: Bad request, invalid arguments
 
   /news:
+    post:
+      tags:
+      - admin
+      summary: 新增资讯
+      parameters:
+      - in: body
+        name: news
+        description: 资讯实体
+        required: true
+        schema:
+          $ref: '#/definitions/News'
+      responses:
+        200:
+          description: 添加成功
+          schema:
+            $ref: '#/definitions/News'
+        401:
+          description: 未登录管理员
+        400:
+          description: Bad request, invalid arguments
+          schema:
+            $ref: '#/definitions/Error'
     get:
       tags:
       - news
+      - admin
       summary: 获取资讯列表
       parameters:
       - $ref: '#/parameters/PageSize'
@@ -753,6 +841,7 @@ paths:
     get:
       tags:
       - news
+      - admin
       summary: 获取资讯信息（同时浏览量+1）
       parameters:
       - in: path
@@ -767,6 +856,35 @@ paths:
             $ref: '#/definitions/News'
         404:
           description: 获取失败，此资讯不存在
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+      - admin
+      summary: 修改资讯
+      parameters:
+      - in: path
+        name: newsId
+        description: 资讯Id。
+        required: true
+        type: integer
+      - in: body
+        name: news
+        description: 修改内容
+        required: true
+        schema:
+            $ref: '#/definitions/News' 
+      responses:
+        200:
+          description: 修改成功，返回对应资讯
+          schema:
+            $ref: '#/definitions/News'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录管理员
+        404:
+          description: 修改失败，资讯不存在
           schema:
             $ref: '#/definitions/Error'
 
@@ -794,7 +912,6 @@ paths:
           description: 获取失败，此资讯不存在
           schema:
             $ref: '#/definitions/Error'
-
     delete:
       tags:
       - news
@@ -818,6 +935,54 @@ paths:
           description: 获取失败，此资讯不存在
           schema:
             $ref: '#/definitions/Error'
+  /admins:
+    post:
+      tags:
+      - admin
+      summary: 管理员注册
+      description: 只能使用一次，注册成功后无法再注册管理员。
+      parameters:
+      - in: body
+        name: student
+        description: 注册的账号信息
+        required: true
+        schema:
+          $ref: '#/definitions/BasicAccount'
+      responses:
+        200:
+          description: 注册成功
+          schema:
+            $ref: '#/definitions/Account'
+        403:
+          description: 注册失败，已注册过管理员
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
+
+  /admins/login:
+    post:
+      tags:
+      - admin
+      summary: 管理员登录
+      parameters:
+      - in: body
+        name: account
+        description: 登录信息
+        required: true
+        schema:
+          $ref: '#/definitions/BasicAccount'
+      responses:
+        200:
+          description: 登录成功，返回账号信息
+          schema:
+            $ref: '#/definitions/Account'
+        403:
+          description: 登录失败，账号不存在或密码错误
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request, invalid arguments
 
   /accounts/{accountId}/pointLogs:
     get:
@@ -1423,16 +1588,6 @@ definitions:
           createTime:
             $ref: '#definitions/Timestamp'
 
-  List-Position:
-    type: object
-    properties:
-      pagination:
-        $ref: '#/definitions/Pagination'
-      items:
-        type: array
-        items:
-          $ref: '#/definitions/Position'
-
   ResumeUpdater:
     type: object
     properties:
@@ -1473,16 +1628,6 @@ definitions:
           updateTime:
             $ref: '#/definitions/Timestamp'
 
-  List-Resume:
-    type: object
-    properties:
-      pagination:
-        $ref: '#/definitions/Pagination'
-      items:
-        type: array
-        items:
-          $ref: '#/definitions/Resume'
-
   News:
     type: object
     allOf:
@@ -1507,16 +1652,6 @@ definitions:
           createTime:
             type: string
             example: '2017-10-01 10:00:00'
-
-  List-News:
-    type: object
-    properties:
-      pagination:
-        $ref: '#/definitions/Pagination'
-      items:
-        type: array
-        items:
-          $ref: '#/definitions/News'
 
   PointLog:
     type: object
@@ -1548,16 +1683,6 @@ definitions:
             type: string
             example: '2017-10-01 10:00:00'
             readOnly: true
-
-  List-PointLog:
-    type: object
-    properties:
-      pagination:
-        $ref: '#/definitions/Pagination'
-      items:
-        type: array
-        items:
-          $ref: '#/definitions/PointLog'
   
   Notification:
     type: object
@@ -1587,6 +1712,66 @@ definitions:
             type: string
             example: '2017-10-01 10:00:00'
             readOnly: true
+
+  List-Student:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Student'
+
+  List-Company:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Company'
+          
+  List-Position:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Position'
+          
+  List-Resume:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Resume'
+          
+  List-News:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/News'
+
+  List-PointLog:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/PointLog'
 
   List-Notification:
     type: object
