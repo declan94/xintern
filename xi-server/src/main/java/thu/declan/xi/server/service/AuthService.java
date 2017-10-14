@@ -16,5 +16,7 @@ public interface AuthService {
 	public Account wechatLogin(String openid, Account.Role authType) throws ServiceException;
 
     public Account login(String phone, String password, Account.Role authType) throws ServiceException;
+	
+	public Account logout();
     
 }

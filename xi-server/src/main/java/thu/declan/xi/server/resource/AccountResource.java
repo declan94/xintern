@@ -175,6 +175,14 @@ public class AccountResource extends BaseResource {
 		LOGGER.debug("==================== leave AccountResource editAccount ====================");
 		return account;
 	}
+	
+	@POST
+	@Path("/logout")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+	public Account logout() throws ApiException {
+		return authService.logout();
+	}			
     
     public void deleteAccount(int accountId) {
         accountService.delete(accountId);

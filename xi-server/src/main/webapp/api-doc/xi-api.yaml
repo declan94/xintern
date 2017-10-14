@@ -1033,6 +1033,22 @@ paths:
           description: 账号不存在
           schema:
             $ref: '#/definitions/Error' 
+
+  /accounts/logout:
+    post:
+      tags:
+      - other
+      summary: 登出
+      responses:
+        200:
+          description: 成功，返回登出前账号信息
+          schema:
+            $ref: '#/definitions/Account'
+        401:
+          description: 当前未登录
+          schema:
+            $ref: '#/definitions/Error' 
+
   /pointLogs:
     get:
       tags:

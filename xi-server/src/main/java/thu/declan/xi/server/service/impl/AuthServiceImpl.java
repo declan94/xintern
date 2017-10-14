@@ -97,5 +97,14 @@ public class AuthServiceImpl implements AuthService {
 		setSession(account, authType);
 		return account;
 	}
+
+	@Override
+	public Account logout() {
+		Account acc = getAccount();
+		HttpSession sess = session();
+		sess.removeAttribute(Constant.SESSION_ACCOUNT);
+		sess.removeAttribute(Constant.SESSION_ENTITY_ID);
+		return acc;
+	}
     
 }
