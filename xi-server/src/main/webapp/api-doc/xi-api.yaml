@@ -29,6 +29,8 @@ tags:
   description: 积分记录
 - name: notification
   description: 通知消息
+- name: account
+  description: 账号相关
 - name: other
   description: 其他
 - name: admin
@@ -977,17 +979,47 @@ paths:
           description: 登录成功，返回账号信息
           schema:
             $ref: '#/definitions/Account'
+        400:
+          description: Bad request, invalid arguments
         403:
           description: 登录失败，账号不存在或密码错误
           schema:
             $ref: '#/definitions/Error'
+
+  /accounts/{accountId}:
+    put:
+      tags:
+      - account
+      summary: 修改账户信息
+      parameters:
+      - in: path
+        name: accountId
+        description: 账号id，若为0表示当前登陆账号。
+        required: true
+        type: integer
+      - in: body
+        name: account
+        description: 账号修改实体
+        schema:
+          $ref: '#/definitions/BasicAccount'
+      responses:
+        200:
+          description: 修改成功，返回账号信息
+          schema:
+            $ref: '#/definitions/Account'
         400:
           description: Bad request, invalid arguments
+        403:
+          description: 修改失败，权限不足。 或者账号重复（修改手机号的情况）
+        404:
+          description: 账号不存在
+          schema:
+            $ref: '#/definitions/Error' 
 
   /accounts/{accountId}/pointLogs:
     get:
       tags:
-      - other
+      - account
       - pointlog
       summary: 获取积分记录
       parameters:
@@ -1011,7 +1043,7 @@ paths:
   /accounts/{accountId}/wechat:
     put:
       tags:
-      - other
+      - account
       summary: 绑定微信openid
       parameters:
       - in: path

@@ -33,7 +33,12 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
 	}
 	
 	@Override
-	public void preUpdate(Account update) {
+	public void preUpdate(Account update) throws ServiceException {
+        if (update.getPhone() != null) {
+            if (accountMapper.selectCount(update) > 0) {
+                throw new ServiceException(ServiceException.CODE_DUPLICATE_ELEMENT, "Account already exists.");
+            }
+        } 
 		if (update.getPassword() != null) {
 			update.setPassword(EncryptionUtils.genProtectedPassword(update.getPassword()));
 		}

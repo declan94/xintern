@@ -14,17 +14,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
-import thu.declan.xi.server.model.Account.Role;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.News;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
-import thu.declan.xi.server.service.AccountService;
 
 /**
  *
@@ -35,9 +32,6 @@ import thu.declan.xi.server.service.AccountService;
 public class AccountResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountResource.class);
-
-	@Autowired
-	private AccountService accountService;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -92,12 +86,43 @@ public class AccountResource extends BaseResource {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-				throw new ApiException(404, devMsg, "该管理员不存在！");
+				throw new ApiException(404, devMsg, "该账号不存在！");
 			}
 			handleServiceException(ex);
 		}
 		LOGGER.debug("==================== leave AccountResource getAccount ====================");
 		return account;
+	}
+    
+    @PUT
+    @Path("/{accountId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
+    public Account editAccount(@PathParam("accountId") int accountId, Account updater) throws ApiException {
+		LOGGER.debug("==================== enter AccountResource editAccount ====================");
+		LOGGER.debug("accountId: " + accountId);
+        if (accountId == 0) {
+            accountId = currentAccountId();
+        }
+        if (!Account.Role.ADMIN.equals(currentRole()) && accountId != currentAccountId()) {
+            throw new ApiException(403, "account id not match", "权限不足！");
+        }
+		try {
+            updater.setId(accountId);
+			accountService.update(updater);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+				throw new ApiException(404, devMsg, "该账号不存在！");
+			} else if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
+                throw new ApiException(403, devMsg, "手机号（账号）重复！");
+            }
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave AccountResource editAccount ====================");
+		return this.getAccount(accountId);
 	}
     
     @GET
@@ -152,29 +177,6 @@ public class AccountResource extends BaseResource {
         return acc;
     }
 
-	@PUT
-	@Path("/{accountId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Account editAccount(@PathParam("accountId") int accountId, Account account) throws ApiException {
-		LOGGER.debug("==================== enter AccountResource editAccount ====================");
-		LOGGER.debug("accountId: " + accountId);
-		if (currentRole() != Account.Role.ADMIN && currentAccount().getId() != accountId) {
-			throw new ApiException(401, "Account Id not equal to authorized one", "权限不足");
-		}
-		try {
-			account.setId(accountId);
-			accountService.update(account);
-		} catch (ServiceException ex) {
-			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-			LOGGER.debug(devMsg);
-			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
-				throw new ApiException(404, devMsg, "该账号不存在！");
-			}
-			handleServiceException(ex);
-		}
-		LOGGER.debug("==================== leave AccountResource editAccount ====================");
-		return account;
-	}
 	
 	@POST
 	@Path("/logout")

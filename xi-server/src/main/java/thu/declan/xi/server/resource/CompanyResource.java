@@ -46,16 +46,16 @@ public class CompanyResource extends BaseResource {
 
     @Autowired
     private CompanyService companyService;
-	
-	@Autowired
-	private StudentService studentService;
-	
-	@Autowired
-	private PositionService positionService;
 
-	@Autowired
-	private ResumeService resumeService;
-	
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private PositionService positionService;
+
+    @Autowired
+    private ResumeService resumeService;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -93,11 +93,11 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== enter CompanyResource editCompany ====================");
         LOGGER.debug("companyId: " + companyId);
         if (currentRole() == Account.Role.COMPANY) {
-			if (companyId == 0) {
-				companyId = currentEntityId();
-			} else if (companyId != currentEntityId()) {
-				throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
-			}
+            if (companyId == 0) {
+                companyId = currentEntityId();
+            } else if (companyId != currentEntityId()) {
+                throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
+            }
         }
         try {
             company.setId(companyId);
@@ -116,21 +116,21 @@ public class CompanyResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-	@PermitAll
+    @PermitAll
     public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
-			@QueryParam("pageSize") Integer pageSize,
-			@QueryParam("verified") Boolean verified,
-			@QueryParam("industry") String industry,
-			@QueryParam("type") String type,
-			@QueryParam("scale") String scale) throws ApiException {
+            @QueryParam("pageSize") Integer pageSize,
+            @QueryParam("verified") Boolean verified,
+            @QueryParam("industry") String industry,
+            @QueryParam("type") String type,
+            @QueryParam("scale") String scale) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
         Company selector = new Company();
-		selector.setVerified(verified);
-		selector.setIndustry(industry);
-		selector.setType(type);
-		selector.setScale(scale);
+        selector.setVerified(verified);
+        selector.setIndustry(industry);
+        selector.setType(type);
+        selector.setScale(scale);
         List<Company> companys = null;
-		Pagination pagination = new Pagination(pageSize, pageIndex);
+        Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
             companys = companyService.getList(selector, pagination);
         } catch (ServiceException ex) {
@@ -141,68 +141,71 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource getCompanys ====================");
         return new ListResponse(companys, pagination);
     }
-	
-	@GET
-	@Path("/subscription")
-	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ROLE_STUDENT})
-	public ListResponse<Company> getSubscribedCompanies(@QueryParam("pageIndex") Integer pageIndex,
-			@QueryParam("pageSize") Integer pageSize) throws ApiException {
-		LOGGER.debug("==================== enter PositionResource getSubscribedCompanies ====================");
-		Student stu = null;
-		try {
-			stu = studentService.get(currentEntityId());
-		} catch (ServiceException ex) {
-			java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		Boolean verified = null;
-		String industry = null;
-		String type = null;
-		String scale = null;
-		Map<String, String> sub = null;
-		if (stu != null) {
-			sub = stu.getSubscription();
-		}
-		if (sub != null) {
-			industry = sub.get("industry");
-			type = sub.get("type");
-			scale = sub.get("scale");
-		}
-		LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
-		return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale);
-	}
-	
-	@POST
-	@Path("/login")
-	@PermitAll
-	@Consumes(MediaType.APPLICATION_JSON)
+
+    @GET
+    @Path("/subscription")
     @Produces(MediaType.APPLICATION_JSON)
-	public Company login(Account acc) throws ApiException {
-		acc.setRole(Account.Role.COMPANY);
-		acc = loginAccount(acc);
-		try {
-			Company comp = companyService.getByAccountId(acc.getId());
-			comp.setAccount(acc);
-			return comp;
-		} catch (ServiceException ex) {
-			handleServiceException(ex);
-			return null;
-		}
-	}
+    @RolesAllowed({Constant.ROLE_STUDENT})
+    public ListResponse<Company> getSubscribedCompanies(@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter PositionResource getSubscribedCompanies ====================");
+        Student stu = null;
+        try {
+            stu = studentService.get(currentEntityId());
+        } catch (ServiceException ex) {
+            java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Boolean verified = null;
+        String industry = null;
+        String type = null;
+        String scale = null;
+        Map<String, String> sub = null;
+        if (stu != null) {
+            sub = stu.getSubscription();
+        }
+        if (sub != null) {
+            industry = sub.get("industry");
+            type = sub.get("type");
+            scale = sub.get("scale");
+        }
+        LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
+        return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale);
+    }
+
+    @POST
+    @Path("/login")
+    @PermitAll
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Company login(Account acc) throws ApiException {
+        acc.setRole(Account.Role.COMPANY);
+        acc = loginAccount(acc);
+        try {
+            Company comp = companyService.getByAccountId(acc.getId());
+            comp.setAccount(acc);
+            return comp;
+        } catch (ServiceException ex) {
+            handleServiceException(ex);
+            return null;
+        }
+    }
 
     @GET
     @Path("/{companyId}")
     @Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
+    @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
     public Company getCompany(@PathParam("companyId") int companyId) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompany ====================");
         LOGGER.debug("companyId: " + companyId);
         Company company = null;
-		if (Account.Role.COMPANY == currentRole() && companyId == 0) {
-			companyId = currentEntityId();
-		}
+        Account acc = null;
         try {
-			company = companyService.get(companyId);
+            if (Account.Role.COMPANY == currentRole() && companyId == 0) {
+                companyId = currentEntityId();
+                acc = accountService.get(currentAccountId());
+            }
+            company = companyService.get(companyId);
+            company.setAccount(acc);
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
@@ -214,49 +217,49 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource getCompany ====================");
         return company;
     }
-	
-	@GET
-	@PermitAll
+
+    @GET
+    @PermitAll
     @Path("/{companyId}/positions")
     @Produces(MediaType.APPLICATION_JSON)
-	public ListResponse<Position> getCompanyPositions(@PathParam("companyId") int companyId,
-			@QueryParam("pageIndex") Integer pageIndex,
+    public ListResponse<Position> getCompanyPositions(@PathParam("companyId") int companyId,
+            @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
-		LOGGER.debug("==================== enter CompanyResource getPositiones ====================");
-		if (companyId == 0) {
-			companyId = currentEntityId();
-		}
+        LOGGER.debug("==================== enter CompanyResource getPositiones ====================");
+        if (companyId == 0) {
+            companyId = currentEntityId();
+        }
         Position selector = new Position();
-		selector.setCompanyId(companyId);
+        selector.setCompanyId(companyId);
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<Position> positions = null;
-		try {
-			positions = positionService.getList(selector, pagination);
-		} catch (ServiceException ex) {
-			handleServiceException(ex);
-		}
+        try {
+            positions = positionService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            handleServiceException(ex);
+        }
         LOGGER.debug("==================== leave CompanyResource getPositiones ====================");
         return new ListResponse(positions, pagination);
-	}
-	
-	@GET
-	@Path("/{companyId}/resumes")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ListResponse<Resume> getCompanyResumes(@PathParam("companyId") int companyId,
-			@QueryParam("state") List<Resume.RState>states,
-			@QueryParam("pageIndex") Integer pageIndex,
+    }
+
+    @GET
+    @Path("/{companyId}/resumes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ListResponse<Resume> getCompanyResumes(@PathParam("companyId") int companyId,
+            @QueryParam("state") List<Resume.RState> states,
+            @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
         LOGGER.debug("==================== enter ResumeResource getResumes ====================");
-		if (companyId == 0) {
-			companyId = currentEntityId();
-		}
+        if (companyId == 0) {
+            companyId = currentEntityId();
+        }
         Resume selector = new Resume();
-		if (!states.isEmpty()) {
-			selector.setQueryStates(states);
-		}
-		selector.setCompanyId(companyId);
+        if (!states.isEmpty()) {
+            selector.setQueryStates(states);
+        }
+        selector.setCompanyId(companyId);
         List<Resume> resumes = null;
-		Pagination pagination = new Pagination(pageSize, pageIndex);
+        Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
             resumes = resumeService.getList(selector, pagination);
         } catch (ServiceException ex) {

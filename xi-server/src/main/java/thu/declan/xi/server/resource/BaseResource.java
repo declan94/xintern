@@ -14,6 +14,7 @@ import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Notification.NType;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
+import thu.declan.xi.server.service.AccountService;
 import thu.declan.xi.server.service.AuthService;
 import thu.declan.xi.server.service.NotificationService;
 import thu.declan.xi.server.service.PointLogService;
@@ -23,6 +24,9 @@ import thu.declan.xi.server.service.PointLogService;
  * @author declan
  */
 public class BaseResource {
+    
+    @Autowired
+	protected AccountService accountService;
 	
 	@Autowired
 	protected AuthService authService;
