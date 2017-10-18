@@ -53,6 +53,7 @@
 			<if test="type != null"> c_type = #{type}, </if>
 			<if test="scale != null"> c_scale = #{scale}, </if>
 			<if test="contact != null"> c_contact = #{contact}, </if>
+            <if test="contactPos != null"> c_contactPos = #{contactPos}, </if>
 			<if test="contactPhone != null"> c_contactPhone = #{contactPhone}, </if>
 			<if test="email != null"> c_email = #{email}, </if>
 			<if test="phone != null"> c_phone = #{phone}, </if>
@@ -61,6 +62,7 @@
 			<if test="intro != null"> c_intro = #{intro}, </if>
 			<if test="intro != null"> c_link = #{link}, </if>
             <if test="logo != null"> c_logo = #{logo}, </if>
+            <if test="avatar != null"> c_avatar = #{avatar}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
 			<if test="avgRate != null"> 
 				<if test="avgRate.score1 != null"> c_score1 = #{avgRate.score1}, </if>
