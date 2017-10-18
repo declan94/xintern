@@ -34,8 +34,9 @@ public class NotificationResource extends BaseResource {
     public ListResponse<Notification> getNotificationList(
 			@QueryParam("pageIndex") Integer pageIndex,
 			@QueryParam("pageSize") Integer pageSize) throws ApiException {
-        LOGGER.debug("==================== enter NotificationResource getNotificationes ====================");
+        LOGGER.debug("==================== enter NotificationResource getNotifications ====================");
         Notification selector = new Notification();
+        selector.setAccountId(currentAccountId());
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<Notification> noties = null;
         try {
@@ -45,7 +46,7 @@ public class NotificationResource extends BaseResource {
 			LOGGER.debug(devMsg);
 			handleServiceException(ex);
 		}
-		LOGGER.debug("==================== leave NotificationResource getNotificationes ====================");
+		LOGGER.debug("==================== leave NotificationResource getNotifications ====================");
         return new ListResponse(noties, pagination);
     }
     

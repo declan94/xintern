@@ -10,6 +10,7 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.AccountMapper;
 import thu.declan.xi.server.mapper.CompanyMapper;
+import thu.declan.xi.server.mapper.NotificationMapper;
 import thu.declan.xi.server.mapper.StudentMapper;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Company;
@@ -33,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
 	
 	@Autowired
 	CompanyMapper companyMapper;
+    
+    @Autowired
+	NotificationMapper notiMapper;
     
     private HttpSession session() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -81,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
 		if (!EncryptionUtils.checkPassword(password, account.getPassword())) {
 			throw new ServiceException(ServiceException.CODE_WRONG_PASSWORD, "Wrong password");
 		}
+        account.setUnreadNotis(notiMapper.unreadCnt(account.getId()));
 		setSession(account, authType);
 		return account;
 	}

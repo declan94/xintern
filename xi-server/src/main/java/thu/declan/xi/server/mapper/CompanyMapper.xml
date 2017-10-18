@@ -20,6 +20,7 @@
 		<result property="intro" column="c_intro" />
 		<result property="link" column="c_link" />
         <result property="logo" column="c_logo" />
+        <result property="cert" column="c_cert" />
         <result property="verified" column="c_verified" />
         <result property="createTime" column="c_createTime" />
 		<association property="avgRate" javaType="AvgRate">

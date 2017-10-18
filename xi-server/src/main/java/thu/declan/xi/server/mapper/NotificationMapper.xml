@@ -32,6 +32,19 @@
         </trim>
         where n_id = #{id}
     </update>
+    
+    <update id="setRead">
+        update xi_notification set n_read = 1
+        where n_id in 
+        <foreach item="item" index="index" collection="notis" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <select id="unreadCnt" resultType="int">
+        select count(*) from xi_notification
+        where n_accountId = #{accountId} and n_read = 0
+    </select>
 
     <select id="selectOne" parameterType="int" resultMap="notificationResult">
         select <include refid="selectBaseColumns" />

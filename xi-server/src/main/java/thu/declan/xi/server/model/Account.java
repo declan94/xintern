@@ -75,5 +75,15 @@ public class Account {
     public void setPoint(Integer point) {
         this.point = point;
     }
+
+    private Integer unreadNotis;
+
+    public Integer getUnreadNotis() {
+        return unreadNotis;
+    }
+
+    public void setUnreadNotis(Integer unreadNotis) {
+        this.unreadNotis = unreadNotis;
+    }
     
 }

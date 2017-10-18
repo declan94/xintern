@@ -1,5 +1,6 @@
 package thu.declan.xi.server.service.impl;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.NotificationMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.model.Notification;
+import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.service.NotificationService;
 
 /**
@@ -38,5 +40,17 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+    
+    @Override
+	public List<Notification> getList(Notification objectSelector, Pagination pagination) throws ServiceException {
+        List<Notification> notis = super.getList(objectSelector, pagination);
+        notiMapper.setRead(notis);
+        return notis;
+    }
+
+    @Override
+    public Integer unreadCnt(int accountId) {
+        return notiMapper.unreadCnt(accountId);
+    }
 
 }

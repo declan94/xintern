@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.AccountMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
+import thu.declan.xi.server.mapper.NotificationMapper;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.service.AccountService;
 import thu.declan.xi.server.util.EncryptionUtils;
@@ -18,6 +19,9 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
 
 	@Autowired
 	AccountMapper accountMapper;
+    
+    @Autowired
+	NotificationMapper notiMapper;
 	
 	@Override
 	protected BaseMapper<Account> getMapper() {
@@ -47,6 +51,13 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
     @Override
     public void delete(int id) {
         accountMapper.delete(id);
+    }
+    
+    @Override
+    public Account get(int id) throws ServiceException {
+        Account acc = super.get(id);
+        acc.setUnreadNotis(notiMapper.unreadCnt(id));
+        return acc;
     }
 	
 }
