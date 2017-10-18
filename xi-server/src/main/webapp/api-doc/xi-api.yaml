@@ -1306,11 +1306,15 @@ definitions:
         type: string
         description: 登录手机号
         example: '18810203423'
-
       password:
         type: string
         description: 登录密码
         example: 'password'
+      unreadNotis:
+        type: integer
+        description: 未读消息数量
+        example: 10
+        readOnly: true
 
   Account:
     type: object
