@@ -32,7 +32,7 @@
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
-		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPos, c_contactPhone, c_avatar, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo
+		c_accountId, c_name, c_addr, c_type, c_scale, c_contact, c_contactPos, c_contactPhone, c_avatar, c_email, c_phone, c_industry, c_code, c_intro, c_link, c_logo, c_cert
 	</sql>
     
 	<sql id="selectBaseColumns" >
@@ -42,7 +42,7 @@
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Company">
 		insert into xi_company (<include refid="insertBaseColumns" />) 
-		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPos}, #{contactPhone},  #{avatar}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{link}, #{logo})
+		values (#{accountId}, #{name}, #{addr}, #{type}, #{scale}, #{contact}, #{contactPos}, #{contactPhone},  #{avatar}, #{email}, #{phone}, #{industry}, #{code}, #{intro}, #{link}, #{logo}, #{cert})
 	</insert>
     
 	<update id="update" parameterType="Company">
@@ -62,6 +62,7 @@
 			<if test="intro != null"> c_intro = #{intro}, </if>
 			<if test="intro != null"> c_link = #{link}, </if>
             <if test="logo != null"> c_logo = #{logo}, </if>
+            <if test="cert != null"> c_cert = #{cert}, </if>
             <if test="avatar != null"> c_avatar = #{avatar}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
 			<if test="avgRate != null"> 

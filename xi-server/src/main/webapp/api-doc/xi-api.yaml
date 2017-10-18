@@ -1381,6 +1381,12 @@ definitions:
         type: string
         description: 公司网页
         example: 'http://www.baidu.com'
+      logo:
+        type: string
+        description: 公司logo url
+      cert:
+        type: string
+        description: 公司营业执照 url
 
   Rate:
     allOf: 

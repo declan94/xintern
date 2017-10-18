@@ -190,6 +190,16 @@ public class Company {
         this.logo = logo;
     }
 
+    private String cert;
+
+    public String getCert() {
+        return cert;
+    }
+
+    public void setCert(String cert) {
+        this.cert = cert;
+    }
+
     private Boolean verified;
 
     public Boolean isVerified() {
