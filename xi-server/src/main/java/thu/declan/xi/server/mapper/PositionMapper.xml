@@ -26,6 +26,7 @@
         <result property="reqMajor" column="p_reqMajor" />
         <result property="reqLang" column="p_reqLang" />
         <result property="reqLangLevel" column="p_reqLangLevel" />
+		<result property="active" column="p_active" />
         <result property="createTime" column="p_createTime" />
 		<association property="company" javaType="Company">
 			<id property="id" column="p_companyId"/>
@@ -45,11 +46,11 @@
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel
+        p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_active
     </sql>
     
     <sql id="selectBaseColumns" >
-        p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime
+        p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime, p_active
     </sql>
 	
     <sql id="selectExtColumns">
@@ -63,7 +64,7 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
         insert into xi_position (<include refid="insertBaseColumns" />) 
-        values (#{companyId}, #{title}, #{area}, #{addr}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{salary}, #{stuSalary}, #{unit}, #{minDays}, #{continuous}, #{count}, #{retention}, #{intro}, #{reqGender}, #{reqEdu}, #{reqGrade}, #{reqMajor}, #{reqLang}, #{reqLangLevel})
+        values (#{companyId}, #{title}, #{area}, #{addr}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{salary}, #{stuSalary}, #{unit}, #{minDays}, #{continuous}, #{count}, #{retention}, #{intro}, #{reqGender}, #{reqEdu}, #{reqGrade}, #{reqMajor}, #{reqLang}, #{reqLangLevel}, #{active})
     </insert>
     
     <insert id="collect">
@@ -104,6 +105,7 @@
             <if test="reqMajor != null"> p_reqMajor = #{reqMajor}, </if>
             <if test="reqLang != null"> p_reqLang = #{reqLang}, </if>
             <if test="reqLangLevel != null"> p_reqLangLevel = #{reqLangLevel}, </if>
+			<if test="active != null"> p_active = #{active}, </if>
         </trim>
         where p_id = #{id}
     </update>
@@ -127,6 +129,7 @@
                 <if test="company.industry != null"> c_industry = #{company.industry} and </if>
                 <if test="company.type != null"> c_type = #{company.type} and </if>
             </if>
+			<if test="active != null"> p_active = #{active} and </if>
             <if test="area != null"> p_area = #{area} and </if>
         </trim>
     </sql>

@@ -256,14 +256,14 @@ public class Position {
         this.reqLangLevel = reqLangLevel;
     }
 
-	private Boolean collected;
+	private Boolean active;
 
-	public Boolean isCollected() {
-		return collected;
+	public Boolean isActive() {
+		return active;
 	}
 
-	public void setCollected(Boolean collected) {
-		this.collected = collected;
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
     private Date createTime;
@@ -276,5 +276,36 @@ public class Position {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+	
+	private Boolean collected;
+
+	public Boolean isCollected() {
+		return collected;
+	}
+
+	public void setCollected(Boolean collected) {
+		this.collected = collected;
+	}
+
+	private Integer internCnt;
+
+	public Integer getInternCnt() {
+		return internCnt;
+	}
+
+	public void setInternCnt(Integer internCnt) {
+		this.internCnt = internCnt;
+	}
+
+	private Integer candidateCnt;
+
+	public Integer getCandidateCnt() {
+		return candidateCnt;
+	}
+
+	public void setCandidateCnt(Integer candidateCnt) {
+		this.candidateCnt = candidateCnt;
+	}
+	
     
 }

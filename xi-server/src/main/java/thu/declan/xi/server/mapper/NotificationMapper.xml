@@ -59,7 +59,7 @@
 			<if test="accountId != null">  n_accountId = #{accountId} and </if>
 			<if test="read != null">  n_read = #{read} and </if>
         </trim>
-		order by n_createTime desc
+		order by n_read asc, n_createTime desc
     </select>
     
     <select id="selectCount" parameterType="Notification" resultType="int">

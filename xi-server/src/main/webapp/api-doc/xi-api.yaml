@@ -1470,6 +1470,12 @@ definitions:
             type: boolean
             description: 是否已认证
             readOnly: true
+          activePosCnt:
+            type: integer
+            description: 在招职位数量
+          rateCnt:
+            type: integer
+            description: 评价数量
           createTime:
             $ref: '#definitions/Timestamp'
      
@@ -1622,6 +1628,9 @@ definitions:
         description: 语言
       reqLangLevel:
         $ref: '#definitions/LangLevel'
+      active:
+        type: boolean
+        description: 是否在招
       
   Position:
     type: object
@@ -1643,6 +1652,12 @@ definitions:
             type: boolean
             description: 当前是否已收藏（只对学生账户有效）
             readOnly: true
+          internCnt:
+            type: integer
+            description: 正在实习的人数
+          candidateCnt:
+            type: integer
+            description: 投递人数
           createTime:
             $ref: '#definitions/Timestamp'
 

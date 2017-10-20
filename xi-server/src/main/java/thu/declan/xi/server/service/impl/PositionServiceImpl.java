@@ -1,5 +1,6 @@
 package thu.declan.xi.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,11 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.PositionMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.mapper.CompanyMapper;
+import thu.declan.xi.server.mapper.ResumeMapper;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.service.PositionService;
 
 /**
@@ -24,7 +28,30 @@ public class PositionServiceImpl extends BaseTableServiceImpl<Position> implemen
 	PositionMapper positionMapper;
 	
 	@Autowired
+	ResumeMapper resumeMapper;
+	
+	@Autowired
 	CompanyMapper companyMapper;
+	
+	@Override
+	protected void postGetList(List<Position> positions) {
+		Resume sel1 = new Resume();
+		sel1.setState(RState.WORKING);
+		Resume sel2 = new Resume();
+		sel2.setQueryStates(new ArrayList<RState>(){{
+			add(RState.NEW);
+			add(RState.CONFIRMED);
+			add(RState.OFFERED);
+			add(RState.WAIT_COMP_CONFIRM);
+			add(RState.WAIT_STU_CONFIRM);
+		}});
+		for (Position pos : positions) {
+			sel1.setPositionId(pos.getId());
+			pos.setInternCnt(resumeMapper.selectCount(sel1));
+			sel2.setPositionId(pos.getId());
+			pos.setCandidateCnt(resumeMapper.selectCount(sel2));
+		}
+	}
 
 	@Override
 	protected BaseMapper<Position> getMapper() {
@@ -54,6 +81,7 @@ public class PositionServiceImpl extends BaseTableServiceImpl<Position> implemen
 		int count = positionMapper.selectCollectedCount(stuId);
 		pagination.setRowCnt(count);
 		pagination.setPageCnt((count - 1) / limit + 1);
+		postGetList(objects);
         return objects;
     }
 

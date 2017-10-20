@@ -9,7 +9,6 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.NotificationMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.model.Notification;
-import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.service.NotificationService;
 
 /**
@@ -26,6 +25,11 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	protected BaseMapper getMapper() {
 		return notiMapper;
 	}
+	
+	@Override
+	protected void postGetList(List<Notification> notis) {
+		notiMapper.setRead(notis);
+	}
 
 	@Override
 	public void addNoti(int accountId, Notification.NType type, int refId, String msgTpl, Object... args) {
@@ -40,14 +44,7 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-    
-    @Override
-	public List<Notification> getList(Notification objectSelector, Pagination pagination) throws ServiceException {
-        List<Notification> notis = super.getList(objectSelector, pagination);
-        notiMapper.setRead(notis);
-        return notis;
-    }
-
+	
     @Override
     public Integer unreadCnt(int accountId) {
         return notiMapper.unreadCnt(accountId);

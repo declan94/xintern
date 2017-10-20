@@ -36,6 +36,14 @@ public abstract class BaseTableServiceImpl<T> implements BaseTableService<T> {
 	protected void postUpdate(T object) throws ServiceException {
 		
 	}
+	
+	protected void postGetList(List<T> objects) {
+		
+	}
+	
+	protected void postGet(T object) {
+		
+	}
     
 	@Override
 	public List<T> getList(T objectSelector, Pagination pagination) throws ServiceException {
@@ -45,17 +53,22 @@ public abstract class BaseTableServiceImpl<T> implements BaseTableService<T> {
 		int count = getMapper().selectCount(objectSelector);
 		pagination.setRowCnt(count);
 		pagination.setPageCnt((count - 1) / limit + 1);
+		postGetList(objects);
 		return objects;
 	}
 	
 	@Override
 	public List<T> getList(T objectSelector) throws ServiceException {
-		return getMapper().selectList(objectSelector);
+		List<T> objects = getMapper().selectList(objectSelector);
+		postGetList(objects);
+		return objects;
 	}
     
     @Override
 	public List<T> getList() throws ServiceException {
-		return getMapper().selectList();
+		List<T> objects = getMapper().selectList();
+		postGetList(objects);
+		return objects;
 	}
     
     @Override
@@ -99,6 +112,7 @@ public abstract class BaseTableServiceImpl<T> implements BaseTableService<T> {
         if (obj == null) {
             throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such element");
         }
+		postGet(obj);
         return obj;
 	}
 	

@@ -231,5 +231,24 @@ public class Company {
 		this.avgRate = avgRate;
 	}
 	
+	private Integer activePosCnt;
+
+	public Integer getActivePosCnt() {
+		return activePosCnt;
+	}
+
+	public void setActivePosCnt(Integer activePosCnt) {
+		this.activePosCnt = activePosCnt;
+	}
+
+	private Integer rateCnt;
+
+	public Integer getRateCnt() {
+		return rateCnt;
+	}
+
+	public void setRateCnt(Integer rateCnt) {
+		this.rateCnt = rateCnt;
+	}
        
 }
