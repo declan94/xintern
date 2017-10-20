@@ -27,10 +27,12 @@ import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.Rate;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
+import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
 import thu.declan.xi.server.service.StudentService;
 
@@ -55,6 +57,9 @@ public class CompanyResource extends BaseResource {
 
     @Autowired
     private ResumeService resumeService;
+	
+	@Autowired
+	private RateService rateService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -249,7 +254,7 @@ public class CompanyResource extends BaseResource {
             @QueryParam("state") List<Resume.RState> states,
             @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
-        LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+        LOGGER.debug("==================== enter CompanyResource getResumes ====================");
         if (companyId == 0) {
             companyId = currentEntityId();
         }
@@ -267,8 +272,35 @@ public class CompanyResource extends BaseResource {
             LOGGER.debug(devMsg);
             handleServiceException(ex);
         }
-        LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+        LOGGER.debug("==================== leave CompanyResource getResumes ====================");
         return new ListResponse(resumes, pagination);
+    }
+	
+	@GET
+    @Path("/{companyId}/rates")
+    @Produces(MediaType.APPLICATION_JSON)
+	@PermitAll
+    public ListResponse<Rate> getCompanyRates(@PathParam("companyId") int companyId,
+            @QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter CompanyResource getCompanyRates ====================");
+        if (companyId == 0 && Account.Role.COMPANY.equals(currentRole())) {
+            companyId = currentEntityId();
+        }
+        Rate selector = new Rate();
+		selector.setCompanyId(companyId);
+        
+        List<Rate> rates = null;
+        Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            rates = rateService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave CompanyResource getCompanyRates ====================");
+        return new ListResponse(rates, pagination);
     }
 
 }

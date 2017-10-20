@@ -65,6 +65,7 @@
         select <include refid="selectBaseColumns" />
         from xi_rate
         <include refid="whereList" />
+		order by r_createTime desc
     </select>
     
     <select id="selectCount" parameterType="Rate" resultType="int">

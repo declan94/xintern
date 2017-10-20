@@ -444,6 +444,37 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /companies/{companyId}/rates:
+    get:
+      tags:
+      - company
+      - rate
+      - admin
+      summary: 获取企业收到的学生评价信息
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，设置为0则代表当前登录企业
+        required: true
+        type: integer
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回评价信息列表
+          schema:
+            $ref: '#/definitions/List-Rate'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此公司不存在
+          schema:
+            $ref: '#/definitions/Error'
+
   /positions:
     post:
       tags:
@@ -1855,6 +1886,16 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Notification'
+
+  List-Rate:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Rate'
 
   UploadResult:
     type: object
