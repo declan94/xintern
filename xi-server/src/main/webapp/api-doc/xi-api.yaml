@@ -23,6 +23,8 @@ tags:
   description: 职位相关
 - name: resume
   description: 简历（实习关系）相关
+- name: salary
+  description: 薪资相关
 - name: news
   description: 资讯相关
 - name: pointlog
@@ -228,6 +230,44 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /students/{studentId}/salaries:
+    get:
+      tags:
+      - student
+      - salary
+      - admin
+      summary: 获取学生的薪资列表
+      parameters:
+      - in: path
+        name: studentId
+        description: 学生Id，设置为0则代表当前登录学生
+        required: true
+        type: integer
+      - in: query
+        name: state
+        description: 筛选薪资状态，可以提供多个值。 （例如：?state=NEW_GENERATED&state=WAIT_COMP_CONFIRM 可同时获取两种状态）
+        type: string
+        enum:
+          - NEW_GENERATED
+          - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
+          - CONFIRMED
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回薪资列表信息
+          schema:
+            $ref: '#/definitions/List-Salary'
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此学生不存在
+          schema:
+            $ref: '#/definitions/Error'
+
   /companies:
     post:
       tags:
@@ -400,13 +440,13 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /companies/{companyId}/resumes:
+  /companies/{companyId}/salaries:
     get:
       tags:
       - company
-      - resume
+      - salary
       - admin
-      summary: 获取企业收到的简历信息
+      summary: 获取企业的薪资列表
       parameters:
       - in: path
         name: companyId
@@ -415,26 +455,20 @@ paths:
         type: integer
       - in: query
         name: state
-        description: 筛选简历状态，可以提供多个值。 （例如：?state=ENDED&state=CANCELD 可同时获取两种状态）
+        description: 筛选薪资状态，可以提供多个值。 （例如：?state=NEW_GENERATED&state=WAIT_COMP_CONFIRM 可同时获取两种状态）
         type: string
         enum:
-          - NEW
+          - NEW_GENERATED
           - WAIT_STU_CONFIRM
           - WAIT_COMP_CONFIRM
           - CONFIRMED
-          - OFFERED
-          - WORKING
-          - ENDED
-          - CANCELED
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:
         200:
-          description: 成功，返回简历列表信息
+          description: 成功，返回薪资列表信息
           schema:
-            $ref: '#/definitions/List-Resume'
-        400:
-          description: Bad request, invalid arguments
+            $ref: '#/definitions/List-Salary'
         401:
           description: 当前未登录
         403:
@@ -1730,6 +1764,8 @@ definitions:
         type: integer
       WAIT_STU_CONFIRM:
         type: integer
+      WAIT_COMP_CONFIRM:
+        type: integer
       CONFIRMED:
         type: integer
       OFFERED:
@@ -1749,6 +1785,7 @@ definitions:
         enum:
           - NEW
           - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
           - CONFIRMED
           - OFFERED
           - WORKING
@@ -1796,16 +1833,52 @@ definitions:
           positionId:
             type: integer
           position:
-            $ref: '#/definitions/Position'
+            type: object
+            readOnly: true
           stuId:
             type: integer
             readOnly: true
           student:
-            $ref: '#/definitions/Student'
+            type: object
+            readOnly: true
           createTime:
             $ref: '#/definitions/Timestamp'
           updateTime:
             $ref: '#/definitions/Timestamp'
+
+  SalaryUpdater:
+    type: object
+    properties:
+      workDays:
+        type: integer
+        example: 10
+        description: 该月工作天数
+      state:
+        type: string
+        description: 状态
+        enum:
+          - NEW_GENERATED
+          - WAIT_STU_CONFIRM
+          - WAIT_COMP_CONFIRM
+          - CONFIRMED
+  
+  Salary:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicModel'
+      - properties:
+          resumeId:
+            type: integer
+            readOnly: true
+          companyId:
+            type: integer
+            readOnly: true
+          stuId:
+            type: integer
+            readOnly: true
+          resume:
+            type: object
+            readOnly: true
 
   News:
     type: object
@@ -1971,6 +2044,16 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Rate'
+  
+  List-Salary:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Salary'
 
   UploadResult:
     type: object

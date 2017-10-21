@@ -24,6 +24,7 @@
         <typeAlias alias="PointLog" type="thu.declan.xi.server.model.PointLog" />
         <typeAlias alias="Notification" type="thu.declan.xi.server.model.Notification" />
         <typeAlias alias="Code" type="thu.declan.xi.server.model.Code" />
+		<typeAlias alias="Salary" type="thu.declan.xi.server.model.Salary" />
     </typeAliases>
 	
     <typeHandlers>
@@ -36,6 +37,7 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.PointLog$PType" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Notification$NType" />
 		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Rate$Direction" />
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Salary$SState" />
         <typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
 		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
 	</typeHandlers>

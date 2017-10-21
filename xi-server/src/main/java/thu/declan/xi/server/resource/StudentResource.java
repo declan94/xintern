@@ -31,7 +31,9 @@ import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
 import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.model.Salary;
 import thu.declan.xi.server.service.ResumeService;
+import thu.declan.xi.server.service.SalaryService;
 import thu.declan.xi.server.service.StudentService;
 
 /**
@@ -49,6 +51,9 @@ public class StudentResource extends BaseResource {
 
     @Autowired
     private ResumeService resumeService;
+	
+	@Autowired
+	private SalaryService salaryService;
 
     @POST
     @PermitAll
@@ -218,7 +223,7 @@ public class StudentResource extends BaseResource {
             @QueryParam("state") List<Resume.RState> states,
             @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
-        LOGGER.debug("==================== enter ResumeResource getResumes ====================");
+        LOGGER.debug("==================== enter StudentResource getResumes ====================");
         if (studentId == 0) {
             studentId = currentEntityId();
         }
@@ -236,7 +241,37 @@ public class StudentResource extends BaseResource {
             LOGGER.debug(devMsg);
             handleServiceException(ex);
         }
-        LOGGER.debug("==================== leave ResumeResource getResumes ====================");
+        LOGGER.debug("==================== leave StudentResource getResumes ====================");
         return new ListResponse(resumes, pagination);
     }
+	
+	@GET
+    @Path("/{studentId}/salaries")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ListResponse<Salary> getStudentSalaries(@PathParam("studentId") int studentId,
+			@QueryParam("state") List<Salary.SState> states,
+            @QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter StudentResource getStudentSalaries ====================");
+        if (studentId == 0) {
+            studentId = currentEntityId();
+        }
+        Salary selector = new Salary();
+        if (!states.isEmpty()) {
+            selector.setQueryStates(states);
+        }
+        selector.setStuId(studentId);
+        List<Salary> salaries = null;
+        Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            salaries = salaryService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave StudentResource getStudentSalaries ====================");
+        return new ListResponse(salaries, pagination);
+    }
+	
 }

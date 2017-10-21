@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="thu.declan.xi.server.mapper.SalaryMapper">
+
+    <resultMap type="Salary" id="salaryResult">
+        <result property="id" column="s_id" />
+        <result property="resumeId" column="s_resumeId" />
+		<result property="companyId" column="s_companyId" />
+		<result property="stuId" column="s_stuId" />
+		<result property="month" column="s_month" />
+        <result property="workDays" column="s_workDays" />
+        <result property="state" column="s_state" />
+        <result property="createTime" column="s_createTime" />
+    </resultMap>
+	
+    <sql id="insertBaseColumns" >
+        s_resumeId, s_companyId, s_stuId, s_month, s_workDays, s_state
+    </sql>
+    
+    <sql id="selectBaseColumns" >
+		xi_salary.*
+    </sql>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Salary">
+        insert into xi_salary (<include refid="insertBaseColumns" />) 
+        values (#{resumeId}, #{companyId}, #{stuId}, #{month}, #{workDays}, #{state})
+    </insert>
+	
+    <update id="update" parameterType="Salary">
+        update xi_salary 
+        <trim prefix="set" suffixOverrides=",">
+			<if test="workDays != null"> s_workDays = #{workDays}, </if>
+            <if test="state != null"> s_state = #{state}, </if>
+        </trim>
+        where s_id = #{id}
+    </update>
+    
+    <select id="selectOne" parameterType="int" resultMap="salaryResult">
+        select <include refid="selectBaseColumns" />
+        from xi_salary
+        where s_id = #{id}
+    </select>
+	
+	<sql id="whereList" >
+		<trim prefix="where" suffixOverrides="and">
+			<if test="resumeId != null">  s_resumeId = #{resumeId} and </if>
+			<if test="companyId != null">  s_companyId = #{companyId} and </if>
+			<if test="stuId != null">  s_stuId = #{stuId} and </if>
+			<if test="state != null">  s_state = #{state} and </if>
+			<if test="queryStates != null"> 
+				s_state in 
+				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				and 
+			</if>
+        </trim>
+	</sql>
+    	
+    <select id="selectList" parameterType="Salary" resultMap="salaryResult">
+        select <include refid="selectBaseColumns" />
+        from xi_salary
+        <include refid="whereList" />
+		order by s_createTime desc
+    </select>
+    
+    <select id="selectCount" parameterType="Salary" resultType="int">
+        select count(*)
+        from xi_salary
+        <include refid="whereList" />
+    </select>
+	
+    <delete id="delete" parameterType="int">
+        delete from xi_salary where s_id = #{id}
+    </delete>
+   		
+</mapper>
+

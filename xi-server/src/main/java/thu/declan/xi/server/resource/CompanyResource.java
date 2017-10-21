@@ -30,11 +30,13 @@ import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.Rate;
 import thu.declan.xi.server.model.Resume;
+import thu.declan.xi.server.model.Salary;
 import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.PositionService;
 import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
+import thu.declan.xi.server.service.SalaryService;
 import thu.declan.xi.server.service.StudentService;
 
 /**
@@ -61,6 +63,9 @@ public class CompanyResource extends BaseResource {
 	
 	@Autowired
 	private RateService rateService;
+	
+	@Autowired
+	private SalaryService salaryService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -294,6 +299,35 @@ public class CompanyResource extends BaseResource {
 		}
         LOGGER.debug("==================== leave CompanyResource getCompanyResumesCount ====================");
         return cnts;
+    }
+	
+	@GET
+    @Path("/{companyId}/salaries")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ListResponse<Salary> getCompanySalaries(@PathParam("companyId") int companyId,
+			@QueryParam("state") List<Salary.SState> states,
+            @QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter CompanyResource getCompanySalaries ====================");
+        if (companyId == 0) {
+            companyId = currentEntityId();
+        }
+        Salary selector = new Salary();
+        if (!states.isEmpty()) {
+            selector.setQueryStates(states);
+        }
+        selector.setCompanyId(companyId);
+        List<Salary> salaries = null;
+        Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            salaries = salaryService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave CompanyResource getCompanySalaries ====================");
+        return new ListResponse(salaries, pagination);
     }
 	
 	@GET
