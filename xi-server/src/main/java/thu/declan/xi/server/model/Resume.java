@@ -27,8 +27,7 @@ public class Resume {
         
         public static RState fromString(String str) {
             return Enum.valueOf(RState.class, str.toUpperCase());
-        }
-        
+        }        
     }
 
     private Integer id;

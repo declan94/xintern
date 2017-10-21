@@ -444,6 +444,30 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /companies/{companyId}/resumes/count:
+    get:
+      tags:
+      - company
+      - admin
+      summary: 获取企业收到的简历数量统计
+      parameters:
+      - in: path
+        name: companyId
+        description: 企业Id，设置为0则代表当前登录企业
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 成功，返回简历数量统计
+          schema:
+            $ref: '#/definitions/ResumeCnt'
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+          schema:
+            $ref: '#/definitions/Error'
+
   /companies/{companyId}/rates:
     get:
       tags:
@@ -1698,6 +1722,24 @@ definitions:
             description: 投递人数
           createTime:
             $ref: '#definitions/Timestamp'
+
+  ResumeCnt:
+    type: object
+    properties:
+      NEW:
+        type: integer
+      WAIT_STU_CONFIRM:
+        type: integer
+      CONFIRMED:
+        type: integer
+      OFFERED:
+        type: integer
+      WORKING:
+        type: integer
+      ENDED:
+        type: integer
+      CANCELED:
+        type: integer
 
   ResumeUpdater:
     type: object

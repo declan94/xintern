@@ -1,5 +1,6 @@
 package thu.declan.xi.server.resource;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -274,6 +275,25 @@ public class CompanyResource extends BaseResource {
         }
         LOGGER.debug("==================== leave CompanyResource getResumes ====================");
         return new ListResponse(resumes, pagination);
+    }
+	
+	@GET
+    @Path("/{companyId}/resumes/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public HashMap<String, Integer> getCompanyResumesCount(@PathParam("companyId") int companyId) throws ApiException {
+        LOGGER.debug("==================== enter CompanyResource getCompanyResumesCount ====================");
+        if (companyId == 0) {
+            companyId = currentEntityId();
+        }
+		HashMap<String, Integer> cnts = new HashMap<>();
+        Resume selector = new Resume();
+		selector.setCompanyId(companyId);
+        for (Resume.RState st : Resume.RState.values()) {
+			selector.setState(st);
+			cnts.put(st.toString(), resumeService.getCount(selector));
+		}
+        LOGGER.debug("==================== leave CompanyResource getCompanyResumesCount ====================");
+        return cnts;
     }
 	
 	@GET
