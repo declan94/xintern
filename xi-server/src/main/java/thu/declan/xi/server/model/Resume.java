@@ -82,6 +82,16 @@ public class Resume {
     public void setStuId(Integer stuId) {
         this.stuId = stuId;
     }
+
+	private Student student;
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
 	
     private RState state;
 
@@ -93,6 +103,36 @@ public class Resume {
         this.state = state;
     }
 
+	private Integer salary;
+
+	public Integer getSalary() {
+		return salary;
+	}
+
+	public void setSalary(Integer salary) {
+		this.salary = salary;
+	}
+
+	private Integer stuSalary;
+
+	public Integer getStuSalary() {
+		return stuSalary;
+	}
+
+	public void setStuSalary(Integer stuSalary) {
+		this.stuSalary = stuSalary;
+	}
+
+	private String unit;
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}	
+
 	private Date interviewTime;
 
 	@JsonSerialize(using = CustomJsonDateSerializer.class)
@@ -103,6 +143,36 @@ public class Resume {
 	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	public void setInterviewTime(Date interviewTime) {
 		this.interviewTime = interviewTime;
+	}
+
+	private String interviewPlace;
+
+	public String getInterviewPlace() {
+		return interviewPlace;
+	}
+
+	public void setInterviewPlace(String interviewPlace) {
+		this.interviewPlace = interviewPlace;
+	}
+
+	private String contact;
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	private String contactPhone;
+
+	public String getContactPhone() {
+		return contactPhone;
+	}
+
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
 	}
 	
 	@JsonIgnore

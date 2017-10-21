@@ -76,6 +76,9 @@ public class ResumeResource extends BaseResource {
 		try {
 			resumeService.add(resume);
 		} catch (ServiceException ex) {
+			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+				throw new ApiException(404, "No such position", "职位不存在");
+			}
 			handleServiceException(ex);
 		}
 		if (Account.Role.STUDENT.equals(currentRole())) {

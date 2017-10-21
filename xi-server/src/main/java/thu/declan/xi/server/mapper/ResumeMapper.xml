@@ -8,11 +8,40 @@
 		<result property="positionId" column="r_positionId" />
 		<result property="stuId" column="r_stuId" />
 		<result property="state" column="r_state" />
+		<result property="salary" column="r_salary" />
+		<result property="stuSalary" column="r_stuSalary" />
+		<result property="unit" column="r_unit" />
 		<result property="interviewTime" column="r_interviewTime" />
+		<result property="interviewPlace" column="r_interviewPlace" />
+		<result property="contact" column="r_contact" />
+		<result property="contactPhone" column="r_contactPhone" />
 		<result property="commentStu" column="r_commentStu" />
 		<result property="commentComp" column="r_commentComp" />
 		<result property="createTime" column="r_createTime" />
 		<result property="updateTime" column="r_updateTime" />
+		<association property="student" javaType="Student">
+			<result property="id" column="s_id" />
+			<result property="accountId" column="s_accountId" />
+			<result property="name" column="s_name" />
+			<result property="idNo" column="s_idNo" />
+			<result property="phone" column="s_phone" />
+			<result property="gender" column="s_gender" />
+			<result property="education" column="s_education" />
+			<result property="major" column="s_major" />
+			<result property="area" column="s_area" />
+			<result property="email" column="s_email" />
+			<result property="school" column="s_school" />
+			<result property="language" column="s_language" />
+			<result property="langLevel" column="s_langLevel" />
+			<result property="grade" column="s_grade" />
+			<result property="stuCard" column="s_stuCard" />
+			<result property="certs" column="s_certs" />
+			<result property="selfEval" column="s_selfEval" />
+			<result property="socialExp" column="s_socialExp" />
+			<result property="workExp" column="s_workExp" />
+			<result property="avatar" column="s_avatar" />
+			<result property="subscription" column="s_subscription" />
+		</association>
 		<association property="position" javaType="Position">
 			<result property="id" column="r_positionId" />
 			<result property="companyId" column="p_companyId" />
@@ -61,16 +90,18 @@
 	</sql>
     
 	<sql id="selectBaseColumns" >
-		r_id, r_positionId, r_stuId, r_state, r_interviewTime, r_commentStu, r_commentComp, r_createTime, r_updateTime
+		xi_resume.*
+		<!--r_id, r_positionId, r_stuId, r_state, r_interviewTime, r_commentStu, r_commentComp, r_createTime, r_updateTime-->
 	</sql>
 	
 	<sql id="selectExtColumns" >
-		<include refid="selectBaseColumns" />, xi_position.*,
+		<include refid="selectBaseColumns" />, xi_position.*, xi_student.*,
 		c_name, c_addr, c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified
 	</sql>
 	
 	<sql id="joinedTable" >
 		xi_resume
+		inner join xi_student on xi_resume.r_stuId = xi_student.s_id
 		inner join xi_position on xi_resume.r_positionId = xi_position.p_id
 		inner join xi_company on xi_position.p_companyId = xi_company.c_id
 	</sql>
@@ -84,6 +115,13 @@
 		update xi_resume 
 		<trim prefix="set" suffixOverrides=",">
 			<if test="state != null"> r_state = #{state}, </if>
+			<if test="salary != null"> r_salary = #{salary}, </if>
+			<if test="stuSalary != null"> r_stuSalary = #{stuSalary}, </if>
+			<if test="unit != null"> r_unit = #{unit}, </if>
+			<if test="interviewTime != null"> r_interviewTime = #{interviewTime}, </if>
+			<if test="interviewPlace= null"> r_interviewPlace = #{interviewPlace}, </if>
+			<if test="contact != null"> r_contact = #{contact}, </if>
+			<if test="contactPhone != null"> r_contactPhone = #{contactPhone}, </if>
 			<if test="commentStu != null"> r_commentStu = #{commentStu}, </if>
 			<if test="commentComp != null"> r_commentComp = #{commentComp}, </if>
 			<if test="updateTime != null"> r_updateTime = #{updateTime}, </if>

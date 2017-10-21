@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.ResumeMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
+import thu.declan.xi.server.mapper.PositionMapper;
+import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.service.ResumeService;
 
@@ -18,6 +20,9 @@ public class ResumeServiceImpl extends BaseTableServiceImpl<Resume> implements R
 	@Autowired
 	ResumeMapper resumeMapper;
 	
+	@Autowired
+	PositionMapper positionMapper;
+	
 	@Override
 	protected BaseMapper<Resume> getMapper() {
 		return resumeMapper;
@@ -25,7 +30,13 @@ public class ResumeServiceImpl extends BaseTableServiceImpl<Resume> implements R
 	
 	@Override
 	public void preAdd(Resume resume) throws ServiceException {
-        
+        Position pos = positionMapper.selectOne(resume.getPositionId());
+		if (pos == null) {
+			throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such position");
+		}
+		resume.setSalary(pos.getSalary());
+		resume.setStuSalary(pos.getStuSalary());
+		resume.setUnit(pos.getUnit());
 	}
 	
 	@Override

@@ -1712,10 +1712,32 @@ definitions:
           - WORKING
           - ENDED
           - CANCELED
+      salary:
+        type: integer
+        description: 薪资
+      stuSalary:
+        type: integer
+        description: 学生薪资（扣除服务费）
+      unit:
+        type: string
+        example: 天
+        description: 薪资单位
       interviewTime:
         type: string
         example: '2017-10-01 08:00:00'
         description: '面试时间'
+      interviewPlace:
+        type: string
+        example: '面试地点'
+        description: '面试地点'
+      contact:
+        type: string
+        example: '联系人'
+        description: '联系人'
+      contactPhone:
+        type: string
+        example: '联系电话'
+        description: '联系电话'
       commentStu:
         type: string
         description: 学生对企业的评价
@@ -1731,9 +1753,13 @@ definitions:
       - properties:
           positionId:
             type: integer
+          position:
+            $ref: '#/definitions/Position'
           stuId:
             type: integer
             readOnly: true
+          student:
+            $ref: '#/definitions/Student'
           createTime:
             $ref: '#/definitions/Timestamp'
           updateTime:
