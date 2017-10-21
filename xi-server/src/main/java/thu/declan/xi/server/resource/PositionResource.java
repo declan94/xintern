@@ -29,6 +29,7 @@ import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog.PType;
+import thu.declan.xi.server.model.QueryModel;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Resume.RState;
 import thu.declan.xi.server.model.Student;
@@ -122,6 +123,7 @@ public class PositionResource extends BaseResource {
 	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
 	public ListResponse<Position> getPositions(@QueryParam("pageIndex") Integer pageIndex,
 			@QueryParam("pageSize") Integer pageSize,
+			@QueryParam("keyword") String keyword,
 			@QueryParam("verified") Boolean verified,
 			@QueryParam("industry") String industry,
 			@QueryParam("type") String type,
@@ -134,6 +136,9 @@ public class PositionResource extends BaseResource {
 		compSel.setType(type);
 		selector.setArea(area);
 		selector.setCompany(compSel);
+		if (keyword != null) {
+			selector.setQueryParam(QueryModel.SEARCH_KEY, keyword);
+		}
 		List<Position> positions = null;
 		Pagination pagination = new Pagination(pageSize, pageIndex);
 		try {
@@ -179,7 +184,7 @@ public class PositionResource extends BaseResource {
 			area = sub.get("area");
 		}
 		LOGGER.debug("==================== leave PositionResource getSubscribedPositions ====================");
-		return this.getPositions(pageIndex, pageSize, verified, industry, type, area);
+		return this.getPositions(pageIndex, pageSize, null, verified, industry, type, area);
 	}
 
 	@GET

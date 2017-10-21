@@ -129,8 +129,13 @@
                 <if test="company.industry != null"> c_industry = #{company.industry} and </if>
                 <if test="company.type != null"> c_type = #{company.type} and </if>
             </if>
+			<if test="companyId != null"> p_companyId = #{companyId} </if>
 			<if test="active != null"> p_active = #{active} and </if>
             <if test="area != null"> p_area = #{area} and </if>
+			<if test="queryParams.searchKey != null">
+				(p_title LIKE concat('%', #{queryParams.searchKey}, '%')
+				or c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
+			</if>
         </trim>
     </sql>
     

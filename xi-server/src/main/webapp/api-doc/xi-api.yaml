@@ -505,6 +505,10 @@ paths:
       summary: 筛选职位列表
       parameters:
       - in: query
+        name: keyword
+        type: string
+        description: 搜索关键词（职位公司名称）
+      - in: query
         name: verified
         type: boolean
         description: 是否认证

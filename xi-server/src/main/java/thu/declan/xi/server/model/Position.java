@@ -12,7 +12,7 @@ import thu.declan.xi.server.util.CustomJsonDateSerializer;
  *
  * @author declan
  */
-public class Position {
+public class Position extends QueryModel {
 
     private Integer id;
 

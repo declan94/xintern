@@ -21,6 +21,8 @@ public class QueryModel {
     public static final String SORT_DIR_ASC = "asc";
     public static final String SORT_DIR_DESC = "desc";
 	
+	public static final String SEARCH_KEY = "searchKey";
+	
 	@JsonIgnore
 	private Map queryParams = new HashMap();
 
