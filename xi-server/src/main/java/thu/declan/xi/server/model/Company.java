@@ -168,8 +168,18 @@ public class Company {
 
     public void setIntro(String intro) {
         this.intro = intro;
-    }    
+    }
+	
+	private String video;
 
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}	
+	
 	private String link;
 
 	public String getLink() {

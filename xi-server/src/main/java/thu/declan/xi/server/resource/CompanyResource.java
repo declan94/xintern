@@ -120,8 +120,8 @@ public class CompanyResource extends BaseResource {
     }
 
     @GET
+	@PermitAll
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
     public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize,
             @QueryParam("verified") Boolean verified,
@@ -196,9 +196,9 @@ public class CompanyResource extends BaseResource {
     }
 
     @GET
+	@PermitAll
     @Path("/{companyId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
     public Company getCompany(@PathParam("companyId") int companyId) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompany ====================");
         LOGGER.debug("companyId: " + companyId);
