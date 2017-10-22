@@ -10,12 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
-import thu.declan.xi.server.service.AccountService;
 
 /**
  *
@@ -26,9 +24,6 @@ import thu.declan.xi.server.service.AccountService;
 public class AdminResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminResource.class);
-
-	@Autowired
-	private AccountService accountService;
 
 	@POST
 	@PermitAll
@@ -48,7 +43,7 @@ public class AdminResource extends BaseResource {
 		String pwd = acc.getPassword();
 		acc = accRes.createAccount(acc);
 		try {
-			authService.login(acc.getPhone(), pwd, Account.Role.STUDENT);
+			authService.login(acc.getPhone(), pwd, Account.Role.ADMIN);
 		} catch (ServiceException ex) {
 			accRes.deleteAccount(acc.getId());
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
@@ -65,7 +60,7 @@ public class AdminResource extends BaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Account login(Account acc) throws ApiException {
-		acc.setRole(Account.Role.STUDENT);
+		acc.setRole(Account.Role.ADMIN);
 		acc = loginAccount(acc);
 		return acc;
 	}
