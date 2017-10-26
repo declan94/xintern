@@ -30,6 +30,7 @@
         <result property="createTime" column="p_createTime" />
 		<association property="company" javaType="Company">
 			<id property="id" column="p_companyId"/>
+			<result property="accountId" column="c_accountId" />
 			<result property="name" column="c_name" />
 			<result property="addr" column="c_addr" />
 			<result property="type" column="c_type" />
@@ -55,7 +56,7 @@
 	
     <sql id="selectExtColumns">
         <include refid="selectBaseColumns" />,
-        c_name, c_addr,  c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified, c_priority
+        c_accountId, c_name, c_addr,  c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified, c_priority
     </sql>
 	
     <sql id="joinedTable" >

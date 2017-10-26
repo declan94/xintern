@@ -3,6 +3,7 @@ package thu.declan.xi.server.resource;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -73,7 +74,10 @@ public class ResumeResource extends BaseResource {
 		if (Account.Role.STUDENT.equals(currentRole())) {
 			resume.setStuId(currentEntityId());
 		}
+		Integer posId = resume.getPositionId();
+		Position pos = null;
 		try {
+			pos = positionService.get(posId);
 			resumeService.add(resume);
 		} catch (ServiceException ex) {
 			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
@@ -83,6 +87,14 @@ public class ResumeResource extends BaseResource {
 		}
 		if (Account.Role.STUDENT.equals(currentRole())) {
 			addNoti(Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_ADD);
+			Student stu = null;
+			try {
+				stu = studentService.get(currentEntityId());
+				if (pos != null && pos.getCompany() != null) {
+					notiService.addNoti(pos.getCompany().getAccountId(), Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_NEW, stu.getName());
+				}
+			} catch (ServiceException ex) {
+			}
 		}
 		LOGGER.debug("==================== leave ResumeResource createResume ====================");
 		return resume;

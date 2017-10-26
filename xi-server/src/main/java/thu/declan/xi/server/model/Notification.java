@@ -21,6 +21,7 @@ public class Notification {
 	public final static String TPL_WITHDRAW = "提现成功通知";
 	public final static String TPL_WITHDRAW_FAIL = "提现失败通知";
 	public final static String TPL_COMMENT = "实习结束啦，请及时对该公司进行评价。";
+	public final static String TPL_RESUME_NEW = "你收到来自%s的简历，请尽快查看。";
 	
     
     public enum NType {

@@ -15,6 +15,8 @@
 		<result property="interviewPlace" column="r_interviewPlace" />
 		<result property="contact" column="r_contact" />
 		<result property="contactPhone" column="r_contactPhone" />
+		<result property="offerPlace" column="r_offerPlace" />
+		<result property="offerTime" column="r_offerTime" />
 		<result property="commentStu" column="r_commentStu" />
 		<result property="commentComp" column="r_commentComp" />
 		<result property="createTime" column="r_createTime" />
@@ -119,9 +121,11 @@
 			<if test="stuSalary != null"> r_stuSalary = #{stuSalary}, </if>
 			<if test="unit != null"> r_unit = #{unit}, </if>
 			<if test="interviewTime != null"> r_interviewTime = #{interviewTime}, </if>
-			<if test="interviewPlace= null"> r_interviewPlace = #{interviewPlace}, </if>
+			<if test="interviewPlace != null"> r_interviewPlace = #{interviewPlace}, </if>
 			<if test="contact != null"> r_contact = #{contact}, </if>
 			<if test="contactPhone != null"> r_contactPhone = #{contactPhone}, </if>
+			<if test="offerPlace != null"> r_offerPlace = #{offerPlace}, </if>
+			<if test="offerTime != null"> r_offerTime = #{offerTime}, </if>
 			<if test="commentStu != null"> r_commentStu = #{commentStu}, </if>
 			<if test="commentComp != null"> r_commentComp = #{commentComp}, </if>
 			<if test="updateTime != null"> r_updateTime = #{updateTime}, </if>

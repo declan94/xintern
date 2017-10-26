@@ -98,6 +98,9 @@
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>
+			<if test="queryParams.searchKey != null">
+				(c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
+			</if>
 		</trim>
 	</select>
     
@@ -108,6 +111,9 @@
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>
+			<if test="queryParams.searchKey != null">
+				(c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
+			</if>
 		</trim>
 	</select>
 	

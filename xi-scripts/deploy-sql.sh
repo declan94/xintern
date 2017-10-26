@@ -4,8 +4,11 @@ if [[ -d xi-scripts ]]; then
     cd xi-scripts
 fi
 
-scp xintern.sql root@yegames.cn:/root/dist/xi-scripts/
-scp fakedata.sql root@yegames.cn:/root/dist/xi-scripts/
+# SERVER=yegames.cn
+SERVER=x.xiangshixi.cc
 
-ssh root@yegames.cn
-# ssh root@yegames.cn "cd /root/dist/xi-scripts; ./drop_database.sh; ./init_database.sh"
+scp xintern.sql root@${SERVER}:/root/dist/xi-scripts/
+scp fakedata.sql root@${SERVER}:/root/dist/xi-scripts/
+
+ssh root@${SERVER}
+# ssh root@${SERVER} "cd /root/dist/xi-scripts; ./drop_database.sh; ./init_database.sh"

@@ -28,6 +28,7 @@ import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.Position;
+import thu.declan.xi.server.model.QueryModel;
 import thu.declan.xi.server.model.Rate;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Salary;
@@ -133,13 +134,15 @@ public class CompanyResource extends BaseResource {
             @QueryParam("verified") Boolean verified,
             @QueryParam("industry") String industry,
             @QueryParam("type") String type,
-            @QueryParam("scale") String scale) throws ApiException {
+            @QueryParam("scale") String scale,
+			@QueryParam("keyword") String keyword) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
         Company selector = new Company();
         selector.setVerified(verified);
         selector.setIndustry(industry);
         selector.setType(type);
         selector.setScale(scale);
+		selector.setQueryParam(QueryModel.SEARCH_KEY, keyword);
         List<Company> companys = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
@@ -180,7 +183,7 @@ public class CompanyResource extends BaseResource {
             scale = sub.get("scale");
         }
         LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
-        return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale);
+        return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale, null);
     }
 
     @POST

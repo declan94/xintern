@@ -130,6 +130,7 @@ public class PositionResource extends BaseResource {
 			@QueryParam("area") String area) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource getPositions ====================");
 		Position selector = new Position();
+		selector.setActive(true);
 		Company compSel = new Company();
 		compSel.setVerified(verified);
 		compSel.setIndustry(industry);

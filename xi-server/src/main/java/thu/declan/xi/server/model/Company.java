@@ -8,7 +8,7 @@ import thu.declan.xi.server.util.CustomJsonDateSerializer;
  *
  * @author declan
  */
-public class Company {
+public class Company extends QueryModel {
     
     private Integer id;
 

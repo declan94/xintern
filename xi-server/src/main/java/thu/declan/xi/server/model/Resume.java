@@ -185,6 +185,28 @@ public class Resume {
 		this.queryStates = queryStates;
 	}
 
+	private String offerPlace;
+
+	public String getOfferPlace() {
+		return offerPlace;
+	}
+
+	public void setOfferPlace(String offerPlace) {
+		this.offerPlace = offerPlace;
+	}
+
+	private Date offerTime;
+
+	@JsonSerialize(using = CustomJsonDateSerializer.class)
+	public Date getOfferTime() {
+		return offerTime;
+	}
+
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	public void setOfferTime(Date offerTime) {
+		this.offerTime = offerTime;
+	}
+
     private String commentStu;
 
     public String getCommentStu() {

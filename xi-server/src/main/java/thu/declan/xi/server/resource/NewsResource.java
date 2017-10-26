@@ -140,6 +140,7 @@ public class NewsResource extends BaseResource {
 			news = newsService.get(newsId);
 			newsService.incStar(currentAccountId(), newsId);
 			news.setStarred(true);
+			news.setStar(news.getStar()+1);
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
@@ -165,6 +166,7 @@ public class NewsResource extends BaseResource {
 			news = newsService.get(newsId);
 			newsService.decStar(currentAccountId(), newsId);
 			news.setStarred(false);
+			news.setStar(news.getStar()-1);
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
