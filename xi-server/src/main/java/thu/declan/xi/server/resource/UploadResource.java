@@ -8,7 +8,9 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,6 +37,16 @@ public class UploadResource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
     
+	@POST
+	@PermitAll
+	@Path("log")
+	@Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+	public String uploadLog(String log) {
+		LOGGER.error("Frontend Log: " + log);
+		return log;
+	}
+	
     @POST
 	@Path("{type}")
     @Produces(MediaType.APPLICATION_JSON)
