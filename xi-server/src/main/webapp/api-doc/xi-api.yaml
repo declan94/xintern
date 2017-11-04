@@ -920,6 +920,9 @@ paths:
       - admin
       summary: 获取资讯列表
       parameters:
+      - in: query
+        name: published
+        type: boolean
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:
@@ -1487,6 +1490,9 @@ definitions:
       cert:
         type: string
         description: 公司营业执照 url
+      frozen:
+        type: boolean
+        description: 冻结企业
 
   Rate:
     allOf: 

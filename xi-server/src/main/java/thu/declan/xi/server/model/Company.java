@@ -240,6 +240,16 @@ public class Company extends QueryModel {
 	public void setAvgRate(AvgRate avgRate) {
 		this.avgRate = avgRate;
 	}
+
+	private Boolean frozen;
+
+	public Boolean isFrozen() {
+		return frozen;
+	}
+
+	public void setFrozen(Boolean frozen) {
+		this.frozen = frozen;
+	}
 	
 	private Integer activePosCnt;
 

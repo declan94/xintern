@@ -24,6 +24,7 @@
         <result property="cert" column="c_cert" />
         <result property="verified" column="c_verified" />
         <result property="createTime" column="c_createTime" />
+		<result property="frozen" column="c_frozen" />
 		<association property="avgRate" javaType="AvgRate">
 			<result property="score1" column="c_score1" />
 			<result property="score2" column="c_score2" />
@@ -68,6 +69,7 @@
             <if test="cert != null"> c_cert = #{cert}, </if>
             <if test="avatar != null"> c_avatar = #{avatar}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
+			<if test="frozen != null"> c_frozen = #{frozen}, </if>
 			<if test="avgRate != null"> 
 				<if test="avgRate.score1 != null"> c_score1 = #{avgRate.score1}, </if>
 				<if test="avgRate.score2 != null"> c_score2 = #{avgRate.score2}, </if>
@@ -98,6 +100,7 @@
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>
+			<if test="frozen != null"> c_frozen = #{frozen} and </if>
 			<if test="queryParams.searchKey != null">
 				(c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
 			</if>
@@ -111,6 +114,7 @@
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>
+			<if test="frozen != null"> c_frozen = #{frozen} and </if>
 			<if test="queryParams.searchKey != null">
 				(c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
 			</if>

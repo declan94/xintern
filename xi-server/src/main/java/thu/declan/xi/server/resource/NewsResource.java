@@ -58,9 +58,11 @@ public class NewsResource extends BaseResource {
 	@PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public ListResponse<News> getNewsList(@QueryParam("pageIndex") Integer pageIndex,
-			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+			@QueryParam("pageSize") Integer pageSize,
+			@QueryParam("published") Boolean published) throws ApiException {
         LOGGER.debug("==================== enter NewsResource getNewses ====================");
         News selector = new News();
+		selector.setPublished(published);
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<News> newses = null;
         try {

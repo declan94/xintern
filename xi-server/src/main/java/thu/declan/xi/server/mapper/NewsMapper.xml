@@ -48,6 +48,7 @@
         from xi_news
         <trim prefix="where" suffixOverrides="and">
 			<if test="title != null">  n_title like %#{title}% and </if>
+			<if test="published != null">  n_published like %#{published}% and </if>
         </trim>
 		order by n_priority desc, n_createTime desc
     </select>
@@ -57,6 +58,7 @@
         from xi_news
         <trim prefix="where" suffixOverrides="and">
 			<if test="title != null">  n_title like %#{title}% and </if>
+			<if test="published != null">  n_published like %#{published}% and </if>
         </trim>
     </select>
 	

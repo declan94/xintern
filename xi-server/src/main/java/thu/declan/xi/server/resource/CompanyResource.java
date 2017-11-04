@@ -110,6 +110,7 @@ public class CompanyResource extends BaseResource {
             } else if (companyId != currentEntityId()) {
                 throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
             }
+			company.setFrozen(null);
         }
         try {
             company.setId(companyId);
@@ -132,6 +133,7 @@ public class CompanyResource extends BaseResource {
     public ListResponse<Company> getCompanies(@QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize,
             @QueryParam("verified") Boolean verified,
+			@QueryParam("frozen") Boolean frozen,
             @QueryParam("industry") String industry,
             @QueryParam("type") String type,
             @QueryParam("scale") String scale,
@@ -170,6 +172,7 @@ public class CompanyResource extends BaseResource {
             java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         Boolean verified = null;
+		Boolean frozen = false;
         String industry = null;
         String type = null;
         String scale = null;
@@ -183,7 +186,7 @@ public class CompanyResource extends BaseResource {
             scale = sub.get("scale");
         }
         LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
-        return this.getCompanies(pageIndex, pageSize, verified, industry, type, scale, null);
+        return this.getCompanies(pageIndex, pageSize, verified, frozen, industry, type, scale, null);
     }
 
     @POST
