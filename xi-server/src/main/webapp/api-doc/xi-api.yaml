@@ -277,7 +277,37 @@ paths:
           description: 获取失败，此学生不存在
           schema:
             $ref: '#/definitions/Error'
-
+  /students/{studentId}/rates:
+    get:
+      tags:
+      - student
+      - rate
+      - admin
+      summary: 获取学生收到的企业评价信息
+      parameters:
+      - in: path
+        name: studentId
+        description: 学生Id，设置为0则代表当前登录学生
+        required: true
+        type: integer
+      - $ref: '#/parameters/PageSize'
+      - $ref: '#/parameters/PageIndex'
+      responses:
+        200:
+          description: 成功，返回评价信息列表
+          schema:
+            $ref: '#/definitions/List-Rate'
+        400:
+          description: Bad request, invalid arguments
+        401:
+          description: 当前未登录
+        403:
+          description: 获取失败，权限不允许
+        404:
+          description: 获取失败，此公司不存在
+          schema:
+            $ref: '#/definitions/Error'
+            
   /companies:
     post:
       tags:
