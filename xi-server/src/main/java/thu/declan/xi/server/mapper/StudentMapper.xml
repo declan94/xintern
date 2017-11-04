@@ -80,6 +80,9 @@
 	
 	<sql id="whereList" >
         <trim prefix="where" suffixOverrides="and">
+			<if test="name != null"> s_name LIKE concat('%', #{name}, '%') and </if>
+			<if test="school != null"> s_school LIKE concat('%', #{school}, '%') and </if>
+			<if test="phone != null"> s_phone LIKE concat('%', #{phone}, '%') and </if>
         </trim>
     </sql>
     

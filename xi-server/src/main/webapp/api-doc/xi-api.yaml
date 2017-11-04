@@ -65,8 +65,18 @@ paths:
     get:
       tags:
       - admin
+      - company
       summary: 获取学生列表
       parameters:
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: school
+        type: string
+      - in: query
+        name: phone
+        type: string
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:

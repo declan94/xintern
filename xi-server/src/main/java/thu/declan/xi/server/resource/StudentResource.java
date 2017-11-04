@@ -116,10 +116,17 @@ public class StudentResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY})
     public ListResponse<Student> getStudents(@QueryParam("pageIndex") Integer pageIndex,
-            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+            @QueryParam("pageSize") Integer pageSize,
+			@QueryParam("school") String school,
+			@QueryParam("name") String name,
+			@QueryParam("phone") String phone) throws ApiException {
         LOGGER.debug("==================== enter StudentResource getStudents ====================");
         Student selector = new Student();
+		selector.setSchool(school);
+		selector.setName(name);
+		selector.setPhone(phone);
         List<Student> students = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
