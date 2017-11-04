@@ -349,7 +349,7 @@ public class CompanyResource extends BaseResource {
         }
         Rate selector = new Rate();
 		selector.setCompanyId(companyId);
-        
+        selector.setDirection(Rate.Direction.STU_TO_COMP);
         List<Rate> rates = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
         try {

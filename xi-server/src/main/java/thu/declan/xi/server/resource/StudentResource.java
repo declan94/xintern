@@ -30,8 +30,10 @@ import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
+import thu.declan.xi.server.model.Rate;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Salary;
+import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
 import thu.declan.xi.server.service.SalaryService;
 import thu.declan.xi.server.service.StudentService;
@@ -54,6 +56,9 @@ public class StudentResource extends BaseResource {
 	
 	@Autowired
 	private SalaryService salaryService;
+	
+	@Autowired
+	private RateService rateService;
 
     @POST
     @PermitAll
@@ -279,6 +284,33 @@ public class StudentResource extends BaseResource {
         }
         LOGGER.debug("==================== leave StudentResource getStudentSalaries ====================");
         return new ListResponse(salaries, pagination);
+    }
+	
+	@GET
+    @Path("/{studentId}/rates")
+    @Produces(MediaType.APPLICATION_JSON)
+	@PermitAll
+    public ListResponse<Rate> getStudentRates(@PathParam("studentId") int studentId,
+            @QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+        LOGGER.debug("==================== enter StudentResource getStudentRates ====================");
+        if (studentId == 0 && Account.Role.STUDENT.equals(currentRole())) {
+            studentId = currentEntityId();
+        }
+        Rate selector = new Rate();
+		selector.setStuId(studentId);
+        selector.setDirection(Rate.Direction.COMP_TO_STU);
+        List<Rate> rates = null;
+        Pagination pagination = new Pagination(pageSize, pageIndex);
+        try {
+            rates = rateService.getList(selector, pagination);
+        } catch (ServiceException ex) {
+            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            handleServiceException(ex);
+        }
+        LOGGER.debug("==================== leave StudentResource getStudentRates ====================");
+        return new ListResponse(rates, pagination);
     }
 	
 }
