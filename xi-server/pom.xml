@@ -27,6 +27,7 @@
 		<logback.version>1.1.7</logback.version>
 		<aspectj.version>1.8.9</aspectj.version>
 		<commons-codec.version>1.10</commons-codec.version>
+		<mail.version>1.4.7</mail.version>
 	</properties>
     
 	<dependencies>
@@ -193,12 +194,20 @@
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec.version}</version>
 		</dependency>
-	 <dependency>
-	  <groupId>com.alibaba</groupId>
-	  <artifactId>fastjson</artifactId>
-	  <version>1.2.21</version>
-	  <type>jar</type>
-	 </dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.21</version>
+			<type>jar</type>
+		</dependency>
+	 
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${mail.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

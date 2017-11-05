@@ -277,6 +277,7 @@ paths:
           description: 获取失败，此学生不存在
           schema:
             $ref: '#/definitions/Error'
+  
   /students/{studentId}/rates:
     get:
       tags:
