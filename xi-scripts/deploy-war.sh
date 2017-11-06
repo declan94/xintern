@@ -6,6 +6,12 @@ fi
 
 # SERVER=yegames.cn
 SERVER=x.xiangshixi.cc
+if [[ $1 != '' ]]; then
+    SERVER=$1
+fi
+
+echo "Server: $SERVER"
+
 
 ./package-war.sh $@
 

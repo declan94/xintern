@@ -31,8 +31,8 @@ public class Constant {
     public static final Double SERVICE_FEE_RATE = 0.1;
 	
 	/*------------- email info -------------*/
-	public static final String EMAIL_SMTPHOST = "smtp.xiangshixi.cc";
-	public static final String EMAIL_SMTPPORT = "465";
+	public static final String EMAIL_SMTPHOST = "smtp.ym.163.com";
+	public static final String EMAIL_SMTPPORT = "25";
 	public static final String EMAIL_USERNAME = "wangzc@xiangshixi.cc";
 	public static final String EMAIL_PASSWORD = "1qaz2wsX";
     
