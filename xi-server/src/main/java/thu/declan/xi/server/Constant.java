@@ -36,4 +36,7 @@ public class Constant {
 	public static final String EMAIL_USERNAME = "wangzc@xiangshixi.cc";
 	public static final String EMAIL_PASSWORD = "1qaz2wsX";
     
+    /*------------- wechat info -------------*/
+    public static final String WECHAT_APPID = "wx44895bec275b61e6";
+    public static final String WECHAT_SECRET = "15d2424d3ec81b316972fc72b6ba6cec";
 }

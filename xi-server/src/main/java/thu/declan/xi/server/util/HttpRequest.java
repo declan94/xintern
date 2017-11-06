@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import thu.declan.xi.server.resource.CodeResource;
 
 public class HttpRequest {
     /**
@@ -52,7 +51,6 @@ public class HttpRequest {
             }
         } catch (Exception e) {
             LOGGER.error("发送GET请求出现异常！" + e);
-            e.printStackTrace();
         }
         // 使用finally块来关闭输入流
         finally {
@@ -61,7 +59,6 @@ public class HttpRequest {
                     in.close();
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
             }
         }
         LOGGER.debug("get result: " + result);
@@ -108,7 +105,6 @@ public class HttpRequest {
             }
         } catch (Exception e) {
             LOGGER.error("发送 POST 请求出现异常！"+e);
-            e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
         finally{
@@ -121,7 +117,6 @@ public class HttpRequest {
                 }
             }
             catch(IOException ex){
-                ex.printStackTrace();
             }
         }
         return result;

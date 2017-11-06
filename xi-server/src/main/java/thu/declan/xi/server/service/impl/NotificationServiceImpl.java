@@ -16,6 +16,7 @@ import thu.declan.xi.server.service.AccountService;
 import thu.declan.xi.server.service.CompanyService;
 import thu.declan.xi.server.service.EmailService;
 import thu.declan.xi.server.service.NotificationService;
+import thu.declan.xi.server.service.SMSService;
 import thu.declan.xi.server.service.StudentService;
 
 /**
@@ -39,6 +40,9 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	
 	@Autowired
 	private EmailService emailService;
+    
+    @Autowired
+    private SMSService smsService;
 	
 	@Override
 	protected BaseMapper getMapper() {
@@ -65,14 +69,18 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 		try {
 			Account acc = accountService.get(accountId);
 			String emailAddr;
+            String phone;
 			if (acc.getRole() == Account.Role.STUDENT) {
+                phone = acc.getPhone();
 				Student stu = studentService.getByAccountId(accountId);
 				emailAddr = stu.getEmail();
 			} else {
 				Company comp = companyService.getByAccountId(accountId);
 				emailAddr = comp.getEmail();
+                phone = comp.getPhone();
 			}
 			emailService.sendEmailInBackground("消息通知【享实习】", noti.getMsg(), emailAddr);
+            smsService.sendMsg(phone, noti.getMsg());
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
