@@ -64,7 +64,7 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
 	public Account getByMatcher(Account matcher) throws ServiceException {
 		Account acc = accountMapper.selectByIdentity(matcher);
 		if (acc == null) {
-			throws new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account.");
+			throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account.");
 		}
 		return acc;
 	}
