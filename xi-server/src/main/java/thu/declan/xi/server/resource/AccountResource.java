@@ -1,6 +1,7 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -14,14 +15,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Code;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.News;
 import thu.declan.xi.server.model.Pagination;
+import thu.declan.xi.server.model.PasswordReseter;
 import thu.declan.xi.server.model.PointLog;
+import thu.declan.xi.server.service.CodeService;
 
 /**
  *
@@ -32,6 +37,9 @@ import thu.declan.xi.server.model.PointLog;
 public class AccountResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountResource.class);
+	
+	@Autowired
+	private CodeService codeService;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -184,7 +192,44 @@ public class AccountResource extends BaseResource {
 	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
 	public Account logout() throws ApiException {
 		return authService.logout();
-	}			
+	}
+	
+	@PUT
+	@PermitAll
+	@Path("/resetPassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Account resetPassword(@Valid PasswordReseter reset) throws ApiException {
+		Account sel = new Account();
+		sel.setPhone(reset.getPhone());
+		sel.setRole(reset.getRole());
+		if (reset.getRole() == null) {
+			sel.setRole(Account.Role.STUDENT);
+		}
+		try {
+			Account acc = accountService.getByMatcher(sel);
+			Code c = new Code();
+			c.setPhone(reset.getPhone());
+			c.setCode(reset.getCode());
+			codeService.verify(c);
+			Account updater = new Account();
+			updater.setId(acc.getId());
+			updater.setPassword(reset.getNewPassword());
+			accountService.update(updater);
+			return accountService.get(acc.getId());
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+				throw new ApiException(404, devMsg, "该账号不存在！");
+			} else if (ex.getCode() == ServiceException.CODE_VERIFY_FAILED) {
+                throw new ApiException(403, devMsg, "验证码错误！");
+            }
+			handleServiceException(ex);
+		}
+		return null;
+	}
+	
     
     public void deleteAccount(int accountId) {
         accountService.delete(accountId);

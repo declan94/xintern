@@ -65,7 +65,7 @@ public class CodeResource extends BaseResource {
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
-            if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+            if (ex.getCode() == ServiceException.CODE_VERIFY_FAILED) {
 				throw new ApiException(404, devMsg, "验证失败。");
 			}
 			handleServiceException(ex);

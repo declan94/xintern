@@ -59,5 +59,14 @@ public class AccountServiceImpl extends BaseTableServiceImpl<Account> implements
         acc.setUnreadNotis(notiMapper.unreadCnt(id));
         return acc;
     }
+
+	@Override
+	public Account getByMatcher(Account matcher) throws ServiceException {
+		Account acc = accountMapper.selectByIdentity(matcher);
+		if (acc == null) {
+			throws new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "No such account.");
+		}
+		return acc;
+	}
 	
 }

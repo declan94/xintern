@@ -43,7 +43,7 @@ public class CodeServiceImpl extends BaseTableServiceImpl<Code> implements CodeS
     public Code verify(Code code) throws ServiceException {
         Code c = codeMapper.verifyCode(code);
         if (c == null) {
-            throw new ServiceException(ServiceException.CODE_NO_SUCH_ELEMENT, "Verify failed!");
+            throw new ServiceException(ServiceException.CODE_VERIFY_FAILED, "Verify failed!");
         }
         return c;
     }
