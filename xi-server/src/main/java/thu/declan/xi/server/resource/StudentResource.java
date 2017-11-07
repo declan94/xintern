@@ -228,6 +228,7 @@ public class StudentResource extends BaseResource {
     }
 
     @GET
+	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
     @Path("/{studentId}/resumes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -236,7 +237,7 @@ public class StudentResource extends BaseResource {
             @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
         LOGGER.debug("==================== enter StudentResource getResumes ====================");
-        if (studentId == 0) {
+        if (studentId == 0 && currentRole() == Account.Role.STUDENT) {
             studentId = currentEntityId();
         }
         Resume selector = new Resume();
