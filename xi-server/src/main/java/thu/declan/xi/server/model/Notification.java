@@ -16,16 +16,19 @@ public class Notification {
 	public final static String TPL_RESUME_CANCEL2 = "很抱歉，您参加的%s公司面试未通过，让我们继续在享实习寻找机会吧！";
 	public final static String TPL_RESUME_INTERVIEW = "你收到来自%s公司的面试邀请，请尽快确认面试时间。";
 	public final static String TPL_RESUME_TIME = "您的%s公司面试时间已修改为%s，请准时参加。";
-	public final static String TPL_RESUME_JOIN = "恭喜你已通过%s公司面试，请尽快确认入职";
+	public final static String TPL_RESUME_JOIN = "尊敬的【%s】，您应聘的“【%s】”职位已经获得企业的录取通知，请尽快前往查看。";
 	public final static String TPL_SALARY_GET = "工资到账";
 	public final static String TPL_WITHDRAW = "提现成功通知";
 	public final static String TPL_WITHDRAW_FAIL = "提现失败通知";
 	public final static String TPL_COMMENT = "实习结束啦，请及时对该公司进行评价。";
-	public final static String TPL_RESUME_NEW = "你收到来自%s的简历，请尽快查看。";
+	public final static String TPL_RESUME_NEW = "尊敬的【%s】，您发布的“【%s】”职位已有应聘者投递了简历，请尽快前往查看。";
+    public final static String TPL_COMPANY_VERIFY_FAIL = "非常抱歉，您的企业账号：【%s】，审核未通过，您需要继续完善企业信息并保存，等待重新审核！";
+    public final static String TPL_COMPANY_VERIFY_SUC = "您的企业账号：【%s】，已审核通过，您可以登录享实习网站发布职位啦！";
+    
 	
     
     public enum NType {
-        POINT, RESUME, SALARY, WITHDRAW, COMMENT, BACKEND;
+        POINT, RESUME, SALARY, WITHDRAW, STUDENT, COMPANY, POSITION, RATE, BACKEND;
     }
     
     private Integer id;

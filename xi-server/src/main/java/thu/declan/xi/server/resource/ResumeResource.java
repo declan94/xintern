@@ -91,7 +91,7 @@ public class ResumeResource extends BaseResource {
 			try {
 				stu = studentService.get(currentEntityId());
 				if (pos != null && pos.getCompany() != null) {
-					notiService.addNoti(pos.getCompany().getAccountId(), Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_NEW, stu.getName());
+					notiService.addNoti(pos.getCompany().getAccountId(), Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_NEW, pos.getCompany().getName(), pos.getTitle());
 				}
 			} catch (ServiceException ex) {
 			}
@@ -158,7 +158,7 @@ public class ResumeResource extends BaseResource {
 					}
 					break;
 				case OFFERED:
-					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, compName);
+					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, stu.getName(), oldRes.getPosition().getTitle());
 					break;
 			}
 		}

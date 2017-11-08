@@ -25,6 +25,7 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.Position;
@@ -111,10 +112,19 @@ public class CompanyResource extends BaseResource {
                 throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
             }
 			company.setFrozen(null);
+            company.setVerified(null);
         }
         try {
             company.setId(companyId);
             companyService.update(company);
+            if (company.isVerified() != null) {
+                Company com = companyService.get(companyId);
+                if (company.isVerified()) {
+                    notiService.addNoti(com.getAccountId(), Notification.NType.BACKEND, companyId, Notification.TPL_COMPANY_VERIFY_SUC, com.getName());
+                } else {
+                    notiService.addNoti(com.getAccountId(), Notification.NType.BACKEND, companyId, Notification.TPL_COMPANY_VERIFY_FAIL, com.getName());
+                }
+            }
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
@@ -144,6 +154,7 @@ public class CompanyResource extends BaseResource {
         selector.setIndustry(industry);
         selector.setType(type);
         selector.setScale(scale);
+        selector.setFrozen(frozen);
 		selector.setQueryParam(QueryModel.SEARCH_KEY, keyword);
         List<Company> companys = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
