@@ -33,6 +33,7 @@
             <if test="content != null"> n_content = #{content}, </if>
             <if test="view != null"> n_view = #{view}, </if>
             <if test="star != null"> n_star = #{star}, </if>
+            <if test="published != null"> n_published = #{published}, </if>
         </trim>
         where n_id = #{id}
     </update>
