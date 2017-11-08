@@ -48,11 +48,11 @@ public class SalaryTask {
             s.setResumeId(r.getId());
             s.setState(Salary.SState.NEW_GENERATED);
             s.setWorkDays(SALARY_COMMON_DAYS);
-            if (unit.contains("周")) {
-                s.setWorkDays(SALARY_COMMON_DAYS / 7 + 1);
-            } else if (unit.contains("时")) {
-                s.setWorkDays(SALARY_COMMON_DAYS*8);
-            }
+//            if (unit.contains("周")) {
+//                s.setWorkDays(SALARY_COMMON_DAYS / 7 + 1);
+//            } else if (unit.contains("时")) {
+//                s.setWorkDays(SALARY_COMMON_DAYS*8);
+//            }
             salaryMapper.insert(s);
         }
         LOGGER.info("******************************** Finish Generate Salaries ********************************");
