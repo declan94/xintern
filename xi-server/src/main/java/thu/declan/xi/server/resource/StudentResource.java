@@ -126,12 +126,14 @@ public class StudentResource extends BaseResource {
             @QueryParam("pageSize") Integer pageSize,
 			@QueryParam("school") String school,
 			@QueryParam("name") String name,
-			@QueryParam("phone") String phone) throws ApiException {
+			@QueryParam("phone") String phone,
+            @QueryParam("frozen") Boolean frozen) throws ApiException {
         LOGGER.debug("==================== enter StudentResource getStudents ====================");
         Student selector = new Student();
 		selector.setSchool(school);
 		selector.setName(name);
 		selector.setPhone(phone);
+        selector.setFrozen(frozen);
         List<Student> students = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
         try {

@@ -48,7 +48,7 @@
         select <include refid="selectBaseColumns" />
         from xi_news
         <trim prefix="where" suffixOverrides="and">
-			<if test="title != null">  n_title like %#{title}% and </if>
+            <if test="title != null">  n_title concat('%', #{title}, '%') and </if>      
 			<if test="published != null">  n_published = #{published} and </if>
         </trim>
 		order by n_priority desc, n_createTime desc
@@ -58,7 +58,7 @@
         select count(*)
         from xi_news
         <trim prefix="where" suffixOverrides="and">
-			<if test="title != null">  n_title like %#{title}% and </if>
+			<if test="title != null">  n_title concat('%', #{title}, '%') and </if>
 			<if test="published != null">  n_published = #{published} and </if>
         </trim>
     </select>

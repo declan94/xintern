@@ -270,5 +270,16 @@ public class Student {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+    private Boolean frozen;
+
+    public Boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+
     
 }

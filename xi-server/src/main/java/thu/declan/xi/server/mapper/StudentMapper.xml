@@ -24,6 +24,8 @@
 		<result property="workExp" column="s_workExp" />
         <result property="avatar" column="s_avatar" />
 		<result property="subscription" column="s_subscription" />
+        <result property="createTime" column="s_createTime" />
+        <result property="frozen" column="s_frozen" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -62,6 +64,7 @@
 			<if test="workExp != null"> s_workExp = #{workExp}, </if>
             <if test="avatar != null"> s_avatar = #{avatar}, </if>
 			<if test="subscription != null"> s_subscription = #{subscription}, </if>
+            <if test="frozen != null"> s_frozen = #{frozen}, </if>
         </trim>
         where s_id = #{id}
     </update>
@@ -83,6 +86,7 @@
 			<if test="name != null"> s_name LIKE concat('%', #{name}, '%') and </if>
 			<if test="school != null"> s_school LIKE concat('%', #{school}, '%') and </if>
 			<if test="phone != null"> s_phone LIKE concat('%', #{phone}, '%') and </if>
+            <if test="frozen != null"> s_frozen = #{frozen} and </if>
         </trim>
     </sql>
     
