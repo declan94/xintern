@@ -88,6 +88,10 @@ public class CompanyResource extends BaseResource {
             companyService.add(company);
             authService.login(acc.getPhone(), pwd, Account.Role.COMPANY);
             addPoint(PointLog.PType.REGISTER, acc.getId());
+			notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_CREATION, company.getName());
+			if (company.getCert() != null) {
+				notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_VERIFY, company.getName());
+			}
         } catch (ServiceException ex) {
             accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
@@ -125,6 +129,10 @@ public class CompanyResource extends BaseResource {
                     notiService.addNoti(com.getAccountId(), Notification.NType.BACKEND, companyId, Notification.TPL_COMPANY_VERIFY_FAIL, com.getName());
                 }
             }
+			if (company.getCert() != null) {
+				Company com = companyService.get(companyId);
+				notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_VERIFY, com.getName());
+			}
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);

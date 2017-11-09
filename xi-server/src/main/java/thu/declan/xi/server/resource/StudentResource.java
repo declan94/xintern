@@ -27,6 +27,7 @@ import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Student;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.model.PointLog.PType;
@@ -79,6 +80,7 @@ public class StudentResource extends BaseResource {
             studentService.add(student);
             authService.login(acc.getPhone(), pwd, Account.Role.STUDENT);
             addPoint(PointLog.PType.REGISTER, acc.getId());
+			notiService.addNoti(0, Notification.NType.STUDENT, student.getId(), Notification.TPL_BACK_STUDENT_CREATION, student.getName());
         } catch (ServiceException ex) {
             accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

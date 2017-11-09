@@ -25,6 +25,9 @@ public class Notification {
     public final static String TPL_COMPANY_VERIFY_FAIL = "非常抱歉，您的企业账号：【%s】，审核未通过，您需要继续完善企业信息并保存，等待重新审核！";
     public final static String TPL_COMPANY_VERIFY_SUC = "您的企业账号：【%s】，已审核通过，您可以登录享实习网站发布职位啦！";
     
+	public final static String TPL_BACK_STUDENT_CREATION = "学生注册通知：您有新的学生用户 【%s】 注册了";
+	public final static String TPL_BACK_COMPANY_CREATION = "企业注册通知：您有新的企业用户 【%s】 注册了";
+	public final static String TPL_BACK_COMPANY_VERIFY = "企业申请认证通知： 【%s】 申请企业认证请尽快查看。";
 	
     
     public enum NType {
