@@ -66,6 +66,9 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		if (accountId == 0) {
+			return;
+		}
 		try {
 			Account acc = accountService.get(accountId);
 			String emailAddr;
@@ -79,10 +82,8 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 				emailAddr = comp.getEmail();
                 phone = comp.getPhone();
 			}
-			if (acc.getRole() != Account.Role.ADMIN) {
-				emailService.sendEmailInBackground("消息通知【享实习】", noti.getMsg(), emailAddr);
-				smsService.sendMsg(phone, noti.getMsg());
-			}
+			emailService.sendEmail("消息通知【享实习】", noti.getMsg(), emailAddr);
+			smsService.sendMsg(phone, noti.getMsg());
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}

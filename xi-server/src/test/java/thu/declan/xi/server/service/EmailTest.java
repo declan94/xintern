@@ -20,7 +20,8 @@ public class EmailTest {
 	@Test
 	public void testEmailService() {
 		System.out.println("-------------testEmailService begin------------");
-		emailService.sendEmail("test", "testEmail", "chenye94@qq.com");
+		emailService.sendEmailInBackground("test", "testEmail", "chenye94@qq.com");
+//		emailService.sendEmail("test", "testEmail", "chenye94@qq.com");
 		System.out.println("-------------testEmailService end------------");
 	}
 }

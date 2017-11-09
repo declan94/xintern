@@ -4,6 +4,7 @@ package thu.declan.xi.server.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.service.EmailService;
@@ -83,15 +84,19 @@ public class EmailServiceImpl implements InitializingBean, EmailService {
     }
     
     @Override
+	@Async
     public void sendEmailInBackground(EmailInfo emailInfo) {
-        SendEmailRunnable sendEmailRunnable = new SendEmailRunnable(emailInfo);
-        new Thread(sendEmailRunnable).start();
+//        SendEmailRunnable sendEmailRunnable = new SendEmailRunnable(emailInfo);
+//        new Thread(sendEmailRunnable).start();
+		sendEmail(emailInfo);
     }
     
     @Override
+	@Async
     public void sendEmailInBackground(String title, String body, String mailTo) {
-        EmailInfo emailInfo = buildEmailInfo(title, body, mailTo);
-        sendEmailInBackground(emailInfo);
+		sendEmail(title, body, mailTo);
+//        EmailInfo emailInfo = buildEmailInfo(title, body, mailTo);
+//        sendEmailInBackground(emailInfo);
     }
     
 }
