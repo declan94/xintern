@@ -159,6 +159,10 @@ public class StudentResource extends BaseResource {
         acc = loginAccount(acc);
         try {
             Student stu = studentService.getByAccountId(acc.getId());
+			if (stu.isFrozen()) {
+				authService.logout();
+				throw new ApiException(403, "Account Frozen", "你的账号当前已被禁用，详情请联系网站客服400-820-4818！");
+			}
             stu.setAccount(acc);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date = sdf.format(new Date());

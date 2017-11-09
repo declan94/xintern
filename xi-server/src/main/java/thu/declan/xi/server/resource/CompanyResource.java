@@ -218,6 +218,10 @@ public class CompanyResource extends BaseResource {
         acc = loginAccount(acc);
         try {
             Company comp = companyService.getByAccountId(acc.getId());
+			if (comp.isFrozen()) {
+				authService.logout();
+				throw new ApiException(403, "Account Frozen", "你的账号当前已被禁用，详情请联系网站客服400-820-4818");
+			}
             comp.setAccount(acc);
             return comp;
         } catch (ServiceException ex) {
