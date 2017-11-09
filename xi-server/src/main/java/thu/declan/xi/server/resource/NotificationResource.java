@@ -1,7 +1,6 @@
 package thu.declan.xi.server.resource;
 
 import java.util.List;
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
+import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
@@ -36,7 +36,11 @@ public class NotificationResource extends BaseResource {
 			@QueryParam("pageSize") Integer pageSize) throws ApiException {
         LOGGER.debug("==================== enter NotificationResource getNotifications ====================");
         Notification selector = new Notification();
-        selector.setAccountId(currentAccountId());
+		if (currentRole() == Account.Role.ADMIN) {
+			selector.setAccountId(0);
+		} else {
+			selector.setAccountId(currentAccountId());
+		}
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<Notification> noties = null;
         try {

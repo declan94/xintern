@@ -14,9 +14,12 @@ public class Notification {
 	public final static String TPL_RESUME_ADD = "简历投递成功，请等待面试通知。";
 	public final static String TPL_RESUME_CANCEL = "您的简历与企业相关要求不符，让我们再接再厉吧。";
 	public final static String TPL_RESUME_CANCEL2 = "很抱歉，您参加的%s公司面试未通过，让我们继续在享实习寻找机会吧！";
+	public final static String TPL_RESUME_CANCEL3 = "学生【%s】拒绝了【%s】职位的录用，继续招聘吧。";
 	public final static String TPL_RESUME_INTERVIEW = "你收到来自%s公司的面试邀请，请尽快确认面试时间。";
 	public final static String TPL_RESUME_TIME = "您的%s公司面试时间已修改为%s，请准时参加。";
+	public final static String TPL_RESUME_TIME2 = "您有新的面试时间修改通知，请及时查看。";
 	public final static String TPL_RESUME_JOIN = "尊敬的【%s】，您应聘的“【%s】”职位已经获得企业的录取通知，请尽快前往查看。";
+	public final static String TPL_RESUME_JOIN2 = "恭喜，学生【%s】同意了 【%s】 职位的录用通知，请尽快联系入职吧。";
 	public final static String TPL_SALARY_GET = "工资到账";
 	public final static String TPL_WITHDRAW = "提现成功通知";
 	public final static String TPL_WITHDRAW_FAIL = "提现失败通知";

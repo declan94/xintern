@@ -3,7 +3,6 @@ package thu.declan.xi.server.resource;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -21,6 +20,7 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
@@ -110,8 +110,11 @@ public class ResumeResource extends BaseResource {
 		Resume oldRes = null;
 		boolean curStu = true;
 		Student stu = null;
+		Company comp = null;
 		try {
 			oldRes = resumeService.get(resumeId);
+			stu = oldRes.getStudent();
+			comp = oldRes.getPosition().getCompany();
 			switch (currentRole()) {
 				case STUDENT:
 					if (!Objects.equals(oldRes.getStuId(), currentEntityId())) {
@@ -120,14 +123,11 @@ public class ResumeResource extends BaseResource {
 					curStu = true;
 					break;
 				case COMPANY:
-					Position pos = positionService.get(oldRes.getPositionId());
+					Position pos = oldRes.getPosition();
 					if (!pos.getCompanyId().equals(currentEntityId())) {
 						throw new ApiException(403, "Company Id not equal to authorized one", "权限不足");
 					}
-					stu = studentService.get(oldRes.getStuId());
 					curStu = false;
-					break;
-				default:
 					break;
 			}
 		} catch (ServiceException ex) {
@@ -159,6 +159,19 @@ public class ResumeResource extends BaseResource {
 					break;
 				case OFFERED:
 					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, stu.getName(), oldRes.getPosition().getTitle());
+					break;
+			}
+		}
+		if (curStu && comp != null && stu != null) {
+			switch (resume.getState()) {
+				case WAIT_COMP_CONFIRM:
+					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME2);
+					break;
+				case WORKING:
+					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN2, stu.getName(), oldRes.getPosition().getTitle());
+					break;
+				case CANCELED:
+					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL3, stu.getName(), oldRes.getPosition().getTitle());
 					break;
 			}
 		}
