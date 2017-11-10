@@ -24,7 +24,7 @@ import thu.declan.xi.server.model.Pagination;
  * @author declan
  */
 @Path("notifications")
-@RolesAllowed({Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+@RolesAllowed({Constant.ROLE_STUDENT, Constant.ROLE_COMPANY, Constant.ROLE_ADMIN})
 public class NotificationResource extends BaseResource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(NotificationResource.class);
