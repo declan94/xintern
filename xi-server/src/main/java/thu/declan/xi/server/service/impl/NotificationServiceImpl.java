@@ -51,7 +51,9 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	
 	@Override
 	protected void postGetList(List<Notification> notis) {
-		notiMapper.setRead(notis);
+		if (!notis.isEmpty()) {
+			notiMapper.setRead(notis);
+		}		
 	}
 
 	@Override
