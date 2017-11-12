@@ -15,6 +15,7 @@ import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Code;
 import thu.declan.xi.server.service.CodeService;
+import thu.declan.xi.server.service.EmailService;
 import thu.declan.xi.server.service.SMSService;
 
 /**
@@ -32,6 +33,9 @@ public class CodeResource extends BaseResource {
     
     @Autowired
 	private SMSService smsService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -72,6 +76,15 @@ public class CodeResource extends BaseResource {
 		}
 		LOGGER.debug("==================== leave CodeResource verifyCode ====================");
 		return null;
+	}
+	
+	
+	@GET
+	@Path("/test")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String test() throws ApiException {
+//		emailService.sendEmailInBackground("testTitle", "testBody", "chenye94@qq.com");
+		return "test done";
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.service.SMSService;
 import thu.declan.xi.server.util.HttpRequest;
@@ -38,6 +39,12 @@ public class SMSServiceImpl implements SMSService{
     public boolean sendCode(String phone, String code) {
         return sendMsg(phone, "您的验证码是：" + code + "。请不要把验证码泄露给其他人。");
     }
+
+	@Override
+	@Async
+	public boolean sendMsgInBackground(String phone, String content) {
+		return sendMsg(phone, content);
+	}
     
 }
 

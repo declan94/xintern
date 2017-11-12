@@ -84,8 +84,8 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 				emailAddr = comp.getEmail();
                 phone = comp.getPhone();
 			}
-			emailService.sendEmail("消息通知【享实习】", noti.getMsg(), emailAddr);
-			smsService.sendMsg(phone, noti.getMsg());
+			emailService.sendEmailInBackground("消息通知【享实习】", noti.getMsg(), emailAddr);
+			smsService.sendMsgInBackground(phone, noti.getMsg());
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
