@@ -137,6 +137,9 @@ public class StudentResource extends BaseResource {
 		selector.setPhone(phone);
         selector.setFrozen(frozen);
         List<Student> students = null;
+		if (currentRole() != Account.Role.ADMIN && name == null && phone == null) {
+			throw new ApiException(400, "ether name or phone should be set", "请输入姓名或者手机号检索");
+		}
         Pagination pagination = new Pagination(pageSize, pageIndex);
         try {
             students = studentService.getList(selector, pagination);

@@ -167,6 +167,9 @@ public class ResumeResource extends BaseResource {
 				case WAIT_COMP_CONFIRM:
 					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME2);
 					break;
+				case CONFIRMED:
+					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME3);
+					break;
 				case WORKING:
 					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN2, stu.getName(), oldRes.getPosition().getTitle());
 					break;

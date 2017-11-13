@@ -83,7 +83,7 @@ public class CodeResource extends BaseResource {
 	@Path("/test")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String test() throws ApiException {
-		emailService.sendEmailInBackground("testTitle", "testBody", "chenye94@qq.com");
+//		emailService.sendEmailInBackground("testTitle", "testBody", "chenye94@qq.com");
 		return "test done";
 	}
 

@@ -18,6 +18,7 @@ public class Notification {
 	public final static String TPL_RESUME_INTERVIEW = "你收到来自%s公司的面试邀请，请尽快确认面试时间。";
 	public final static String TPL_RESUME_TIME = "您的%s公司面试时间已修改为%s，请准时参加。";
 	public final static String TPL_RESUME_TIME2 = "您有新的面试时间修改通知，请及时查看。";
+	public final static String TPL_RESUME_TIME3 = "您有新的学生确认了面试时间，请及时查看。";
 	public final static String TPL_RESUME_JOIN = "尊敬的【%s】，您应聘的“【%s】”职位已经获得企业的录取通知，请尽快前往查看。";
 	public final static String TPL_RESUME_JOIN2 = "恭喜，学生【%s】同意了 【%s】 职位的录用通知，请尽快联系入职吧。";
 	public final static String TPL_SALARY_GET = "工资到账";
