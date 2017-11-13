@@ -222,6 +222,7 @@ paths:
           - WORKING
           - ENDED
           - CANCELED
+          - COMMENTED
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:
@@ -739,6 +740,7 @@ paths:
           - WORKING
           - ENDED
           - CANCELED
+          - COMMENTED
       - $ref: '#/parameters/PageSize'
       - $ref: '#/parameters/PageIndex'
       responses:
@@ -1823,6 +1825,8 @@ definitions:
         type: integer
       CANCELED:
         type: integer
+      COMMENTED:
+        type: integer
 
   ResumeUpdater:
     type: object
@@ -1838,6 +1842,7 @@ definitions:
           - WORKING
           - ENDED
           - CANCELED
+          - COMMENTED
       salary:
         type: integer
         description: 薪资

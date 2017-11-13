@@ -23,7 +23,8 @@ public class Resume {
         OFFERED,
         WORKING,
         ENDED,
-        CANCELED;
+        CANCELED,
+		COMMENTED;
         
         public static RState fromString(String str) {
             return Enum.valueOf(RState.class, str.toUpperCase());
