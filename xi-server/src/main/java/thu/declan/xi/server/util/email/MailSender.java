@@ -33,8 +33,10 @@ public class MailSender {
         props = System.getProperties();
         props.put("mail.smtp.host", senderInfo.getSmtpHost());
 		props.put("mail.smtp.port", senderInfo.getSmtpPort());
-//		props.put("mail.smtp.socketFactory.port", senderInfo.getSmtpPort());
-//		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		if (senderInfo.isUseSSL()) {
+			props.put("mail.smtp.socketFactory.port", senderInfo.getSmtpPort());
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		}
         props.put("mail.smtp.auth", senderInfo.isNeedAuth() ? "true" : "false");
         this.senderInfo = senderInfo;
         this.charset = charset;

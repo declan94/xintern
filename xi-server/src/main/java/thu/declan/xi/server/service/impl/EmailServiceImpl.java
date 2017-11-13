@@ -62,6 +62,7 @@ public class EmailServiceImpl implements InitializingBean, EmailService {
 		info.setSmtpPort(Constant.EMAIL_SMTPPORT);
         info.setUsername(Constant.EMAIL_USERNAME);
         info.setPassword(Constant.EMAIL_PASSWORD);
+		info.setUseSSL(Constant.EMAIL_USESSL);
         info.setSenderName("享实习");
         sender = new MailSender(info);
     }

@@ -31,6 +31,16 @@ public class SenderInfo {
     private boolean needAuth;
 
 	private String smtpPort;
+	
+	private boolean useSSL;
+
+	public boolean isUseSSL() {
+		return useSSL;
+	}
+
+	public void setUseSSL(boolean useSSL) {
+		this.useSSL = useSSL;
+	}	
 
     public boolean isNeedAuth() {
         return this.needAuth;

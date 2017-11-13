@@ -42,8 +42,8 @@ public class SMSServiceImpl implements SMSService{
 
 	@Override
 	@Async
-	public boolean sendMsgInBackground(String phone, String content) {
-		return sendMsg(phone, content);
+	public void sendMsgInBackground(String phone, String content) {
+		sendMsg(phone, content);
 	}
     
 }
