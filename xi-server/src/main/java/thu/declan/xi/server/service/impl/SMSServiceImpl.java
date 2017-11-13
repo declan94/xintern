@@ -25,7 +25,7 @@ public class SMSServiceImpl implements SMSService{
     public boolean sendMsg(String phone, String content) {
         StringBuilder params = new StringBuilder("method=Submit");
         try {
-			LOGGER.debug("sending msg to [%s] with content [%s]", phone, content);
+			LOGGER.debug(String.format("sending msg to [%s] with content [%s]", phone, content));
             params.append("&account=").append(ACCOUNT)
                     .append("&password=").append(KEY)
                     .append("&mobile=").append(phone)

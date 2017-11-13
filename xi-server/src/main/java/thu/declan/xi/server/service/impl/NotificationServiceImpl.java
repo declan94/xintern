@@ -82,7 +82,7 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			} else {
 				Company comp = companyService.getByAccountId(accountId);
 				emailAddr = comp.getEmail();
-                phone = comp.getPhone();
+                phone = comp.getContactPhone();
 			}
 			emailService.sendEmailInBackground("消息通知【享实习】", noti.getMsg(), emailAddr);
 			smsService.sendMsgInBackground(phone, noti.getMsg());

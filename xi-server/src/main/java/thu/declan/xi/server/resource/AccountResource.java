@@ -55,7 +55,7 @@ public class AccountResource extends BaseResource {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
-				throw new ApiException(403, devMsg, "手机号已注册，请登录。");
+				throw new ApiException(403, devMsg, "该账号已注册，请直接登录。");
 			}
 			handleServiceException(ex);
 		}
