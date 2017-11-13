@@ -140,7 +140,7 @@ public class ResumeResource extends BaseResource {
 			this.addPoint(PType.COMMENT, resumeId);
 		}
 		String compName = oldRes.getPosition().getCompany().getName();
-		if (!curStu && stu != null) {
+		if (resume.getState() != null && !curStu && stu != null) {
 			switch (resume.getState()) {
 				case CANCELED:
 					if (oldRes.getState() == RState.NEW) {
@@ -162,7 +162,7 @@ public class ResumeResource extends BaseResource {
 					break;
 			}
 		}
-		if (curStu && comp != null && stu != null) {
+		if (resume.getState() != null && curStu && comp != null && stu != null) {
 			switch (resume.getState()) {
 				case WAIT_COMP_CONFIRM:
 					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME2);
