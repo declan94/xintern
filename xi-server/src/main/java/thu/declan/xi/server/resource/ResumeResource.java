@@ -150,6 +150,7 @@ public class ResumeResource extends BaseResource {
 					}
 					break;
 				case WAIT_STU_CONFIRM:
+				case CONFIRMED:
 					if (oldRes.getState() == RState.NEW) {
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW, compName);
 					} else if (resume.getInterviewTime() != null) {
