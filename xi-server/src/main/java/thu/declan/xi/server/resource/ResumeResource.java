@@ -153,9 +153,12 @@ public class ResumeResource extends BaseResource {
 				case CONFIRMED:
 					if (oldRes.getState() == RState.NEW) {
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW, compName);
-					} else if (resume.getInterviewTime() != null || oldRes.getState() == RState.WAIT_COMP_CONFIRM) {
+					} else if (resume.getInterviewTime() != null) {
 						SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(resume.getInterviewTime()));
+					} else if (oldRes.getState() == RState.WAIT_COMP_CONFIRM) {
+						SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
+						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(oldRes.getInterviewTime()));
 					}
 					break;
 				case OFFERED:
