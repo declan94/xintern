@@ -249,5 +249,28 @@ public class Resume {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+	
+	// stu to comp
+	private Rate rate1;
+
+	public Rate getRate1() {
+		return rate1;
+	}
+
+	public void setRate1(Rate rate1) {
+		this.rate1 = rate1;
+	}
+	
+	// comp to stu
+	private Rate rate2;
+
+	public Rate getRate2() {
+		return rate2;
+	}
+
+	public void setRate2(Rate rate2) {
+		this.rate2 = rate2;
+	}
+
     
 }

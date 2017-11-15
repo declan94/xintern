@@ -80,4 +80,11 @@
 		<include refid="whereList" />
 	</select>
    	
+	<select id="selectResumeRate" resultMap="avgRateResult">
+		select <include refid="selectBaseColumns" />
+        from xi_rate
+        where r_resumeId = #{resume.id} and r_direction = #{direction}
+		order by r_createTime desc
+		limit 1
+	</select>
 </mapper>
