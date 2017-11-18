@@ -56,7 +56,7 @@
 	
     <sql id="selectExtColumns">
         <include refid="selectBaseColumns" />,
-        c_accountId, c_name, c_addr,  c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified, c_priority
+        c_accountId, c_name, c_addr,  c_type, c_contact, c_contactPos, c_contactPhone, c_avatar, c_phone, c_industry, c_link, c_logo, c_verified, c_priority, c_frozen
     </sql>
 	
     <sql id="joinedTable" >
@@ -125,11 +125,12 @@
 	
     <sql id="whereList">
         <trim prefix="where" suffixOverrides="and">
+			c_frozen = 0 and
             <if test="company != null"> 
                 <if test="company.verified != null"> c_verified = #{company.verified} and </if>
                 <if test="company.industry != null"> c_industry = #{company.industry} and </if>
                 <if test="company.type != null"> c_type = #{company.type} and </if>
-            </if>
+            </if>			
 			<if test="companyId != null"> p_companyId = #{companyId} and </if>
 			<if test="active != null"> p_active = #{active} and </if>
             <if test="area != null"> p_area = #{area} and </if>
