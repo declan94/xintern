@@ -7,7 +7,7 @@ info:
   contact:
     email: chenye94@qq.com
 host: localhost:8080
-basePath: /api
+basePath: /backend/api
 schemes:
  - http
 consumes:

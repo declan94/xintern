@@ -12,11 +12,11 @@ if [[ -d xi-scripts ]]; then
     cd xi-scripts
 fi
 
-# SERVER=yegames.cn
-SERVER=x.xiangshixi.cc
+# SERVER=yegames.cn:8080
+SERVER=xiangshixi.cc
 
 echo "[package war]"
 cd ../xi-server
-sed -i '' "s/localhost/${SERVER}/g" ./src/main/webapp/api-doc/xi-api.yaml
+sed -i '' "s/localhost:8080/${SERVER}/g" ./src/main/webapp/api-doc/xi-api.yaml
 mvn clean package -Dmaven.test.skip=true
-sed -i '' "s/${SERVER}/localhost/g" ./src/main/webapp/api-doc/xi-api.yaml
+sed -i '' "s/${SERVER}/localhost:8080/g" ./src/main/webapp/api-doc/xi-api.yaml
