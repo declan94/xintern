@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public Account wechatLogin(String openid, Account.Role authType) throws ServiceException {
 		Account matcher = new Account();
-		matcher.setWechat(openid);
+		matcher.setUnionId(openid);
 		matcher.setRole(authType);
 		Account account = accountMapper.selectByIdentity(matcher);
 		if (account == null) {

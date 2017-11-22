@@ -187,9 +187,9 @@ public class StudentResource extends BaseResource {
     @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Student wechatLogin(@QueryParam("openid") String openid) throws ApiException {
+    public Student wechatLogin(@QueryParam("unionid") String unionId) throws ApiException {
         try {
-            Account acc = authService.wechatLogin(openid, Account.Role.STUDENT);
+            Account acc = authService.wechatLogin(unionId, Account.Role.STUDENT);
             Student stu = studentService.getByAccountId(acc.getId());
             stu.setAccount(acc);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

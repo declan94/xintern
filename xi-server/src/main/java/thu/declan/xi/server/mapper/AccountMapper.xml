@@ -6,29 +6,31 @@
         <result property="id" column="a_id" />
 		<result property="role" column="a_role" />
         <result property="phone" column="a_phone" />
-        <result property="wechat" column="a_wechat" />
+        <result property="unionId" column="a_unionId" />
+		<result property="openId" column="a_openId" />
 		<result property="password" column="a_password" />
         <result property="point" column="a_point" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        a_role, a_phone, a_wechat, a_password
+        a_role, a_phone, a_unionId, a_openId, a_password
     </sql>
     
     <sql id="selectBaseColumns" >
-		a_id, a_role, a_phone, a_wechat, a_password, a_point
+		a_id, a_role, a_phone, a_unionId, a_openId, a_password, a_point
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Account">
         insert into xi_account (<include refid="insertBaseColumns" />) 
-        values (#{role}, #{phone}, #{wechat}, #{password})
+        values (#{role}, #{phone}, #{unionId}, #{openId}, #{password})
     </insert>
     
     <update id="update" parameterType="Account">
         update xi_account 
         <trim prefix="set" suffixOverrides=",">
             <if test="password != null"> a_password = #{password}, </if>
-            <if test="wechat != null"> a_wechat = #{wechat}, </if>
+            <if test="unionId != null"> a_unionId = #{unionId}, </if>
+			<if test="openId != null"> a_openId = #{openId}, </if>
 			<if test="phone != null"> a_phone = #{phone}, </if>
         </trim>
         where a_id = #{id}
@@ -51,7 +53,8 @@
         from xi_account
 		<trim prefix="where" suffixOverrides="and">
             <if test="phone != null"> a_phone = #{phone} and </if>
-			<if test="wechat != null"> a_wechat = #{wechat} and </if>
+			<if test="unionId != null"> a_unionId = #{unionId} and </if>
+			<if test="openId != null"> a_openId = #{openId} and </if>
             <if test="role != null"> a_role = #{role} and </if>
         </trim>
 		limit 1
@@ -62,7 +65,8 @@
         from xi_account
         <trim prefix="where" suffixOverrides="and">
             <if test="phone != null"> a_phone = #{phone} and </if>
-			<if test="wechat != null"> a_wechat = #{wechat} and </if>
+			<if test="unionId != null"> a_unionId = #{unionId} and </if>
+			<if test="openId != null"> a_openId = #{openId} and </if>
             <if test="role != null"> a_role = #{role} and </if>
         </trim>
     </select>
@@ -72,7 +76,8 @@
         from xi_account
         <trim prefix="where" suffixOverrides="and">
             <if test="phone != null"> a_phone = #{phone} and </if>
-			<if test="wechat != null"> a_wechat = #{wechat} and </if>
+			<if test="unionId != null"> a_unionId = #{unionId} and </if>
+			<if test="openId != null"> a_openId = #{openId} and </if>
             <if test="role != null"> a_role = #{role} and </if>
         </trim>
     </select>

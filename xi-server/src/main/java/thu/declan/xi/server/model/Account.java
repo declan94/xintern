@@ -46,15 +46,25 @@ public class Account {
         this.phone = phone;
     }
 
-    private String wechat;
+    private String unionId;
 
-    public String getWechat() {
-        return wechat;
+    public String getUnionId() {
+        return unionId;
     }
 
-    public void setWechat(String wechat) {
-        this.wechat = wechat;
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
+
+	private String openId;
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 
     private String password;
 

@@ -164,14 +164,16 @@ public class AccountResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
     public Account bindWechat(@PathParam("accountId") int accountId,
-			@QueryParam("openid") String openid) throws ApiException {
+			@QueryParam("openid") String openid,
+			@QueryParam("unionid") String unionid) throws ApiException {
         LOGGER.debug("==================== enter AccountResource bindWechat ====================");
         if (accountId == 0) {
             accountId = currentAccountId();
         }
         Account updater = new Account();
 		updater.setId(accountId);
-		updater.setWechat(openid);
+		updater.setUnionId(unionid);
+		updater.setOpenId(openid);
 		Account acc = null;
         try {
 			accountService.update(updater);
