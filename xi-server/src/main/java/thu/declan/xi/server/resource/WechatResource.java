@@ -24,13 +24,18 @@ public class WechatResource extends BaseResource {
     @GET
     @Path("/accessToken")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAccessToken(@QueryParam("code") String code, @QueryParam("channel") String channel) {
+    public String getAccessToken(@QueryParam("code") String code, @QueryParam("mobile") Boolean mobile) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
-        String params = String.format("appid=%s&secret=%s&code=%s&grant_type=authorization_code", 
-                Constant.WECHAT_APPID, Constant.WECHAT_SECRET, code);
-        if (channel != null) {
-            params = params + "&chanell=" + channel;
+        String appid, appsecret;
+        if (mobile) {
+            appid = Constant.WECHAT_APPID;
+            appsecret = Constant.WECHAT_SECRET;
+        } else {
+            appid = Constant.WECHAT_OPEN_APPID;
+            appsecret = Constant.WECHAT_OPEN_SECRET;
         }
+        String params = String.format("appid=%s&secret=%s&code=%s&grant_type=authorization_code", 
+                appid, appsecret, code);
         String ret = HttpRequest.sendGet(url, params);
 //        ObjectMapper mapper = new ObjectMapper();
 //        JsonNode obj = null;

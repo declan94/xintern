@@ -45,6 +45,9 @@ public class Constant {
 	public static final boolean EMAIL_USESSL = true;
     
     /*------------- wechat info -------------*/
-    public static final String WECHAT_APPID = "wx44895bec275b61e6";
-    public static final String WECHAT_SECRET = "15d2424d3ec81b316972fc72b6ba6cec";
+    public static final String WECHAT_OPEN_APPID = "wx44895bec275b61e6";
+    public static final String WECHAT_OPEN_SECRET = "15d2424d3ec81b316972fc72b6ba6cec";
+    public static final String WECHAT_APPID = "wx3157ff5481ec5025";
+    public static final String WECHAT_SECRET = "3af4a208195f3b7aa3ddc50f5d6e9e09";
+    
 }
