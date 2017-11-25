@@ -29,7 +29,9 @@ public class WechatServiceImpl implements WechatService {
 	@Cacheable(CacheConfig.CACHE_ACCESS_TOKEN)
 	public String getAccessToken() throws ServiceException {
 		Token token = TokenAPI.token(Constant.WECHAT_APPID, Constant.WECHAT_SECRET);
-		if (token.getErrmsg() != null && !token.getErrmsg().isEmpty()) {
+		if (token.getErrmsg() != null && !token.getErrmsg().isEmpty() &&
+				Integer.parseInt(token.getErrcode()) != 0) {
+			
 			throw new ServiceException(ServiceException.CODE_EXTERNAL_ERROR, "Get access_token failed: " + token.getErrcode() + " " + token.getErrmsg());
 		}
 		return token.getAccess_token();
@@ -38,7 +40,8 @@ public class WechatServiceImpl implements WechatService {
 	@Cacheable(CacheConfig.CACHE_JSAPI_TICKET)
 	private String getJsAPITicket() throws ServiceException {
 		Ticket ticket = TicketAPI.ticketGetticket(getAccessToken());
-		if (ticket.getErrmsg() != null && !ticket.getErrmsg().isEmpty()) {
+		if (ticket.getErrmsg() != null && !ticket.getErrmsg().isEmpty() &&
+				Integer.parseInt(ticket.getErrcode()) != 0) {
 			throw new ServiceException(ServiceException.CODE_EXTERNAL_ERROR, "Get jsapi_ticket failed: " + ticket.getErrcode() + " " + ticket.getErrmsg());
 		}
 		return ticket.getTicket();
