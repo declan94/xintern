@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -53,7 +54,8 @@ public class UploadResource {
     public UploadResult uploadImage(@PathParam("type") String type,
 			@FormDataParam("file") InputStream fileInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail,
-			@Context UriInfo ui) throws ApiException {
+			@Context UriInfo ui,
+			@Context HttpServletRequest request) throws ApiException {
         LOGGER.debug("==================== enter UploadResource uploadImage ====================");
 		String oldName = fileDetail.getFileName();
 		System.out.println(oldName);
@@ -68,8 +70,8 @@ public class UploadResource {
 		}
 		String fullPath = uploadDir + "/" + newFileName;
 		URI uri = ui.getBaseUri();
-		String url = "http://" + uri.getHost();
-		if (uri.getPort() != 80) {
+		String url = request.getScheme() + "://" + uri.getHost();
+		if (uri.getPort() != 80 && uri.getPort() != 443) {
 			url = url + ":" + uri.getPort();
 		}
 		url = url + Constant.UPLOAD_CONTEXT_PATH + "/" + type + "/" + newFileName;
