@@ -1,5 +1,9 @@
 package thu.declan.xi.server.resource;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,7 +12,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import thu.declan.xi.server.Constant;
+import thu.declan.xi.server.exception.ApiException;
+import thu.declan.xi.server.exception.ServiceException;
+import thu.declan.xi.server.service.WechatService;
 import thu.declan.xi.server.util.HttpRequest;
 
 /**
@@ -20,6 +28,9 @@ import thu.declan.xi.server.util.HttpRequest;
 public class WechatResource extends BaseResource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(WechatResource.class);
+	
+	@Autowired
+	private WechatService wechatService;
     
     @GET
     @Path("/accessToken")
@@ -46,5 +57,25 @@ public class WechatResource extends BaseResource {
 //        }
         return ret;
     }
+	
+	@GET
+	@Path("jssdkSign")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, String> getJSSDKSign(@QueryParam("url") String url) throws ApiException {
+		if (url == null) {
+			throw new ApiException(400, "api should be set", "未设置url");
+		}
+		try {
+			url = URLDecoder.decode(url, "UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			LOGGER.error("Unsupported Encoding in getJSSDKSign");
+		}
+		try {
+			return wechatService.getJSSDKSign(url);
+		} catch (ServiceException ex) {
+			handleServiceException(ex);
+		}
+		return null;
+	}
 	    
 }
