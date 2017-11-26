@@ -33,7 +33,11 @@ public class Notification {
 	public final static String TPL_BACK_COMPANY_CREATION = "企业注册通知：您有新的企业用户 【%s】 注册了";
 	public final static String TPL_BACK_COMPANY_VERIFY = "企业申请认证通知： 【%s】 申请企业认证请尽快查看。";
 	
-    
+    public final static String WX_TPL_ID_BIND = "uifypyPxvgSZii0k5sGLcU44xwyM6ZDgDHdv1HnJis0";
+	public final static String WX_TPL_ID_INTERVIEW = "ESF14P9LwBeIZUGPL86sAmS9l3XFUOTQYc_oeZoVCUE";
+	public final static String WX_TPL_ID_RESUMERET = "7ALGPfxWH8keb-XexxIKAI-In0JDUMdGGGiYbwrlAxg";
+	
+	
     public enum NType {
         POINT, RESUME, SALARY, WITHDRAW, STUDENT, COMPANY, POSITION, RATE, BACKEND;
     }

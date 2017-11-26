@@ -71,7 +71,7 @@ public class UploadResource {
 		String fullPath = uploadDir + "/" + newFileName;
 		URI uri = ui.getBaseUri();
 		String url = request.getScheme() + "://" + uri.getHost();
-		if (uri.getPort() != 80 && uri.getPort() != 443) {
+		if (uri.getPort() > -1 && uri.getPort() != 80 && uri.getPort() != 443) {
 			url = url + ":" + uri.getPort();
 		}
 		url = url + Constant.UPLOAD_CONTEXT_PATH + "/" + type + "/" + newFileName;

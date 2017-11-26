@@ -5,16 +5,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.CacheConfig;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.service.WechatService;
+import weixin.popular.api.MessageAPI;
 import weixin.popular.api.TicketAPI;
 import weixin.popular.api.TokenAPI;
+import weixin.popular.bean.message.templatemessage.TemplateMessage;
+import weixin.popular.bean.message.templatemessage.TemplateMessageItem;
 import weixin.popular.bean.ticket.Ticket;
 import weixin.popular.bean.token.Token;
 
@@ -74,7 +79,7 @@ public class WechatServiceImpl implements WechatService {
         {
             e.printStackTrace();
         }
-
+		
         ret.put("url", url);
         ret.put("jsapi_ticket", jsapi_ticket);
         ret.put("nonceStr", nonce_str);
@@ -84,6 +89,20 @@ public class WechatServiceImpl implements WechatService {
         return ret;
 	}
 	
+	@Async
+	@Override
+	public void sendTemplateMessage(String tplId, String openid, String url, Map<String, String> data) throws ServiceException {
+		TemplateMessage tplMsg = new TemplateMessage();
+		tplMsg.setTemplate_id(tplId);
+		tplMsg.setTouser(openid);
+		tplMsg.setUrl(url == null ? "https://xiangshixi.cc" : url);
+		LinkedHashMap<String, TemplateMessageItem> d = new LinkedHashMap<>();
+		for (String k : data.keySet()) {
+			TemplateMessageItem item = new TemplateMessageItem(data.get(k), "#173177");
+			d.put(k, item);
+		}
+		MessageAPI.messageTemplateSend(getAccessToken(), tplMsg);
+	}
 	
     private String byteToHex(final byte[] hash) {
 		String result;

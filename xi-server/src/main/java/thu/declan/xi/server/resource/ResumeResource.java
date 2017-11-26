@@ -1,8 +1,11 @@
 package thu.declan.xi.server.resource;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -34,6 +37,7 @@ import thu.declan.xi.server.service.PositionService;
 import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
 import thu.declan.xi.server.service.StudentService;
+import thu.declan.xi.server.service.WechatService;
 import thu.declan.xi.server.task.AsyncTask;
 
 /**
@@ -60,6 +64,9 @@ public class ResumeResource extends BaseResource {
 
 	@Autowired
 	private StudentService studentService;
+
+	@Autowired
+	private WechatService wechatService;
 
 	@Autowired
 	private AsyncTask asyncTask;
@@ -111,9 +118,11 @@ public class ResumeResource extends BaseResource {
 		boolean curStu = true;
 		Student stu = null;
 		Company comp = null;
+		Account acc = null;
 		try {
 			oldRes = resumeService.get(resumeId);
 			stu = oldRes.getStudent();
+			acc = accountService.get(stu.getAccountId());
 			comp = oldRes.getPosition().getCompany();
 			switch (currentRole()) {
 				case STUDENT:
@@ -140,29 +149,67 @@ public class ResumeResource extends BaseResource {
 			this.addPoint(PType.COMMENT, resumeId);
 		}
 		String compName = oldRes.getPosition().getCompany().getName();
-		if (resume.getState() != null && !curStu && stu != null) {
+		SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
+		if (resume.getState() != null && !curStu) {
 			switch (resume.getState()) {
 				case CANCELED:
+				{
+					Map<String, String> data = new HashMap<>();
+					data.put("company", compName);
+					data.put("time", fmt.format(oldRes.getCreateTime()));
+					data.put("first", "您好!您投递的简历有新的反馈");
 					if (oldRes.getState() == RState.NEW) {
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL);
+						data.put("result", "初筛淘汰");
 					} else {
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL2, compName);
+						data.put("result", "面试淘汰");
+					}
+					try {
+						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, acc.getOpenId(), null, data);
+					} catch (ServiceException ex) {
 					}
 					break;
+				}
 				case WAIT_STU_CONFIRM:
-				case CONFIRMED:
+				case CONFIRMED: {
 					if (oldRes.getState() == RState.NEW) {
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW, compName);
 					} else if (resume.getInterviewTime() != null) {
-						SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(resume.getInterviewTime()));
 					} else if (oldRes.getState() == RState.WAIT_COMP_CONFIRM) {
-						SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
 						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(oldRes.getInterviewTime()));
 					}
+					Map<String, String> data = new HashMap<>();
+					if (resume.getState() == RState.WAIT_STU_CONFIRM) {
+						data.put("first", "请确认面试时间");
+						data.put("remark", "请尽快确认面试时间");
+					} else {
+						data.put("first", "面试时间已确定");
+						data.put("remark", "点击查看");
+					}
+					data.put("keyword1", compName);
+					data.put("keyword2", oldRes.getPosition().getTitle());
+					data.put("keyowrd3", fmt.format(resume.getInterviewTime()));
+
+					try {
+						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, acc.getOpenId(), null, data);
+					} catch (ServiceException ex) {
+					}
 					break;
+				}
 				case OFFERED:
 					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, stu.getName(), oldRes.getPosition().getTitle());
+					Map<String, String> data = new HashMap<>();
+					data.put("company", compName);
+					data.put("time", fmt.format(oldRes.getCreateTime()));
+					data.put("first", "您好!您投递的简历有新的反馈");
+					data.put("result", "已通过");
+					data.put("remark", "请尽快确认入职");
+					try {
+						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, acc.getOpenId(), null, data);
+					} catch (ServiceException ex) {
+					}
 					break;
 			}
 		}

@@ -13,4 +13,6 @@ public interface WechatService {
 
 	public Map<String, String> getJSSDKSign(String url) throws ServiceException;
 	
+	public void sendTemplateMessage(String tplId, String openid, String url, Map<String, String> data) throws ServiceException;
+			
 }

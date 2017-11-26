@@ -1,5 +1,6 @@
 package thu.declan.xi.server.resource;
 
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -23,10 +24,12 @@ import thu.declan.xi.server.model.Account;
 import thu.declan.xi.server.model.Code;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.News;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.PasswordReseter;
 import thu.declan.xi.server.model.PointLog;
 import thu.declan.xi.server.service.CodeService;
+import thu.declan.xi.server.service.WechatService;
 
 /**
  *
@@ -40,6 +43,9 @@ public class AccountResource extends BaseResource {
 	
 	@Autowired
 	private CodeService codeService;
+	
+	@Autowired
+	private WechatService wechatService;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -178,6 +184,13 @@ public class AccountResource extends BaseResource {
         try {
 			accountService.update(updater);
 			acc = accountService.get(accountId);
+			final String account = acc.getPhone();
+			wechatService.sendTemplateMessage(Notification.WX_TPL_ID_BIND, openid, null, 
+					new HashMap<String, String>() {{
+						put("first", "你已成功绑定 享实习 账号");
+						put("keyword1", account);
+						put("keyword2", "你可以直接使用该微信登录享实习");
+					}});
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
