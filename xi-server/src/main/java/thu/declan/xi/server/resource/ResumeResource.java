@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -119,10 +118,12 @@ public class ResumeResource extends BaseResource {
 		Student stu = null;
 		Company comp = null;
 		Account acc = null;
+		String openid = null;
 		try {
 			oldRes = resumeService.get(resumeId);
 			stu = oldRes.getStudent();
 			acc = accountService.get(stu.getAccountId());
+			openid = acc.getOpenId();
 			comp = oldRes.getPosition().getCompany();
 			switch (currentRole()) {
 				case STUDENT:
@@ -166,7 +167,9 @@ public class ResumeResource extends BaseResource {
 						data.put("result", "面试淘汰");
 					}
 					try {
-						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, acc.getOpenId(), null, data);
+						if (openid != null) {
+							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, null, data);
+						}
 					} catch (ServiceException ex) {
 					}
 					break;
@@ -193,7 +196,9 @@ public class ResumeResource extends BaseResource {
 					data.put("keyowrd3", fmt.format(resume.getInterviewTime()));
 
 					try {
-						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, acc.getOpenId(), null, data);
+						if (openid != null) {
+							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, openid, null, data);
+						}
 					} catch (ServiceException ex) {
 					}
 					break;
@@ -207,7 +212,9 @@ public class ResumeResource extends BaseResource {
 					data.put("result", "已通过");
 					data.put("remark", "请尽快确认入职");
 					try {
-						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, acc.getOpenId(), null, data);
+						if (openid != null) {
+							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, null, data);
+						}
 					} catch (ServiceException ex) {
 					}
 					break;
