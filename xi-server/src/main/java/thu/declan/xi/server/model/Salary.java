@@ -91,6 +91,26 @@ public class Salary {
 	public void setWorkDays(Double workDays) {
 		this.workDays = workDays;
 	}
+    
+    private Double value;
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
+
+    private Double stuValue;
+
+    public Double getStuValue() {
+        return stuValue;
+    }
+
+    public void setStuValue(Double stuValue) {
+        this.stuValue = stuValue;
+    }
 
 	private SState state;
 
@@ -111,6 +131,16 @@ public class Salary {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+    private Date payTime;
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
 	
 	@JsonIgnore
 	private List<SState> queryStates;
@@ -122,5 +152,14 @@ public class Salary {
 	public void setQueryStates(List<SState> queryStates) {
 		this.queryStates = queryStates;
 	}
+    
+    public void updateValue(Resume r) {
+        double units = this.getWorkDays();
+        if (r.getUnit().contains("月")) {
+            units = units / 22;
+        }
+        value = r.getSalary() * units;
+        stuValue = r.getStuSalary() * units;
+    }
 	
 }

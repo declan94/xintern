@@ -10,6 +10,7 @@
 		<result property="openId" column="a_openId" />
 		<result property="password" column="a_password" />
         <result property="point" column="a_point" />
+        <result property="balance" column="a_balance" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -17,7 +18,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-		a_id, a_role, a_phone, a_unionId, a_openId, a_password, a_point
+		a_id, a_role, a_phone, a_unionId, a_openId, a_password, a_point, a_balance
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Account">
@@ -39,6 +40,12 @@
     <update id="addPoint">
         update xi_account
         set a_point = a_point + #{point}
+        where a_id = #{id}
+    </update>
+    
+    <update id="addBalance">
+        update xi_account
+        set a_balance = a_balance + #{balance}
         where a_id = #{id}
     </update>
     

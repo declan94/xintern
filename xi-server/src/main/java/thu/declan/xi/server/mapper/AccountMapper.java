@@ -12,5 +12,7 @@ public interface AccountMapper extends BaseMapper<Account> {
 	public Account selectByIdentity(Account matcher);
     
     public void addPoint(@Param(value="id") int accountId, @Param(value="point") int point);
+    
+    public void addBalance(@Param(value="id") int accountId, @Param(value="balance") double balance);
 	
 }

@@ -86,6 +86,16 @@ public class Account {
         this.point = point;
     }
 
+    private Double balance;
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     private Integer unreadNotis;
 
     public Integer getUnreadNotis() {

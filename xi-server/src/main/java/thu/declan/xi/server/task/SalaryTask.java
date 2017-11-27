@@ -8,10 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import thu.declan.xi.server.mapper.AccountMapper;
 import thu.declan.xi.server.mapper.ResumeMapper;
 import thu.declan.xi.server.mapper.SalaryMapper;
+import thu.declan.xi.server.mapper.StudentMapper;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Salary;
+import thu.declan.xi.server.model.Student;
 
 /**
  * backup databases
@@ -30,6 +33,12 @@ public class SalaryTask {
     
     @Autowired
     private ResumeMapper resumeMapper;
+    
+    @Autowired
+    private StudentMapper studentMapper;
+    
+    @Autowired
+    private AccountMapper accountMapper;
 	
     // 每月1日1点
 	@Scheduled(cron = "0 0 1 1 * ? ")
@@ -57,5 +66,27 @@ public class SalaryTask {
         }
         LOGGER.info("******************************** Finish Generate Salaries ********************************");
 	}
+    
+    // 每天2点
+    @Scheduled(cron = "0 0 2 * * ? ")
+    public void paySalaries() {
+        LOGGER.info("******************************** Start Pay Salaries ********************************");
+        Salary sel = new Salary();
+        sel.setState(Salary.SState.CONFIRMED);
+        List<Salary> salaries = salaryMapper.selectList(sel);
+        for (Salary s : salaries) {
+            LOGGER.info("pay for salary %d", s.getId());
+            Student stu = studentMapper.selectOne(s.getStuId());
+            if (stu == null) {
+                LOGGER.info("Student not found for stuid: %d", s.getStuId());
+                continue;
+            }
+            accountMapper.addBalance(stu.getAccountId(), s.getStuValue());
+            s.setPayTime(new Date());
+            s.setState(Salary.SState.PAID);
+            salaryMapper.update(s);
+        }
+        LOGGER.info("******************************** Finish Pay Salaries ********************************");
+    }
 
 }

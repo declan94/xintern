@@ -9,12 +9,15 @@
 		<result property="stuId" column="s_stuId" />
 		<result property="month" column="s_month" />
         <result property="workDays" column="s_workDays" />
+        <result property="value" column="s_value" />
+        <result property="stuValue" column="s_stuValue" />
         <result property="state" column="s_state" />
         <result property="createTime" column="s_createTime" />
+        <result property="payTime" column="s_payTime" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        s_resumeId, s_companyId, s_stuId, s_month, s_workDays, s_state
+        s_resumeId, s_companyId, s_stuId, s_month, s_workDays, s_value, s_stuValue, s_state
     </sql>
     
     <sql id="selectBaseColumns" >
@@ -23,14 +26,17 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Salary">
         insert into xi_salary (<include refid="insertBaseColumns" />) 
-        values (#{resumeId}, #{companyId}, #{stuId}, #{month}, #{workDays}, #{state})
+        values (#{resumeId}, #{companyId}, #{stuId}, #{month}, #{workDays}, #{value}, #{stuValue}, #{state})
     </insert>
 	
     <update id="update" parameterType="Salary">
         update xi_salary 
         <trim prefix="set" suffixOverrides=",">
 			<if test="workDays != null"> s_workDays = #{workDays}, </if>
+            <if test="value != null"> s_value = #{value}, </if>
+            <if test="stuValue != null"> s_stuValue = #{stuValue}, </if>
             <if test="state != null"> s_state = #{state}, </if>
+            <if test="payTime != null"> s_payTime = #{payTime}, </if>
         </trim>
         where s_id = #{id}
     </update>
