@@ -1,8 +1,10 @@
 package thu.declan.xi.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Date;
 import java.util.List;
+import thu.declan.xi.server.util.CustomJsonDateSerializer;
 
 /**
  *
@@ -124,6 +126,7 @@ public class Salary {
 
 	private Date createTime;
 
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -134,6 +137,7 @@ public class Salary {
 
     private Date payTime;
 
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
     public Date getPayTime() {
         return payTime;
     }
