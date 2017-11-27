@@ -6,8 +6,8 @@ info:
   title: 享实习API
   contact:
     email: chenye94@qq.com
-host: localhost:8080
-basePath: /api
+host: xiangshixi.cc
+basePath: /backend/api
 schemes:
  - http
 consumes:

@@ -23,7 +23,7 @@ public class SalaryTask {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SalaryTask.class);
 	
-	private static final int SALARY_COMMON_DAYS = 24;
+	private static final double SALARY_COMMON_DAYS = 24;
 
 	@Autowired
     private SalaryMapper salaryMapper;

@@ -14,7 +14,8 @@ public class Salary {
 		NEW_GENERATED,
 		WAIT_STU_CONFIRM,
 		WAIT_COMP_CONFIRM,
-		CONFIRMED;
+		CONFIRMED,
+        PAID;
 		
 		public static SState fromString(String str) {
             return Enum.valueOf(SState.class, str.toUpperCase());
@@ -81,13 +82,13 @@ public class Salary {
 		this.month = month;
 	}
 
-	private Integer workDays;
+	private Double workDays;
 
-	public Integer getWorkDays() {
+	public Double getWorkDays() {
 		return workDays;
 	}
 
-	public void setWorkDays(Integer workDays) {
+	public void setWorkDays(Double workDays) {
 		this.workDays = workDays;
 	}
 
