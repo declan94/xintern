@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,21 @@ import weixin.popular.bean.message.templatemessage.TemplateMessage;
 import weixin.popular.bean.message.templatemessage.TemplateMessageItem;
 import weixin.popular.bean.ticket.Ticket;
 import weixin.popular.bean.token.Token;
+import weixin.popular.client.LocalHttpClient;
 
 /**
  *
  * @author declan
  */
 @Service("wechatService")
-public class WechatServiceImpl implements WechatService {
+public class WechatServiceImpl implements WechatService, InitializingBean {
 	
+    
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        LocalHttpClient.initMchKeyStore(Constant.WECHAT_MCH_ID, Constant.WECHAT_MCH_KEYPATH);
+    }
+    
 	@Override
 	@Cacheable(CacheConfig.CACHE_ACCESS_TOKEN)
 	public String getAccessToken() throws ServiceException {

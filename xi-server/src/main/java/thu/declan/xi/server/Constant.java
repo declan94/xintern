@@ -36,7 +36,7 @@ public class Constant {
 //	public static final String EMAIL_USERNAME = "wangzc@xiangshixi.cc";
 //	public static final String EMAIL_PASSWORD = "1qaz2wsX";
 //	public static final boolean EMAIL_USESSL = false;
-//	
+    
 	/*------------- email info -------------*/
 	public static final String EMAIL_SMTPHOST = "smtp.ryanljr.cn";
 	public static final String EMAIL_SMTPPORT = "465";
@@ -49,5 +49,7 @@ public class Constant {
     public static final String WECHAT_OPEN_SECRET = "15d2424d3ec81b316972fc72b6ba6cec";
     public static final String WECHAT_APPID = "wx3157ff5481ec5025";
     public static final String WECHAT_SECRET = "3af4a208195f3b7aa3ddc50f5d6e9e09";
+    public static final String WECHAT_MCH_ID = "1452897002";
+    public static final String WECHAT_MCH_KEYPATH = "/opt/web/mchpay_api_cert.p12";
     
 }

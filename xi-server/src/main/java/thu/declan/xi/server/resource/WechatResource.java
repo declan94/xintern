@@ -37,7 +37,7 @@ public class WechatResource extends BaseResource {
     public String getAccessToken(@QueryParam("code") String code, @QueryParam("mobile") Boolean mobile) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
         String appid, appsecret;
-        if (mobile) {
+        if (mobile != null && mobile) {
             appid = Constant.WECHAT_APPID;
             appsecret = Constant.WECHAT_SECRET;
         } else {
