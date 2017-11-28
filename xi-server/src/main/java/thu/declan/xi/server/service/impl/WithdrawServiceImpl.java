@@ -39,6 +39,15 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
         }
         accountMapper.addBalance(accId, -value);
     }
+    
+    @Override
+    protected void preUpdate(Withdraw withdraw) {
+        if (withdraw.getState() == Withdraw.WState.REFUSED) {
+            Withdraw origin = withdrawMapper.selectOne(withdraw.getId());
+            int accId = origin.getAccountId();
+            accountMapper.addBalance(accId, origin.getValue());
+        }
+    }
 
     @Override
     protected void postGetList(List<Withdraw> withdraws) {

@@ -45,6 +45,7 @@ public class WithdrawResource extends BaseResource {
         if (currentRole() == Account.Role.STUDENT) {
             withdraw.setAccountId(currentAccountId());
         }
+        withdraw.setState(Withdraw.WState.NEW);
         try {
             withdrawService.add(withdraw);
         } catch (ServiceException ex) {
@@ -56,7 +57,7 @@ public class WithdrawResource extends BaseResource {
             handleServiceException(ex);
         }
         LOGGER.debug("==================== leave WithdrawResource createWithdraw ====================");
-        return withdraw;
+        return getWithdraw(withdraw.getId());
     }
 
     @PUT
@@ -66,6 +67,10 @@ public class WithdrawResource extends BaseResource {
     public Withdraw editWithdraw(@PathParam("withdrawId") int withdrawId, Withdraw withdraw) throws ApiException {
         LOGGER.debug("==================== enter WithdrawResource editWithdraw ====================");
         LOGGER.debug("withdrawId: " + withdrawId);
+        Withdraw oldWd = getWithdraw(withdrawId);
+        if (oldWd.getState() != Withdraw.WState.NEW) {
+            throw new ApiException(403, "Withdraw state not new", "不能修改此提现申请");
+        }
         withdraw.setValue(null);
         try {
             withdraw.setId(withdrawId);
@@ -105,5 +110,28 @@ public class WithdrawResource extends BaseResource {
         LOGGER.debug("==================== leave WithdrawResource getWithdraws ====================");
         return new ListResponse(withdraws, pagination);
     }
+    
+    @GET
+    @Path("/{withdrawId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Withdraw getWithdraw(@PathParam("withdrawId") int withdrawId) throws ApiException {
+        LOGGER.debug("==================== enter WithdrawResource getWithdraw ====================");
+        LOGGER.debug("withdrawId: " + withdrawId);
+        Withdraw withdraw = null;
+        try {
+			withdraw = withdrawService.get(withdrawId);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+            LOGGER.debug(devMsg);
+            if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
+                throw new ApiException(404, devMsg, "该资讯不存在！");
+            }
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave WithdrawResource getWithdraw ====================");
+        return withdraw;
+    }
+    
 	
 }
