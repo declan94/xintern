@@ -1,12 +1,14 @@
 package thu.declan.xi.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.CompanyMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.mapper.PositionMapper;
 import thu.declan.xi.server.mapper.RateMapper;
+import thu.declan.xi.server.model.AvgRate;
 import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.Position;
 import thu.declan.xi.server.model.Rate;
@@ -52,6 +54,19 @@ public class CompanyServiceImpl extends BaseTableServiceImpl<Company> implements
 		rsel.setCompanyId(comp.getId());
 		rsel.setDirection(Rate.Direction.STU_TO_COMP);
 		comp.setRateCnt(rateMapper.selectCount(rsel));
+	}
+    
+    @Async
+    @Override
+	public void refreshAvgRate(Integer id) {
+		Rate sel = new Rate();
+		sel.setCompanyId(id);
+		sel.setDirection(Rate.Direction.STU_TO_COMP);
+		AvgRate ar = rateMapper.selectAvgRate(sel);
+		Company updater = new Company();
+		updater.setId(id);
+		updater.setAvgRate(ar);
+		companyMapper.update(updater);
 	}
 	
 }

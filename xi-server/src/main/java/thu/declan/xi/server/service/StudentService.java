@@ -10,5 +10,7 @@ import thu.declan.xi.server.model.Student;
 public interface StudentService extends BaseTableService<Student> {
 	
 	public Student getByAccountId(int accountId) throws ServiceException;
-	
+
+    public void refreshAvgRate(Integer id);
+    
 }

@@ -37,7 +37,6 @@ import thu.declan.xi.server.service.RateService;
 import thu.declan.xi.server.service.ResumeService;
 import thu.declan.xi.server.service.StudentService;
 import thu.declan.xi.server.service.WechatService;
-import thu.declan.xi.server.task.AsyncTask;
 
 /**
  *
@@ -66,9 +65,6 @@ public class ResumeResource extends BaseResource {
 
 	@Autowired
 	private WechatService wechatService;
-
-	@Autowired
-	private AsyncTask asyncTask;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -117,7 +113,7 @@ public class ResumeResource extends BaseResource {
 		boolean curStu = true;
 		Student stu = null;
 		Company comp = null;
-		Account acc = null;
+		Account acc;
 		String openid = null;
 		try {
 			oldRes = resumeService.get(resumeId);
@@ -220,7 +216,7 @@ public class ResumeResource extends BaseResource {
 					break;
 			}
 		}
-		if (resume.getState() != null && curStu && comp != null && stu != null) {
+		if (resume.getState() != null && curStu && comp != null) {
 			switch (resume.getState()) {
 				case WAIT_COMP_CONFIRM:
 					notiService.addNoti(comp.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME2);
@@ -329,9 +325,9 @@ public class ResumeResource extends BaseResource {
 			handleServiceException(ex);
 		}
 		if (rate.getDirection() == Rate.Direction.STU_TO_COMP) {
-			asyncTask.refreshCompanyRate(rate.getCompanyId());
+            companyService.refreshAvgRate(rate.getCompanyId());
 		} else {
-			asyncTask.refreashStuRate(rate.getStuId());
+            studentService.refreshAvgRate(rate.getStuId());
 		}
 		LOGGER.debug("==================== leave ResumeResource addRate ====================");
 		return rate;
