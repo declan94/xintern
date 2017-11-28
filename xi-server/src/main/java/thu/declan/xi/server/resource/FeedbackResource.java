@@ -43,6 +43,7 @@ public class FeedbackResource extends BaseResource {
     @RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_COMPANY, Constant.ROLE_STUDENT})
     public Feedback createFeedback(@Valid Feedback feedback) throws ApiException {
         LOGGER.debug("==================== enter FeedbackResource createFeedback ====================");
+        feedback.setAccountId(currentAccountId());
         try {
             fbService.add(feedback);
         } catch (ServiceException ex) {
