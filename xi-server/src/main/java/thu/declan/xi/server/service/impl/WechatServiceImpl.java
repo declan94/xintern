@@ -109,6 +109,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 			TemplateMessageItem item = new TemplateMessageItem(data.get(k), "#173177");
 			d.put(k, item);
 		}
+		tplMsg.setData(d);
 		MessageAPI.messageTemplateSend(getAccessToken(), tplMsg);
 	}
 	
