@@ -1,6 +1,7 @@
 package thu.declan.xi.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.mapper.StudentMapper;
@@ -31,5 +32,10 @@ public class StudentServiceImpl extends BaseTableServiceImpl<Student> implements
 		}			
 		return comp;
 	}
+
+    @Async
+    @Override
+    public void refreshAvgRate(Integer id) {
+    }
 	
 }

@@ -25,6 +25,9 @@
         <typeAlias alias="Notification" type="thu.declan.xi.server.model.Notification" />
         <typeAlias alias="Code" type="thu.declan.xi.server.model.Code" />
 		<typeAlias alias="Salary" type="thu.declan.xi.server.model.Salary" />
+        <typeAlias alias="Feedback" type="thu.declan.xi.server.model.Feedback" />
+        <typeAlias alias="Withdraw" type="thu.declan.xi.server.model.Withdraw" />
+        
     </typeAliases>
 	
     <typeHandlers>
@@ -38,6 +41,9 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Notification$NType" />
 		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Rate$Direction" />
 		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Salary$SState" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Feedback$FState" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Withdraw$WState" />
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="thu.declan.xi.server.model.Withdraw$Channel" />
         <typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.Map" jdbcType="VARCHAR" /> 
 		<typeHandler handler="thu.declan.xi.server.mybatis.typehandler.JSONHandler" javaType="java.util.List" jdbcType="VARCHAR" /> 
 	</typeHandlers>

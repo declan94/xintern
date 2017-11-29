@@ -10,5 +10,7 @@ import thu.declan.xi.server.model.Company;
 public interface CompanyService extends BaseTableService<Company> {
 	
 	public Company getByAccountId(int accountId) throws ServiceException;
+    
+    public void refreshAvgRate(Integer id);
 	
 }
