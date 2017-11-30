@@ -38,7 +38,9 @@ public abstract class BaseTableServiceImpl<T> implements BaseTableService<T> {
 	}
 	
 	protected void postGetList(List<T> objects) {
-		
+		for (T obj : objects) {
+			postGet(obj);
+		}
 	}
 	
 	protected void postGet(T object) {

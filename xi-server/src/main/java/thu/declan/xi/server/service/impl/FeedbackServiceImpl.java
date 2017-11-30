@@ -26,13 +26,6 @@ public class FeedbackServiceImpl extends BaseTableServiceImpl<Feedback> implemen
 	protected BaseMapper getMapper() {
 		return feedbackMapper;
 	}
-    
-    @Override
-	protected void postGetList(List<Feedback> fbs) {
-        for (Feedback fb : fbs) {
-            postGet(fb);
-        }
-	}
 
 	@Override
 	protected void postGet(Feedback fb) {
