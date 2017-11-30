@@ -8,7 +8,7 @@ import thu.declan.xi.server.model.Notification;
  */
 public interface NotificationService extends BaseTableService<Notification> {
 
-	public void addNoti(int accountId, Notification.NType type, int relativeId, String msgTpl, Object... args);
+	public Notification addNoti(int accountId, Notification.NType type, int relativeId, String msgTpl, Object... args);
 	
     public Integer unreadCnt(int accountId);
     

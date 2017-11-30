@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import thu.declan.xi.server.CacheConfig;
 import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ServiceException;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.service.WechatService;
 import weixin.popular.api.MessageAPI;
 import weixin.popular.api.TicketAPI;
@@ -111,6 +112,12 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 		}
 		tplMsg.setData(d);
 		MessageAPI.messageTemplateSend(getAccessToken(), tplMsg);
+	}
+	
+	@Override
+	public void sendTemplateMessage(String tplId, String openid, Notification noti, Map<String, String> data) throws ServiceException {
+		String url = noti == null ? null : String.format("www.xiangshixi.cc/wechat?type=notification&id=%d&desc=", noti.getId());
+		sendTemplateMessage(tplId, openid, url, data);
 	}
 	
     private String byteToHex(final byte[] hash) {

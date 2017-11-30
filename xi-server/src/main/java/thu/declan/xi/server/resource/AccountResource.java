@@ -185,7 +185,7 @@ public class AccountResource extends BaseResource {
 			accountService.update(updater);
 			acc = accountService.get(accountId);
 			final String account = acc.getPhone();
-			wechatService.sendTemplateMessage(Notification.WX_TPL_ID_BIND, openid, null, 
+			wechatService.sendTemplateMessage(Notification.WX_TPL_ID_BIND, openid, (String)null, 
 					new HashMap<String, String>() {{
 						put("first", "你已成功绑定 享实习 账号");
 						put("keyword1", account);

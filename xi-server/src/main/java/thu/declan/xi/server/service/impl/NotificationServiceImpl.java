@@ -57,7 +57,7 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	}
 
 	@Override
-	public void addNoti(int accountId, Notification.NType type, int refId, String msgTpl, Object... args) {
+	public Notification addNoti(int accountId, Notification.NType type, int refId, String msgTpl, Object... args) {
 		Notification noti = new Notification();
 		noti.setAccountId(accountId);
 		noti.setType(type);
@@ -69,7 +69,7 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		if (accountId == 0) {
-			return;
+			return noti;
 		}
 		try {
 			Account acc = accountService.get(accountId);
@@ -89,6 +89,7 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		return noti;
 	}
 	
     @Override

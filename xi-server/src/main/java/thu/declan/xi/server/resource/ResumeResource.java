@@ -147,24 +147,26 @@ public class ResumeResource extends BaseResource {
 		}
 		String compName = oldRes.getPosition().getCompany().getName();
 		SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
+		String intTimeStr = fmt.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
+				: oldRes.getInterviewTime());
 		if (resume.getState() != null && !curStu) {
 			switch (resume.getState()) {
-				case CANCELED:
-				{
+				case CANCELED: {
 					Map<String, String> data = new HashMap<>();
 					data.put("company", compName);
 					data.put("time", fmt.format(oldRes.getCreateTime()));
 					data.put("first", "您好!您投递的简历有新的反馈");
+					Notification noti = null;
 					if (oldRes.getState() == RState.NEW) {
-						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL);
+						noti = notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL);
 						data.put("result", "初筛淘汰");
 					} else {
-						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL2, compName);
+						noti = notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_CANCEL2, compName);
 						data.put("result", "面试淘汰");
 					}
 					try {
 						if (openid != null) {
-							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, null, data);
+							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, noti, data);
 						}
 					} catch (ServiceException ex) {
 					}
@@ -172,35 +174,35 @@ public class ResumeResource extends BaseResource {
 				}
 				case WAIT_STU_CONFIRM:
 				case CONFIRMED: {
+					Notification noti = null;
 					if (oldRes.getState() == RState.NEW) {
-						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW, compName);
-					} else if (resume.getInterviewTime() != null) {
-						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(resume.getInterviewTime()));
-					} else if (oldRes.getState() == RState.WAIT_COMP_CONFIRM) {
-						notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, fmt.format(oldRes.getInterviewTime()));
+						noti = notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_INTERVIEW, compName);
+					} else if (resume.getInterviewTime() != null || oldRes.getState() == RState.WAIT_COMP_CONFIRM) {
+						noti = notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_TIME, compName, intTimeStr);
 					}
-					Map<String, String> data = new HashMap<>();
-					if (resume.getState() == RState.WAIT_STU_CONFIRM) {
-						data.put("first", "请确认面试时间");
-						data.put("remark", "请尽快确认面试时间");
-					} else {
-						data.put("first", "面试时间已确定");
-						data.put("remark", "点击查看");
-					}
-					data.put("keyword1", compName);
-					data.put("keyword2", oldRes.getPosition().getTitle());
-					data.put("keyowrd3", fmt.format(resume.getInterviewTime()));
-
-					try {
-						if (openid != null) {
-							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, openid, null, data);
+					if (noti != null) {
+						Map<String, String> data = new HashMap<>();
+						if (resume.getState() == RState.WAIT_STU_CONFIRM) {
+							data.put("first", "请确认面试时间");
+							data.put("remark", "请尽快确认面试时间");
+						} else {
+							data.put("first", "面试时间已确定");
+							data.put("remark", "点击查看");
 						}
-					} catch (ServiceException ex) {
+						data.put("keyword1", compName);
+						data.put("keyword2", oldRes.getPosition().getTitle());
+						data.put("keyowrd3", fmt.format(intTimeStr));
+						try {
+							if (openid != null) {
+								wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, openid, noti, data);
+							}
+						} catch (ServiceException ex) {
+						}
 					}
 					break;
 				}
 				case OFFERED:
-					notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, stu.getName(), oldRes.getPosition().getTitle());
+					Notification noti = notiService.addNoti(stu.getAccountId(), Notification.NType.RESUME, resumeId, Notification.TPL_RESUME_JOIN, stu.getName(), oldRes.getPosition().getTitle());
 					Map<String, String> data = new HashMap<>();
 					data.put("company", compName);
 					data.put("time", fmt.format(oldRes.getCreateTime()));
@@ -209,7 +211,7 @@ public class ResumeResource extends BaseResource {
 					data.put("remark", "请尽快确认入职");
 					try {
 						if (openid != null) {
-							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, null, data);
+							wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, noti, data);
 						}
 					} catch (ServiceException ex) {
 					}
@@ -325,9 +327,9 @@ public class ResumeResource extends BaseResource {
 			handleServiceException(ex);
 		}
 		if (rate.getDirection() == Rate.Direction.STU_TO_COMP) {
-            companyService.refreshAvgRate(rate.getCompanyId());
+			companyService.refreshAvgRate(rate.getCompanyId());
 		} else {
-            studentService.refreshAvgRate(rate.getStuId());
+			studentService.refreshAvgRate(rate.getStuId());
 		}
 		LOGGER.debug("==================== leave ResumeResource addRate ====================");
 		return rate;
