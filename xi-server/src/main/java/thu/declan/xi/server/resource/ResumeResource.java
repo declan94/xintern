@@ -191,7 +191,7 @@ public class ResumeResource extends BaseResource {
 						}
 						data.put("keyword1", compName);
 						data.put("keyword2", oldRes.getPosition().getTitle());
-						data.put("keyowrd3", fmt.format(intTimeStr));
+						data.put("keyowrd3", intTimeStr);
 						try {
 							if (openid != null) {
 								wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, openid, noti, data);
