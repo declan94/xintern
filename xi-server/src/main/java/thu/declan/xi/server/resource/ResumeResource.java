@@ -147,7 +147,10 @@ public class ResumeResource extends BaseResource {
 		}
 		String compName = oldRes.getPosition().getCompany().getName();
 		SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
+		SimpleDateFormat fmt2 = new SimpleDateFormat("YYYY-MM-dd HH:mm");
 		String intTimeStr = fmt.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
+				: oldRes.getInterviewTime());
+		String intTimeStr2 = fmt2.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
 				: oldRes.getInterviewTime());
 		if (resume.getState() != null && !curStu) {
 			switch (resume.getState()) {
@@ -191,7 +194,7 @@ public class ResumeResource extends BaseResource {
 						}
 						data.put("keyword1", compName);
 						data.put("keyword2", oldRes.getPosition().getTitle());
-						data.put("keyowrd3", intTimeStr);
+						data.put("keyowrd3", intTimeStr2);
 						try {
 							if (openid != null) {
 								wechatService.sendTemplateMessage(Notification.WX_TPL_ID_INTERVIEW, openid, noti, data);
