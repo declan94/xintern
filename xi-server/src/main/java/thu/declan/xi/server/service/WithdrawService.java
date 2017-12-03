@@ -1,5 +1,6 @@
 package thu.declan.xi.server.service;
 
+import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Withdraw;
 
 /**
@@ -8,4 +9,5 @@ import thu.declan.xi.server.model.Withdraw;
  */
 public interface WithdrawService extends BaseTableService<Withdraw> {
 	
+	public void payWithdraw(Withdraw withdraw) throws ServiceException;
 }

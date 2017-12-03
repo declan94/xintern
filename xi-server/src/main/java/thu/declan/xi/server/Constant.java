@@ -51,5 +51,8 @@ public class Constant {
     public static final String WECHAT_SECRET = "3af4a208195f3b7aa3ddc50f5d6e9e09";
     public static final String WECHAT_MCH_ID = "1452897002";
     public static final String WECHAT_MCH_KEYPATH = "/opt/web/mchpay_api_cert.p12";
+	public static final String WECHAT_MCH_SECRET = "xiangshixixiangshixixiangshixixi";
+	
+	public static final String SERVER_IP = "10.9.39.15";
     
 }
