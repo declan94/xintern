@@ -34,8 +34,9 @@ public class Notification {
 	public final static String TPL_BACK_COMPANY_VERIFY = "企业申请认证通知： 【%s】 申请企业认证请尽快查看。";
 	
     public final static String WX_TPL_ID_BIND = "uifypyPxvgSZii0k5sGLcU44xwyM6ZDgDHdv1HnJis0";
-	public final static String WX_TPL_ID_INTERVIEW = "ESF14P9LwBeIZUGPL86sAmS9l3XFUOTQYc_oeZoVCUE";
+	public final static String WX_TPL_ID_INTERVIEW = "iK71frKtJrHcQBUyK9eT1dhVrwLn0ydificjYlRVMkk";
 	public final static String WX_TPL_ID_RESUMERET = "7ALGPfxWH8keb-XexxIKAI-In0JDUMdGGGiYbwrlAxg";
+	public final static String WX_TPL_ID_WITHDRAW = "XcYl3o7b_4jotYJrC5Z0sO1F2l16f4BPzdQNUHHmSrw";
 	
 	
     public enum NType {
