@@ -53,7 +53,9 @@ public class WithdrawResource extends BaseResource {
             LOGGER.debug(devMsg);
             if (ex.getCode() == ServiceException.CODE_VERIFY_FAILED) {
                 throw new ApiException(403, devMsg, "可提现余额不足");
-            }
+            } else if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
+				throw new ApiException(403, devMsg, "已经有正在处理中的提现请求");
+			}
             handleServiceException(ex);
         }
         LOGGER.debug("==================== leave WithdrawResource createWithdraw ====================");

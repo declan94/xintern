@@ -41,6 +41,12 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
     @Override
     protected void preAdd(Withdraw withdraw) throws ServiceException {
         int accId = withdraw.getAccountId();
+		Withdraw sel = new Withdraw();
+		sel.setAccountId(accId);
+		sel.setState(Withdraw.WState.NEW);
+		if (withdrawMapper.selectCount(sel) > 0) {
+			throw new ServiceException(ServiceException.CODE_DUPLICATE_ELEMENT, "Already has one withdraw in process");
+		}
         Account acc = accountMapper.selectOne(accId);
         double value = withdraw.getValue();
         if (acc.getBalance() < value) {
