@@ -331,7 +331,26 @@ public class CompanyResource extends BaseResource {
     }
 	
 	@GET
-    @Path("/{companyId}/salaries")
+    @Path("/{companyId}/resumes/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public HashMap<String, Integer> getCompanySalariesCount(@PathParam("companyId") int companyId) throws ApiException {
+        LOGGER.debug("==================== enter CompanyResource getCompanySalariesCount ====================");
+        if (companyId == 0) {
+            companyId = currentEntityId();
+        }
+		HashMap<String, Integer> cnts = new HashMap<>();
+        Salary selector = new Salary();
+		selector.setCompanyId(companyId);
+        for (Salary.SState st : Salary.SState.values()) {
+			selector.setState(st);
+			cnts.put(st.toString(), salaryService.getCount(selector));
+		}
+        LOGGER.debug("==================== leave CompanyResource getCompanySalariesCount ====================");
+        return cnts;
+    }
+	
+	@GET
+    @Path("/{companyId}/salaries/count")
     @Produces(MediaType.APPLICATION_JSON)
     public ListResponse<Salary> getCompanySalaries(@PathParam("companyId") int companyId,
 			@QueryParam("state") List<Salary.SState> states,
