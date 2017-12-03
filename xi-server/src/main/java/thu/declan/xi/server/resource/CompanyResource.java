@@ -331,9 +331,10 @@ public class CompanyResource extends BaseResource {
     }
 	
 	@GET
-    @Path("/{companyId}/resumes/count")
+    @Path("/{companyId}/salaries/count")
     @Produces(MediaType.APPLICATION_JSON)
-    public HashMap<String, Integer> getCompanySalariesCount(@PathParam("companyId") int companyId) throws ApiException {
+    public HashMap<String, Integer> getCompanySalariesCount(@PathParam("companyId") int companyId,
+			@QueryParam("month") String month) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanySalariesCount ====================");
         if (companyId == 0) {
             companyId = currentEntityId();
@@ -341,6 +342,7 @@ public class CompanyResource extends BaseResource {
 		HashMap<String, Integer> cnts = new HashMap<>();
         Salary selector = new Salary();
 		selector.setCompanyId(companyId);
+		selector.setMonth(month);
         for (Salary.SState st : Salary.SState.values()) {
 			selector.setState(st);
 			cnts.put(st.toString(), salaryService.getCount(selector));
@@ -350,10 +352,11 @@ public class CompanyResource extends BaseResource {
     }
 	
 	@GET
-    @Path("/{companyId}/salaries/count")
+    @Path("/{companyId}/salaries")
     @Produces(MediaType.APPLICATION_JSON)
     public ListResponse<Salary> getCompanySalaries(@PathParam("companyId") int companyId,
 			@QueryParam("state") List<Salary.SState> states,
+			@QueryParam("month") String month,
             @QueryParam("pageIndex") Integer pageIndex,
             @QueryParam("pageSize") Integer pageSize) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanySalaries ====================");
@@ -364,6 +367,7 @@ public class CompanyResource extends BaseResource {
         if (!states.isEmpty()) {
             selector.setQueryStates(states);
         }
+		selector.setMonth(month);
         selector.setCompanyId(companyId);
         List<Salary> salaries = null;
         Pagination pagination = new Pagination(pageSize, pageIndex);
