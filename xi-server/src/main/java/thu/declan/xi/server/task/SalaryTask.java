@@ -55,6 +55,7 @@ public class SalaryTask {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
             s.setMonth(format.format(new Date((new Date()).getTime() - 24 * 60 * 60 * 1000)));
             s.setResumeId(r.getId());
+			s.setStuId(r.getStuId());
             s.setState(Salary.SState.NEW_GENERATED);
             s.setWorkDays(SALARY_COMMON_DAYS);
 //            if (unit.contains("周")) {
