@@ -145,11 +145,11 @@ public class UploadResource extends BaseResource {
 			sel.setState(Resume.RState.WORKING);
 			List<Resume> resumes = resumeService.getList(sel);
 			for (Resume r : resumes) {
-				LOGGER.info("Generate for resume %d", r.getId());
+				LOGGER.info("Generate for resume " + r.getId());
 				Salary s = new Salary();
 				s.setCompanyId(r.getCompanyId());
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-				s.setMonth(format.format(new Date((new Date()).getTime() - 24 * 60 * 60 * 1000)));
+				s.setMonth(format.format(new Date((new Date()).getTime() - 20 * 24 * 60 * 60 * 1000)));
 				s.setResumeId(r.getId());
 				s.setStuId(r.getStuId());
 				s.setState(Salary.SState.NEW_GENERATED);
