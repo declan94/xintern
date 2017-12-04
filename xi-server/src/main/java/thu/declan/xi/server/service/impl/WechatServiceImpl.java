@@ -140,7 +140,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 	@Override
 	public void transfer(String openid, String checkname, int tradeNo, double value) throws ServiceException {
 		Transfers trans = new Transfers();
-		String nonce = create_nonce_str();
+		String nonce = create_nonce_str().substring(0, 32);
 		trans.setAmount(String.format("%.0f", value*100));
 		trans.setCheck_name("FORCE_CHECK");
 		trans.setDesc("提现");
