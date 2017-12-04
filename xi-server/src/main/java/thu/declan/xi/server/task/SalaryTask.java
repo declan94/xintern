@@ -64,25 +64,25 @@ public class SalaryTask {
 	}
     
     // 每天2点
-    @Scheduled(cron = "0 0 2 * * ? ")
-    public void paySalaries() {
-        LOGGER.info("******************************** Start Pay Salaries ********************************");
-        Salary sel = new Salary();
-        sel.setState(Salary.SState.CONFIRMED);
-        List<Salary> salaries = salaryMapper.selectList(sel);
-        for (Salary s : salaries) {
-            LOGGER.info("pay for salary %d", s.getId());
-            Student stu = studentMapper.selectOne(s.getStuId());
-            if (stu == null) {
-                LOGGER.info("Student not found for stuid: %d", s.getStuId());
-                continue;
-            }
-            accountMapper.addBalance(stu.getAccountId(), s.getStuValue());
-            s.setPayTime(new Date());
-            s.setState(Salary.SState.PAID);
-            salaryMapper.update(s);
-        }
-        LOGGER.info("******************************** Finish Pay Salaries ********************************");
-    }
+//    @Scheduled(cron = "0 0 2 * * ? ")
+//    public void paySalaries() {
+//        LOGGER.info("******************************** Start Pay Salaries ********************************");
+//        Salary sel = new Salary();
+//        sel.setState(Salary.SState.CONFIRMED);
+//        List<Salary> salaries = salaryMapper.selectList(sel);
+//        for (Salary s : salaries) {
+//            LOGGER.info("pay for salary %d", s.getId());
+//            Student stu = studentMapper.selectOne(s.getStuId());
+//            if (stu == null) {
+//                LOGGER.info("Student not found for stuid: %d", s.getStuId());
+//                continue;
+//            }
+//            accountMapper.addBalance(stu.getAccountId(), s.getStuValue());
+//            s.setPayTime(new Date());
+//            s.setState(Salary.SState.PAID);
+//            salaryMapper.update(s);
+//        }
+//        LOGGER.info("******************************** Finish Pay Salaries ********************************");
+//    }
 
 }

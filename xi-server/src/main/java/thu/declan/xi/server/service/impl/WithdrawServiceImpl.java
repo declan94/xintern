@@ -61,17 +61,9 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
             Withdraw origin = withdrawMapper.selectOne(withdraw.getId());
             int accId = origin.getAccountId();
             accountMapper.addBalance(accId, origin.getValue());
-        } else if (withdraw.getState() == Withdraw.WState.PASSED) {
-			Withdraw w = get(withdraw.getId());
-			payWithdraw(w);
+        } else if (withdraw.getState() == Withdraw.WState.PASSED || withdraw.getState() == Withdraw.WState.PAID) {
+			payWithdraw(withdraw.getId());
 		}
-    }
-
-    @Override
-    protected void postGetList(List<Withdraw> withdraws) {
-        for (Withdraw withdraw : withdraws) {
-            postGet(withdraw);
-        }
     }
 
     @Override
@@ -80,7 +72,8 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
     }
 
 	@Override
-	public void payWithdraw(Withdraw withdraw) throws ServiceException {
+	public void payWithdraw(int id) throws ServiceException {
+		Withdraw withdraw = get(id);
 		Account acc = accountMapper.selectOne(withdraw.getAccountId());
 		if (acc == null || acc.getOpenId() == null || acc.getRole() != Account.Role.STUDENT) {
 			throw new ServiceException(ServiceException.CODE_VERIFY_FAILED, "Account error");
@@ -90,10 +83,8 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
 			throw new ServiceException(ServiceException.CODE_VERIFY_FAILED, "Student error");
 		}
 		wechatService.transfer(acc.getOpenId(), stu.getName(), withdraw.getId(), withdraw.getValue());
-		Withdraw updater = new Withdraw();
-		updater.setId(withdraw.getId());
-		updater.setState(Withdraw.WState.PAID);
-		update(updater);
+		withdraw.setState(Withdraw.WState.PAID);
+		withdrawMapper.update(withdraw);
 	}
 
 }

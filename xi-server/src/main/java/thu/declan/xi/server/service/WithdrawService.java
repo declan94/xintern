@@ -9,5 +9,5 @@ import thu.declan.xi.server.model.Withdraw;
  */
 public interface WithdrawService extends BaseTableService<Withdraw> {
 	
-	public void payWithdraw(Withdraw withdraw) throws ServiceException;
+	public void payWithdraw(int id) throws ServiceException;
 }

@@ -100,7 +100,17 @@ public class SalaryResource extends BaseResource {
             updater.setId(salaryId);
             salaryService.update(updater);
 			if (updater.getState() == Salary.SState.WAIT_STU_CONFIRM) {
-				this.notiService.addNoti(oldSalary.getResume().getStudent().getAccountId(), Notification.NType.SALARY, salaryId, Notification.TPL_SALARY_CONFIRM, oldSalary.getResume().getPosition().getCompany().getName());
+				this.notiService.addNoti(oldSalary.getResume().getStudent().getAccountId(), 
+						Notification.NType.SALARY, salaryId, 
+						Notification.TPL_SALARY_CONFIRM, 
+						oldSalary.getResume().getPosition().getCompany().getName(),
+						oldSalary.getMonth());
+			} else if (updater.getState() == Salary.SState.CONFIRMED || updater.getState() == Salary.SState.PAID) {
+				this.notiService.addNoti(oldSalary.getResume().getStudent().getAccountId(), 
+						Notification.NType.SALARY, salaryId, 
+						Notification.TPL_SALARY_GET, 
+						oldSalary.getResume().getPosition().getCompany().getName(),
+						oldSalary.getMonth());
 			}
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

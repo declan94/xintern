@@ -27,6 +27,7 @@ import thu.declan.xi.server.model.Withdraw;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
+import thu.declan.xi.server.model.Withdraw.WState;
 import thu.declan.xi.server.service.WechatService;
 import thu.declan.xi.server.service.WithdrawService;
 
@@ -70,12 +71,12 @@ public class WithdrawResource extends BaseResource {
 		Map<String, String> data = new HashMap<>();
 		data.put("first", "您好!您已成功申请了一笔提现");
 		data.put("keyword1", String.format("%.2f", withdraw.getValue()));
-		data.put("keyword2", (new SimpleDateFormat("YYYY年MM月dd日 HH:mm")).format(new Date()));
+		data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(new Date()));
 		data.put("remark", "请等待审核通过");
 		String openid = currentAccount().getOpenId();
 		if (openid != null) {
 			try {
-				wechatService.sendTemplateMessage(Notification.WX_TPL_ID_RESUMERET, openid, (String) null, data);
+				wechatService.sendTemplateMessage(Notification.WX_TPL_ID_WITHDRAW, openid, (String) null, data);
 			} catch (ServiceException ex) {
 			}
 		}
@@ -98,6 +99,40 @@ public class WithdrawResource extends BaseResource {
 		try {
 			withdraw.setId(withdrawId);
 			withdrawService.update(withdraw);
+			if (withdraw.getState() == WState.PASSED || withdraw.getState() == WState.PAID) {
+				Account acc = oldWd.getAccount();
+				Notification noti = notiService.addNoti(acc.getId(), Notification.NType.WITHDRAW, withdrawId, 
+						Notification.TPL_WITHDRAW);
+				String openid = acc.getOpenId();
+				Map<String, String> data = new HashMap<>();
+				data.put("first", "您好!您的提现已到账");
+				data.put("keyword1", String.format("%.2f", withdraw.getValue()));
+				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(oldWd.getCreateTime()));
+				data.put("remark", "感谢您的使用");
+				if (openid != null) {
+					try {
+						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_WITHDRAW_SUC, openid, noti, data);
+					} catch (ServiceException ex) {
+					}
+				}
+			} else if (withdraw.getState() == WState.REFUSED) {
+				Account acc = oldWd.getAccount();
+				Notification noti = notiService.addNoti(acc.getId(), Notification.NType.WITHDRAW, withdrawId, 
+						Notification.TPL_WITHDRAW_FAIL);
+				String openid = acc.getOpenId();
+				Map<String, String> data = new HashMap<>();
+				data.put("first", "您好!您的提现申请失败了");
+				data.put("keyword1", String.format("%.2f", withdraw.getValue()));
+				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(oldWd.getCreateTime()));
+				data.put("keyword3", "审核未通过");
+				data.put("remark", "请登陆查看具体原因");
+				if (openid != null) {
+					try {
+						wechatService.sendTemplateMessage(Notification.WX_TPL_ID_WITHDRAW_FAIL, openid, noti, data);
+					} catch (ServiceException ex) {
+					}
+				}
+			}
 		} catch (ServiceException ex) {
 			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);

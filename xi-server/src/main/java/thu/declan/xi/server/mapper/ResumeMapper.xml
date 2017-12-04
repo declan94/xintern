@@ -89,7 +89,7 @@
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
-		r_positionId, r_stuId, r_state, r_commentStu, r_commentComp, r_updateTime
+		r_positionId, r_stuId, r_salary, r_stuSalary, r_unit, r_state, r_commentStu, r_commentComp, r_updateTime
 	</sql>
     
 	<sql id="selectBaseColumns" >
@@ -111,7 +111,7 @@
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Resume">
 		insert into xi_resume (<include refid="insertBaseColumns" />) 
-		values (#{positionId}, #{stuId}, #{state}, #{commentStu}, #{commentComp}, #{updateTime})
+		values (#{positionId}, #{stuId}, #{salary}, #{stuSalary}, #{unit}, #{state}, #{commentStu}, #{commentComp}, #{updateTime})
 	</insert>
     
 	<update id="update" parameterType="Resume">
