@@ -11,6 +11,7 @@
         <result property="workDays" column="s_workDays" />
         <result property="value" column="s_value" />
         <result property="stuValue" column="s_stuValue" />
+        <result property="stuComment" column="s_stuComment" />
         <result property="state" column="s_state" />
         <result property="createTime" column="s_createTime" />
         <result property="payTime" column="s_payTime" />
@@ -35,6 +36,7 @@
 			<if test="workDays != null"> s_workDays = #{workDays}, </if>
             <if test="value != null"> s_value = #{value}, </if>
             <if test="stuValue != null"> s_stuValue = #{stuValue}, </if>
+            <if test="stuComment != null"> s_stuComment = #{stuComment}, </if>
             <if test="state != null"> s_state = #{state}, </if>
             <if test="payTime != null"> s_payTime = #{payTime}, </if>
         </trim>

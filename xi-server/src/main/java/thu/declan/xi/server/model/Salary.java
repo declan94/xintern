@@ -110,6 +110,16 @@ public class Salary {
         return stuValue;
     }
 
+    private String stuComment;
+
+    public String getStuComment() {
+        return stuComment;
+    }
+
+    public void setStuComment(String stuComment) {
+        this.stuComment = stuComment;
+    }
+
     public void setStuValue(Double stuValue) {
         this.stuValue = stuValue;
     }

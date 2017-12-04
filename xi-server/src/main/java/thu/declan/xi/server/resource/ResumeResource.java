@@ -80,6 +80,8 @@ public class ResumeResource extends BaseResource {
 		Position pos = null;
 		try {
 			pos = positionService.get(posId);
+            resume.setSalary(pos.getSalary());
+            resume.setStuSalary(pos.getStuSalary());
 			resumeService.add(resume);
 		} catch (ServiceException ex) {
 			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {
@@ -89,7 +91,7 @@ public class ResumeResource extends BaseResource {
 		}
 		if (Account.Role.STUDENT.equals(currentRole())) {
 			addNoti(Notification.NType.RESUME, resume.getId(), Notification.TPL_RESUME_ADD);
-			Student stu = null;
+			Student stu;
 			try {
 				stu = studentService.get(currentEntityId());
 				if (pos != null && pos.getCompany() != null) {
