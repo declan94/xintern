@@ -57,6 +57,16 @@ public class Withdraw {
         this.account = account;
     }
 
+	private Student student;
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
     private Double value;
 
     public Double getValue() {

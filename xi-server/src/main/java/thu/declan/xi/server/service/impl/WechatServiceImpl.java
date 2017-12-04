@@ -141,7 +141,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 	public void transfer(String openid, String checkname, int tradeNo, double value) throws ServiceException {
 		Transfers trans = new Transfers();
 		String nonce = create_nonce_str();
-		trans.setAmount(String.format("%.2f", value));
+		trans.setAmount(String.format("%.0f", value*100));
 		trans.setCheck_name("FORCE_CHECK");
 		trans.setDesc("提现");
 		trans.setMch_appid(Constant.WECHAT_APPID);

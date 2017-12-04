@@ -69,6 +69,7 @@ public class WithdrawServiceImpl extends BaseTableServiceImpl<Withdraw> implemen
     @Override
     protected void postGet(Withdraw withdraw) {
         withdraw.setAccount(accountMapper.selectOne(withdraw.getAccountId()));
+		withdraw.setStudent(studentMapper.selectByAccountId(withdraw.getAccountId()));
     }
 
 	@Override
