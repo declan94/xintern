@@ -40,6 +40,9 @@ public class Notification {
 	public final static String WX_TPL_ID_WITHDRAW = "XcYl3o7b_4jotYJrC5Z0sO1F2l16f4BPzdQNUHHmSrw";
 	public final static String WX_TPL_ID_WITHDRAW_SUC = "XcYl3o7b_4jotYJrC5Z0sO1F2l16f4BPzdQNUHHmSrw";
 	public final static String WX_TPL_ID_WITHDRAW_FAIL = "mosxDWmFetZxUmbhmGnCnsOxX393hr-mEepLH-Nr408";
+	public final static String WX_TPL_ID_SALARY = "9C8CEri8X_XF9ELVFGUUE--1tGXPzIHRpg6P-uKTlQw";
+	public final static String WX_TPL_ID_SALARY_GET = "tt6-9GV33WjFJhQ1DFGvBy1COLmDaGvBJtfffn4pz0k";
+	
 	
 	
     public enum NType {
