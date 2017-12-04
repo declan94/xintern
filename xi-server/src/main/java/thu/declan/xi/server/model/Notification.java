@@ -21,6 +21,7 @@ public class Notification {
 	public final static String TPL_RESUME_TIME3 = "您有新的学生确认了面试时间，请及时查看。";
 	public final static String TPL_RESUME_JOIN = "尊敬的【%s】，您应聘的“【%s】”职位已经获得企业的录取通知，请尽快前往查看。";
 	public final static String TPL_RESUME_JOIN2 = "恭喜，学生【%s】同意了 【%s】 职位的录用通知，请尽快联系入职吧。";
+	public final static String TPL_SALARY_CONFIRM = "您在【%s】工作的本月工资单已生成，请尽快确认。";
 	public final static String TPL_SALARY_GET = "工资到账";
 	public final static String TPL_WITHDRAW = "提现成功通知";
 	public final static String TPL_WITHDRAW_FAIL = "提现失败通知";

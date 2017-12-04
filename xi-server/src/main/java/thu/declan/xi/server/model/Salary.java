@@ -176,4 +176,8 @@ public class Salary {
         stuValue = r.getStuSalary() * units;
     }
 	
+	public void updateValue() {
+		updateValue(this.resume);
+	}
+	
 }

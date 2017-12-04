@@ -17,6 +17,7 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.ListResponse;
+import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Salary;
 import thu.declan.xi.server.model.Pagination;
 import thu.declan.xi.server.model.Resume;
@@ -94,11 +95,13 @@ public class SalaryResource extends BaseResource {
         }
         try {
             if (updater.getWorkDays() != null) {
-                Resume r = resumeService.get(oldSalary.getResumeId());
-                updater.updateValue(r);
+                updater.updateValue(oldSalary.getResume());
             }
             updater.setId(salaryId);
             salaryService.update(updater);
+			if (updater.getState() == Salary.SState.WAIT_STU_CONFIRM) {
+				this.notiService.addNoti(oldSalary.getResume().getStudent().getAccountId(), Notification.NType.SALARY, salaryId, Notification.TPL_SALARY_CONFIRM, oldSalary.getResume().getPosition().getCompany().getName());
+			}
         } catch (ServiceException ex) {
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
             LOGGER.debug(devMsg);
