@@ -82,6 +82,7 @@ public class ResumeResource extends BaseResource {
 			pos = positionService.get(posId);
             resume.setSalary(pos.getSalary());
             resume.setStuSalary(pos.getStuSalary());
+            resume.setUnit(pos.getUnit());
 			resumeService.add(resume);
 		} catch (ServiceException ex) {
 			if (ex.getCode() == ServiceException.CODE_NO_SUCH_ELEMENT) {

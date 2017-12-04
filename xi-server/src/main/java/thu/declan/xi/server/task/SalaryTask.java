@@ -49,7 +49,6 @@ public class SalaryTask {
         List<Resume> resumes = resumeMapper.selectList(sel);
         for (Resume r : resumes) {
             LOGGER.info("Generate for resume %d", r.getId());
-            String unit = r.getUnit();
             Salary s = new Salary();
             s.setCompanyId(r.getCompanyId());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
@@ -58,11 +57,7 @@ public class SalaryTask {
 			s.setStuId(r.getStuId());
             s.setState(Salary.SState.NEW_GENERATED);
             s.setWorkDays(SALARY_COMMON_DAYS);
-//            if (unit.contains("周")) {
-//                s.setWorkDays(SALARY_COMMON_DAYS / 7 + 1);
-//            } else if (unit.contains("时")) {
-//                s.setWorkDays(SALARY_COMMON_DAYS*8);
-//            }
+            s.updateValue(r);
             salaryMapper.insert(s);
         }
         LOGGER.info("******************************** Finish Generate Salaries ********************************");
