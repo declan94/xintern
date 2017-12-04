@@ -142,7 +142,8 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 		Transfers trans = new Transfers();
 		String nonce = create_nonce_str().substring(0, 32);
 		trans.setAmount(String.format("%.0f", value*100));
-		trans.setCheck_name("FORCE_CHECK");
+//		trans.setCheck_name("FORCE_CHECK");
+		trans.setCheck_name("NO_CHECK");
 		trans.setDesc("提现");
 		trans.setMch_appid(Constant.WECHAT_APPID);
 		trans.setMchid(Constant.WECHAT_MCH_ID);
@@ -151,7 +152,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 		trans.setPartner_trade_no(String.format("%d", tradeNo));
 		trans.setRe_user_name(checkname);
 		trans.setSpbill_create_ip(Constant.SERVER_IP);
-		trans.setSign_type("MD5");
+		trans.setSign_type(null);
 //		String string1 = "amount=" + trans.getAmount()
 //				+ "&check_name=" + trans.getCheck_name()
 //				+ "&desc=" + trans.getDesc()
