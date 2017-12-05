@@ -57,7 +57,18 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 	}
 
 	@Override
+    public Integer unreadCnt(int accountId) {
+        return notiMapper.unreadCnt(accountId);
+    }
+
+
+	@Override
 	public Notification addNoti(int accountId, Notification.NType type, int refId, String msgTpl, Object... args) {
+		return this.addNoti(accountId, type, refId, true, msgTpl, args);
+	}
+
+	@Override
+	public Notification addNoti(int accountId, Notification.NType type, int refId, boolean sendEmail, String msgTpl, Object... args) {
 		Notification noti = new Notification();
 		noti.setAccountId(accountId);
 		noti.setType(type);
@@ -72,7 +83,8 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			return noti;
 		}
 		try {
-			Account acc = accountService.get(accountId);
+			if (sendEmail) {
+				Account acc = accountService.get(accountId);
 			String emailAddr;
             String phone;
 			if (acc.getRole() == Account.Role.STUDENT) {
@@ -86,15 +98,12 @@ public class NotificationServiceImpl extends BaseTableServiceImpl<Notification> 
 			}
 			emailService.sendEmailInBackground("消息通知【享实习】", noti.getMsg(), emailAddr);
 			smsService.sendMsgInBackground(phone, noti.getMsg());
+			}
+			
 		} catch (ServiceException ex) {
 			Logger.getLogger(NotificationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return noti;
 	}
-	
-    @Override
-    public Integer unreadCnt(int accountId) {
-        return notiMapper.unreadCnt(accountId);
-    }
 
 }

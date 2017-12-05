@@ -75,7 +75,7 @@ public class BaseResource {
         try {
 			PointLog pl = new PointLog(currentAccountId(), type, refId);
             plogService.addPoint(pl, isCompany);
-			notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT, pl.getValue());
+			notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), false, Notification.TPL_POINT, pl.getValue());
         } catch (ServiceException ex) {
             if (ex.getCode() == ServiceException.CODE_DUPLICATE_ELEMENT) {
                 return;

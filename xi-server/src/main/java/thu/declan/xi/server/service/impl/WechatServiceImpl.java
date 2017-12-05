@@ -167,7 +167,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 //		String sign = EncryptionUtils.md5(string1).toUpperCase();
 //		trans.setSign(sign);
 		TransfersResult result = PayMchAPI.mmpaymkttransfersPromotionTransfers(trans, Constant.WECHAT_MCH_SECRET);
-		if (!"SUCCESS".equals(result.getErr_code())) {
+		if (result.getErr_code() != null) {
 			throw new ServiceException(ServiceException.CODE_EXTERNAL_ERROR, "Wechat transfer failed: [" + result.getErr_code() + "] " + result.getErr_code_des());
 		}
 	}

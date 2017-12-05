@@ -135,7 +135,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 						pl = new PointLog(account.getId(), PType.LOGIN, (int) refid);
                         plogService.addPoint(pl, false);
                 }
-				notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), Notification.TPL_POINT, pl.getValue());
+				notiService.addNoti(pl.getAccountId(), Notification.NType.POINT, pl.getId(), false, Notification.TPL_POINT, pl.getValue());
             } catch (ParseException | ServiceException ex) {
             }
         }
