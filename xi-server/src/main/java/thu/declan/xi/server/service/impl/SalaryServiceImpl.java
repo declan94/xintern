@@ -56,6 +56,11 @@ public class SalaryServiceImpl extends BaseTableServiceImpl<Salary> implements S
 			this.postGet(s);
 		}
 	}
+    
+    @Override
+    protected void preUpdate(Salary s) {
+        s.setUpdateTime(new Date());
+    }
 	
 	@Override
 	protected void postUpdate(Salary s) throws ServiceException {

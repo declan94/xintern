@@ -15,6 +15,7 @@
         <result property="state" column="s_state" />
         <result property="createTime" column="s_createTime" />
         <result property="payTime" column="s_payTime" />
+        <result property="updateTime" column="s_updateTime" />
     </resultMap>
 	
     <sql id="insertBaseColumns" >
@@ -39,6 +40,7 @@
             <if test="stuComment != null"> s_stuComment = #{stuComment}, </if>
             <if test="state != null"> s_state = #{state}, </if>
             <if test="payTime != null"> s_payTime = #{payTime}, </if>
+            <if test="updateTime != null"> s_updateTime = #{updateTime}, </if>
         </trim>
         where s_id = #{id}
     </update>
@@ -56,6 +58,7 @@
 			<if test="stuId != null">  s_stuId = #{stuId} and </if>
 			<if test="month != null">  s_month = #{month} and </if>
 			<if test="state != null">  s_state = #{state} and </if>
+            <if test="updateTime != null">  s_updateTime &lt; #{updateTime} and </if>
 			<if test="queryStates != null"> 
 				s_state in 
 				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">
