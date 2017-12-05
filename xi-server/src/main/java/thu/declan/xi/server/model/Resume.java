@@ -13,7 +13,7 @@ import thu.declan.xi.server.util.CustomJsonDateSerializer;
  *
  * @author declan
  */
-public class Resume {
+public class Resume extends QueryModel {
     
     public enum RState {
         NEW,
@@ -239,15 +239,15 @@ public class Resume {
         this.createTime = createTime;
     }
 
-    private Date updateTime;
+    private Date endTime;
 
 	@JsonSerialize(using = CustomJsonDateSerializer.class)
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 	
 	// stu to comp

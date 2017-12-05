@@ -20,7 +20,7 @@
 		<result property="commentStu" column="r_commentStu" />
 		<result property="commentComp" column="r_commentComp" />
 		<result property="createTime" column="r_createTime" />
-		<result property="updateTime" column="r_updateTime" />
+		<result property="endTime" column="r_endTime" />
 		<association property="student" javaType="Student">
 			<result property="id" column="s_id" />
 			<result property="accountId" column="s_accountId" />
@@ -89,12 +89,12 @@
 	</resultMap>
 	
 	<sql id="insertBaseColumns" >
-		r_positionId, r_stuId, r_salary, r_stuSalary, r_unit, r_state, r_commentStu, r_commentComp, r_updateTime
+		r_positionId, r_stuId, r_salary, r_stuSalary, r_unit, r_state, r_commentStu, r_commentComp, r_endTime
 	</sql>
     
 	<sql id="selectBaseColumns" >
 		xi_resume.*
-		<!--r_id, r_positionId, r_stuId, r_state, r_interviewTime, r_commentStu, r_commentComp, r_createTime, r_updateTime-->
+		<!--r_id, r_positionId, r_stuId, r_state, r_interviewTime, r_commentStu, r_commentComp, r_createTime, r_endTime-->
 	</sql>
 	
 	<sql id="selectExtColumns" >
@@ -111,7 +111,7 @@
     
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Resume">
 		insert into xi_resume (<include refid="insertBaseColumns" />) 
-		values (#{positionId}, #{stuId}, #{salary}, #{stuSalary}, #{unit}, #{state}, #{commentStu}, #{commentComp}, #{updateTime})
+		values (#{positionId}, #{stuId}, #{salary}, #{stuSalary}, #{unit}, #{state}, #{commentStu}, #{commentComp}, #{endTime})
 	</insert>
     
 	<update id="update" parameterType="Resume">
@@ -129,7 +129,7 @@
 			<if test="offerTime != null"> r_offerTime = #{offerTime}, </if>
 			<if test="commentStu != null"> r_commentStu = #{commentStu}, </if>
 			<if test="commentComp != null"> r_commentComp = #{commentComp}, </if>
-			<if test="updateTime != null"> r_updateTime = #{updateTime}, </if>
+			<if test="endTime != null"> r_endTime = #{endTime}, </if>
 		</trim>
 		where r_id = #{id}
 	</update>
@@ -158,6 +158,7 @@
 			<if test="companyId != null"> p_companyId = #{companyId} and </if>
 			<if test="stuId != null"> r_stuId = #{stuId} and </if>
 			<if test="state != null"> r_state = #{state} and </if>
+            <if test="endTime != null"> r_endTime > #{endTime} and </if>
 			<if test="queryStates != null"> 
 				r_state in 
 				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">
