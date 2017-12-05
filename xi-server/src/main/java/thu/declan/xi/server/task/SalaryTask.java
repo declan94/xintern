@@ -14,7 +14,6 @@ import thu.declan.xi.server.mapper.SalaryMapper;
 import thu.declan.xi.server.mapper.StudentMapper;
 import thu.declan.xi.server.model.Resume;
 import thu.declan.xi.server.model.Salary;
-import thu.declan.xi.server.model.Student;
 
 /**
  * backup databases

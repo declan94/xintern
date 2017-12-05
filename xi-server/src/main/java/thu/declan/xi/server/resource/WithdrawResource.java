@@ -88,26 +88,28 @@ public class WithdrawResource extends BaseResource {
 	@Path("/{withdrawId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_ADMIN})
-	public Withdraw editWithdraw(@PathParam("withdrawId") int withdrawId, Withdraw withdraw) throws ApiException {
+	public Withdraw editWithdraw(@PathParam("withdrawId") int withdrawId, Withdraw updater) throws ApiException {
 		LOGGER.debug("==================== enter WithdrawResource editWithdraw ====================");
 		LOGGER.debug("withdrawId: " + withdrawId);
 		Withdraw oldWd = getWithdraw(withdrawId);
 		if (oldWd.getState() != Withdraw.WState.NEW) {
 			throw new ApiException(403, "Withdraw state not new", "不能修改此提现申请");
 		}
-		withdraw.setValue(null);
+		updater.setValue(null);
+        Withdraw withdraw = null;
 		try {
-			withdraw.setId(withdrawId);
-			withdrawService.update(withdraw);
-			if (withdraw.getState() == WState.PASSED || withdraw.getState() == WState.PAID) {
-				Account acc = oldWd.getAccount();
+			updater.setId(withdrawId);
+			withdrawService.update(updater);
+            withdraw = withdrawService.get(withdrawId);
+            Account acc = withdraw.getAccount();
+			if (updater.getState() == WState.PASSED || updater.getState() == WState.PAID) {
 				Notification noti = notiService.addNoti(acc.getId(), Notification.NType.WITHDRAW, withdrawId, 
 						Notification.TPL_WITHDRAW);
 				String openid = acc.getOpenId();
 				Map<String, String> data = new HashMap<>();
 				data.put("first", "您好!您的提现已到账");
 				data.put("keyword1", String.format("%.2f", withdraw.getValue()));
-				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(oldWd.getCreateTime()));
+				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(withdraw.getCreateTime()));
 				data.put("remark", "感谢您的使用");
 				if (openid != null) {
 					try {
@@ -115,15 +117,14 @@ public class WithdrawResource extends BaseResource {
 					} catch (ServiceException ex) {
 					}
 				}
-			} else if (withdraw.getState() == WState.REFUSED) {
-				Account acc = oldWd.getAccount();
+			} else if (updater.getState() == WState.REFUSED) {
 				Notification noti = notiService.addNoti(acc.getId(), Notification.NType.WITHDRAW, withdrawId, 
 						Notification.TPL_WITHDRAW_FAIL);
 				String openid = acc.getOpenId();
 				Map<String, String> data = new HashMap<>();
 				data.put("first", "您好!您的提现申请失败了");
 				data.put("keyword1", String.format("%.2f", withdraw.getValue()));
-				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(oldWd.getCreateTime()));
+				data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(withdraw.getCreateTime()));
 				data.put("keyword3", "审核未通过");
 				data.put("remark", "请登陆查看具体原因");
 				if (openid != null) {
