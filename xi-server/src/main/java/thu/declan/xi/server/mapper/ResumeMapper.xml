@@ -158,7 +158,7 @@
 			<if test="companyId != null"> p_companyId = #{companyId} and </if>
 			<if test="stuId != null"> r_stuId = #{stuId} and </if>
 			<if test="state != null"> r_state = #{state} and </if>
-            <if test="endTime != null"> r_endTime > #{endTime} and </if>
+            <if test="endTime != null"> r_endTime &gt; #{endTime} and </if>
 			<if test="queryStates != null"> 
 				r_state in 
 				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">

@@ -86,7 +86,7 @@ public class SalaryTask {
     public void autoConfirmSalary() {
         LOGGER.info("******************************** Start Auto Confirm Salaries ********************************");
         Salary sel = new Salary();
-        sel.setUpdateTime(ndaysBefore(15));
+        sel.setUpdateTime(ndaysBefore(5));
         sel.setState(Salary.SState.WAIT_STU_CONFIRM);
         List<Salary> salaries = salaryMapper.selectList(sel);
         for (Salary s : salaries) {

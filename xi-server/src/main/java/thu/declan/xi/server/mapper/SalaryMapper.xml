@@ -58,7 +58,7 @@
 			<if test="stuId != null">  s_stuId = #{stuId} and </if>
 			<if test="month != null">  s_month = #{month} and </if>
 			<if test="state != null">  s_state = #{state} and </if>
-            <if test="updateTime != null">  s_updateTime < #{updateTime} and </if>
+            <if test="updateTime != null">  s_updateTime &lt; #{updateTime} and </if>
 			<if test="queryStates != null"> 
 				s_state in 
 				<foreach item="item" index="index" collection="queryStates" open="(" separator="," close=")">
