@@ -155,6 +155,17 @@ public class Salary {
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
+
+    private Date updateTime;
+
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 	
 	@JsonIgnore
 	private List<SState> queryStates;
