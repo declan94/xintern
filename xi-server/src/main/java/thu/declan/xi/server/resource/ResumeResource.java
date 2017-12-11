@@ -152,9 +152,9 @@ public class ResumeResource extends BaseResource {
 		SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
 		SimpleDateFormat fmt2 = new SimpleDateFormat("YYYY-MM-dd HH:mm");
 		String intTimeStr = fmt.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
-				: oldRes.getInterviewTime());
+				: oldRes.getInterviewTime() != null ? oldRes.getInterviewTime() : "");
 		String intTimeStr2 = fmt2.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
-				: oldRes.getInterviewTime());
+				: oldRes.getInterviewTime() != null ? oldRes.getInterviewTime() : "");
 		if (resume.getState() != null && !curStu) {
 			switch (resume.getState()) {
 				case CANCELED: {
