@@ -1,14 +1,21 @@
 package thu.declan.xi.server.resource;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Map;
 import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +83,15 @@ public class WechatResource extends BaseResource {
 		}
 		return null;
 	}
+    
+    @GET
+    @Path("/redirect/{type}/{id}")
+    public Response redirect(@PathParam("type") String type, @PathParam("id") String id,
+            @Context UriInfo ui,
+			@Context HttpServletRequest request) throws URISyntaxException {
+        URI uri = ui.getBaseUri();
+		String url = String.format("%s://%s/wechat?type=%s&id=%s", request.getScheme(), uri.getHost(), type, id);
+        return Response.temporaryRedirect(new URI(url)).build();
+    }
 	    
 }

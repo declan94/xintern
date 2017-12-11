@@ -55,5 +55,7 @@ public class Constant {
 	
 	public static final String SERVER_IP = "10.9.39.15";
     public static final String SERVER_DOMAIN = "www.xiangshixi.com";
+    public static final String SERVER_SCHEME = "http";
+    public static final String API_BASE = "backend/api";
     
 }

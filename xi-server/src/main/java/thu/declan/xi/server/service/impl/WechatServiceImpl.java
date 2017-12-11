@@ -102,7 +102,7 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 		TemplateMessage tplMsg = new TemplateMessage();
 		tplMsg.setTemplate_id(tplId);
 		tplMsg.setTouser(openid);
-		tplMsg.setUrl(url == null ? "http://" + Constant.SERVER_DOMAIN : url);
+		tplMsg.setUrl(url == null ? Constant.SERVER_SCHEME + "://" + Constant.SERVER_DOMAIN : url);
 		LinkedHashMap<String, TemplateMessageItem> d = new LinkedHashMap<>();
 		for (String k : data.keySet()) {
 			TemplateMessageItem item = new TemplateMessageItem(data.get(k), "#173177");
@@ -114,7 +114,8 @@ public class WechatServiceImpl implements WechatService, InitializingBean {
 
 	@Override
 	public void sendTemplateMessage(String tplId, String openid, Notification noti, Map<String, String> data) throws ServiceException {
-		String url = noti == null ? null : String.format("http://%s/wechat?type=notification&id=%d&desc=", Constant.SERVER_DOMAIN, noti.getId());
+		String url = noti == null ? null : String.format("%s://%s/%s/wechat/redirect/notification/%d", 
+                Constant.SERVER_SCHEME, Constant.SERVER_DOMAIN, Constant.API_BASE, noti.getId());
 		sendTemplateMessage(tplId, openid, url, data);
 	}
 

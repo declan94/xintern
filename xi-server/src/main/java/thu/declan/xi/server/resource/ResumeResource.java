@@ -151,10 +151,15 @@ public class ResumeResource extends BaseResource {
 		String compName = oldRes.getPosition().getCompany().getName();
 		SimpleDateFormat fmt = new SimpleDateFormat("MM月dd日 HH时mm分");
 		SimpleDateFormat fmt2 = new SimpleDateFormat("YYYY-MM-dd HH:mm");
-		String intTimeStr = fmt.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
-				: oldRes.getInterviewTime() != null ? oldRes.getInterviewTime() : "");
-		String intTimeStr2 = fmt2.format(resume.getInterviewTime() != null ? resume.getInterviewTime()
-				: oldRes.getInterviewTime() != null ? oldRes.getInterviewTime() : "");
+		String intTimeStr = ""; 
+		String intTimeStr2 = "";
+        if (resume.getInterviewTime() != null) {
+            intTimeStr = fmt.format(resume.getInterviewTime());
+            intTimeStr2 = fmt2.format(resume.getInterviewTime());
+        } else if (oldRes.getInterviewTime() != null) {
+            intTimeStr = fmt.format(oldRes.getInterviewTime());
+            intTimeStr2 = fmt2.format(oldRes.getInterviewTime());
+        }
 		if (resume.getState() != null && !curStu) {
 			switch (resume.getState()) {
 				case CANCELED: {
