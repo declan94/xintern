@@ -90,7 +90,7 @@ public class WechatResource extends BaseResource {
             @Context UriInfo ui,
 			@Context HttpServletRequest request) throws URISyntaxException {
         URI uri = ui.getBaseUri();
-		String url = String.format("%s://%s/wechat?type=%s&id=%s", request.getScheme(), uri.getHost(), type, id);
+		String url = String.format("%s://%s/wechat/redirect.html?type=%s&id=%s", request.getScheme(), uri.getHost(), type, id);
         return Response.temporaryRedirect(new URI(url)).build();
     }
 	    
