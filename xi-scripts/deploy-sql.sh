@@ -5,7 +5,7 @@ if [[ -d xi-scripts ]]; then
 fi
 
 # SERVER=yegames.cn
-SERVER=x.xiangshixi.cc
+SERVER=www.xiangshixi.com
 
 scp xintern.sql root@${SERVER}:/root/dist/xi-scripts/
 scp initdata.sql root@${SERVER}:/root/dist/xi-scripts/

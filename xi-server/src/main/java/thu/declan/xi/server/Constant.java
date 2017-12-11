@@ -54,5 +54,6 @@ public class Constant {
 	public static final String WECHAT_MCH_SECRET = "xiangshixixiangshixixiangshixixi";
 	
 	public static final String SERVER_IP = "10.9.39.15";
+    public static final String SERVER_DOMAIN = "www.xiangshixi.com";
     
 }

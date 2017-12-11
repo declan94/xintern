@@ -5,7 +5,7 @@ if [[ -d xi-scripts ]]; then
 fi
 
 # SERVER=yegames.cn
-SERVER=xiangshixi.cc
+SERVER=www.xiangshixi.com
 if [[ $1 != '' ]]; then
     SERVER=$1
 fi
