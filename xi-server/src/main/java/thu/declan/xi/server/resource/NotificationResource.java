@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -29,6 +30,16 @@ public class NotificationResource extends BaseResource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(NotificationResource.class);
     
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN})
+	public Notification createNotification(Notification noti) throws ApiException {
+		noti.setType(Notification.NType.BACKEND);
+		notiService.addNoti(noti.getAccountId(), Notification.NType.BACKEND, 0, noti.getMsg());
+		return noti;
+	}
+	
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public ListResponse<Notification> getNotificationList(
