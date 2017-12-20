@@ -75,6 +75,13 @@
 			<if test="unionId != null"> a_unionId = #{unionId} and </if>
 			<if test="openId != null"> a_openId = #{openId} and </if>
             <if test="role != null"> a_role = #{role} and </if>
+			<if test="queryRoles != null"> 
+				a_role in 
+				<foreach item="item" index="index" collection="queryRoles" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				and 
+			</if>
         </trim>
     </select>
     
@@ -86,6 +93,13 @@
 			<if test="unionId != null"> a_unionId = #{unionId} and </if>
 			<if test="openId != null"> a_openId = #{openId} and </if>
             <if test="role != null"> a_role = #{role} and </if>
+			<if test="queryRoles != null"> 
+				a_role in 
+				<foreach item="item" index="index" collection="queryRoles" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				and 
+			</if>
         </trim>
     </select>
 	

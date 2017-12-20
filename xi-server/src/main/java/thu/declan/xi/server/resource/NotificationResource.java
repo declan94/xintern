@@ -1,6 +1,8 @@
 package thu.declan.xi.server.resource;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,6 +18,7 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Account.Role;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Pagination;
@@ -34,9 +37,35 @@ public class NotificationResource extends BaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_ADMIN})
-	public Notification createNotification(Notification noti) throws ApiException {
-		noti.setType(Notification.NType.BACKEND);
+	public Notification sendNotification(Notification noti) throws ApiException {
 		notiService.addNoti(noti.getAccountId(), Notification.NType.BACKEND, 0, noti.getMsg());
+		return noti;
+	}
+	
+	@POST
+	@Path("/broadcast")
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({Constant.ROLE_ADMIN})
+	public Notification sendNotifications(Notification noti, @QueryParam("role") List<Role> roles) throws ApiException {
+		if (roles == null) {
+			roles = new ArrayList<>();
+			roles.add(Role.COMPANY);
+			roles.add(Role.STUDENT);
+		}
+		Account sel = new Account();
+		sel.setQueryRoles(roles);
+		List<Account> accounts = null;
+		try {
+			accounts = accountService.getList(sel);
+			for (Account acc : accounts) {
+			notiService.addNoti(acc.getId(), Notification.NType.BACKEND, 0, noti.getMsg());
+		}
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
 		return noti;
 	}
 	

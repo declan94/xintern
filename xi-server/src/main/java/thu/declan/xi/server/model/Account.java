@@ -1,5 +1,8 @@
 package thu.declan.xi.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+
 /**
  *
  * @author declan
@@ -35,6 +38,17 @@ public class Account {
     public void setRole(Role type) {
         this.role = type;
     }
+	
+	@JsonIgnore
+	private List<Role> queryRoles;
+
+	public List<Role> getQueryRoles() {
+		return queryRoles;
+	}
+
+	public void setQueryRoles(List<Role> queryRoles) {
+		this.queryRoles = queryRoles;
+	}	
 
     private String phone;
 
