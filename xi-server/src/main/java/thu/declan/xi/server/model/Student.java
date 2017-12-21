@@ -17,6 +17,11 @@ public class Student {
         public static Gender fromString(String str) {
             return Enum.valueOf(Gender.class, str.toUpperCase());
         }
+		
+		public String toChsString() {
+			return this == MALE ? "男" : "女";
+		}
+		
     }
     
     public enum Education {
@@ -28,6 +33,21 @@ public class Student {
         public static Education fromString(String str) {
             return Enum.valueOf(Education.class, str.toUpperCase());
         }
+		
+		public String toChsString() {
+			switch (this) {
+				case COLLEGE:
+					return "大专";
+				case BACHELOR:
+					return "本科";
+				case MASTER:
+					return "硕士";
+				case PHD:
+					return "博士";
+			}
+			return "";
+		}
+		
     }
     
     public enum LangLevel {

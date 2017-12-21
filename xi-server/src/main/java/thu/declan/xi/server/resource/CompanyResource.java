@@ -1,6 +1,11 @@
 package thu.declan.xi.server.resource;
 
+import com.sargeraswang.util.ExcelUtil.ExcelUtil;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -15,7 +20,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +152,67 @@ public class CompanyResource extends BaseResource {
         LOGGER.debug("==================== leave CompanyResource editCompany ====================");
         return company;
     }
+	
+	@GET
+	@Path("/export")
+	@Produces("application/xls")
+	@RolesAllowed({Constant.ROLE_ADMIN})
+	public Response exportCompanies(
+			@QueryParam("verified") Boolean verified,
+			@QueryParam("frozen") Boolean frozen,
+            @QueryParam("industry") String industry,
+            @QueryParam("type") String type,
+            @QueryParam("scale") String scale,
+			@QueryParam("keyword") String keyword) throws ApiException {
+		LOGGER.debug("==================== enter CompanyResource exportCompanies ====================");
+		ListResponse<Company> res = getCompanies(null, null, verified, frozen, industry, type, scale, keyword);
+		final List<Map<String, Object>> data = new LinkedList<>();
+		for (Company comp : res.getItems()) {
+			Map<String, Object> d = new HashMap<>();
+			d.put("id", comp.getId());
+			d.put("name", comp.getName());
+			d.put("addr", comp.getAddr());
+			d.put("phone", comp.getPhone());
+			d.put("email", comp.getEmail());
+			d.put("contact", comp.getContact());
+			d.put("contactPos", comp.getContactPos());
+			d.put("contactPhone", comp.getContactPhone());
+			d.put("industry", comp.getIndustry());
+			d.put("type", comp.getType());
+			d.put("scale", comp.getScale());
+			d.put("code", comp.getCode());
+			d.put("link", comp.getLink());
+			d.put("intro", comp.getIntro());
+			data.add(d);
+		}
+		final Map<String, String> titles = new LinkedHashMap<>();
+		titles.put("id", "ID");
+		titles.put("name", "名称");
+		titles.put("addr", "地址");
+		titles.put("phone", "电话");
+		titles.put("email", "邮箱");
+		titles.put("contact", "联系人");
+		titles.put("contactPos", "联系人职位");
+		titles.put("contactPhone", "联系电话");
+		titles.put("industry", "产业");
+		titles.put("type", "公司类型");
+		titles.put("scale", "公司大小");
+		titles.put("code", "组织机构代码");
+		titles.put("link", "公司链接");
+		titles.put("intro", "公司简介");
+		StreamingOutput stream = new StreamingOutput() {
+			@Override
+			public void write(OutputStream output) throws IOException, WebApplicationException {
+				try {
+					ExcelUtil.exportExcel(titles, data, output);
+					LOGGER.debug("==================== leave CompanyResource exportCompanies ====================");
+				} catch (Exception e) {
+					throw new WebApplicationException(e);
+				}
+			}
+		};
+		return Response.ok(stream).header("content-disposition", "attachment; filename = cmpanies_export.xls").build();
+	}
 
     @GET
 	@PermitAll
