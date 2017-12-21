@@ -80,7 +80,7 @@ public class StudentResource extends BaseResource {
             studentService.add(student);
             authService.login(acc.getPhone(), pwd, Account.Role.STUDENT);
             addPoint(PointLog.PType.REGISTER, acc.getId());
-			notiService.addNoti(0, Notification.NType.STUDENT, student.getId(), Notification.TPL_BACK_STUDENT_CREATION, student.getName());
+			notiService.addNoti(0, Notification.NType.STUDENT, student.getId(), Notification.TPL_BACK_STUDENT_CREATION, acc.getPhone());
         } catch (ServiceException ex) {
             accRes.deleteAccount(acc.getId());
             String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();

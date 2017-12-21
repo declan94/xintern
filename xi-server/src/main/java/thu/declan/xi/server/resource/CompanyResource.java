@@ -88,9 +88,9 @@ public class CompanyResource extends BaseResource {
             companyService.add(company);
             authService.login(acc.getPhone(), pwd, Account.Role.COMPANY);
             addPoint(PointLog.PType.REGISTER, acc.getId());
-			notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_CREATION, company.getName());
+			notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_CREATION, acc.getPhone());
 			if (company.getCert() != null) {
-				notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_VERIFY, company.getName());
+				notiService.addNoti(0, Notification.NType.COMPANY, company.getId(), Notification.TPL_BACK_COMPANY_VERIFY, acc.getPhone());
 			}
         } catch (ServiceException ex) {
             accRes.deleteAccount(acc.getId());
