@@ -151,11 +151,11 @@ public class StudentResource extends BaseResource {
 			d.put("email", stu.getEmail());
 			d.put("area", stu.getArea());
 			d.put("school", stu.getSchool());
-			d.put("edu", stu.getEducation().toChsString());
+			d.put("edu", stu.getEducation() == null ? "" : stu.getEducation().toChsString());
 			d.put("major", stu.getMajor());
 			d.put("grade", stu.getGrade());
 			d.put("lang", stu.getLanguage());
-			d.put("langLevel", stu.getLangLevel().toString());
+			d.put("langLevel", stu.getLangLevel());
 			d.put("workExp", stu.getWorkExp());
 			d.put("socialExp", stu.getSocialExp());
 			d.put("selfVal", stu.getSelfEval());
@@ -280,7 +280,7 @@ public class StudentResource extends BaseResource {
 	@Path("/{studentId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Student getStudent(@PathParam("studentId") int studentId) throws ApiException {
+	public Student getStudent(@PathParam("studentId") Integer studentId) throws ApiException {
 		LOGGER.debug("==================== enter StudentResource getStudent ====================");
 		LOGGER.debug("studentId: " + studentId);
 		Student student = null;
