@@ -129,10 +129,11 @@ public class PositionResource extends BaseResource {
 			@QueryParam("industry") List<String> industry,
 			@QueryParam("type") List<String> type,
             @QueryParam("ptype") List<String> ptype,
-			@QueryParam("area") String area) throws ApiException {
+			@QueryParam("area") String area,
+            @QueryParam("active") Boolean active) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource getPositions ====================");
 		Position selector = new Position();
-		selector.setActive(true);
+		selector.setActive(active);
 		Company compSel = new Company();
 		compSel.setVerified(verified);
         if (industry.size() == 1) {
@@ -211,7 +212,7 @@ public class PositionResource extends BaseResource {
 			area = sub.get("area");
 		}
 		LOGGER.debug("==================== leave PositionResource getSubscribedPositions ====================");
-		return this.getPositions(pageIndex, pageSize, null, verified, industry, type, ptype, area);
+		return this.getPositions(pageIndex, pageSize, null, verified, industry, type, ptype, area, true);
 	}
 
 	@GET
