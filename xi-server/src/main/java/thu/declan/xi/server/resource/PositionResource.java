@@ -1,5 +1,6 @@
 package thu.declan.xi.server.resource;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -125,16 +126,30 @@ public class PositionResource extends BaseResource {
 			@QueryParam("pageSize") Integer pageSize,
 			@QueryParam("keyword") String keyword,
 			@QueryParam("verified") Boolean verified,
-			@QueryParam("industry") String industry,
-			@QueryParam("type") String type,
+			@QueryParam("industry") List<String> industry,
+			@QueryParam("type") List<String> type,
+            @QueryParam("ptype") List<String> ptype,
 			@QueryParam("area") String area) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource getPositions ====================");
 		Position selector = new Position();
 		selector.setActive(true);
 		Company compSel = new Company();
 		compSel.setVerified(verified);
-		compSel.setIndustry(industry);
-		compSel.setType(type);
+        if (industry.size() == 1) {
+            compSel.setIndustry(industry.get(0));
+        } else {
+            compSel.setQueryParam("industry", industry);
+        }
+		if (type.size() == 1) {
+            compSel.setType(type.get(0));
+        } else {
+            compSel.setQueryParam("type", type);
+        }
+        if (ptype.size() == 1) {
+            selector.setPtype(ptype.get(0));
+        } else {
+            selector.setQueryParam("ptype", ptype);
+        }
 		selector.setArea(area);
 		selector.setCompany(compSel);
 		if (keyword != null) {
@@ -172,20 +187,31 @@ public class PositionResource extends BaseResource {
 			java.util.logging.Logger.getLogger(PositionResource.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		Boolean verified = null;
-		String industry = null;
-		String type = null;
+		List<String> industry = null;
+		List<String> type = null;
+        List<String> ptype = null;
 		String area = null;
 		Map<String, String> sub = null;
 		if (stu != null) {
 			sub = stu.getSubscription();
 		}
 		if (sub != null) {
-			industry = sub.get("industry");
-			type = sub.get("type");
+			String industryStr = sub.get("industry");
+            if (industryStr != null) {
+                industry = Arrays.asList(industryStr.split("&"));
+            }
+            String typeStr = sub.get("type");
+            if (typeStr != null) {
+                type = Arrays.asList(typeStr.split("&"));
+            }
+            String ptypeStr = sub.get("ptype");
+            if (typeStr != null) {
+                ptype = Arrays.asList(ptypeStr.split("&"));
+            }
 			area = sub.get("area");
 		}
 		LOGGER.debug("==================== leave PositionResource getSubscribedPositions ====================");
-		return this.getPositions(pageIndex, pageSize, null, verified, industry, type, area);
+		return this.getPositions(pageIndex, pageSize, null, verified, industry, type, ptype, area);
 	}
 
 	@GET
