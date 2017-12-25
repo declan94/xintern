@@ -347,13 +347,15 @@ public class CompanyResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ListResponse<Position> getCompanyPositions(@PathParam("companyId") int companyId,
             @QueryParam("pageIndex") Integer pageIndex,
-            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+            @QueryParam("pageSize") Integer pageSize,
+            @QueryParam("active") Boolean active) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getPositiones ====================");
         if (companyId == 0) {
             companyId = currentEntityId();
         }
         Position selector = new Position();
         selector.setCompanyId(companyId);
+        selector.setActive(active);
         Pagination pagination = new Pagination(pageSize, pageIndex);
         List<Position> positions = null;
         try {
