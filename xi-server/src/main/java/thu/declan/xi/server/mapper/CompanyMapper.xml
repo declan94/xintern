@@ -97,6 +97,7 @@
 		select <include refid="selectBaseColumns" />
 		from xi_company
 		<trim prefix="where" suffixOverrides="and">
+			<if test="accountId != null"> c_accountId = #{accountId} and </if>
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>
@@ -111,6 +112,7 @@
 		select count(*)
 		from xi_company
 		<trim prefix="where" suffixOverrides="and">
+			<if test="accountId != null"> c_accountId = #{accountId} and </if>
 			<if test="type != null"> c_type = #{type} and </if>
 			<if test="industry != null"> c_industry = #{industry} and </if>
 			<if test="scale != null"> c_scale = #{scale} and </if>

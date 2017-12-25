@@ -165,7 +165,7 @@ public class CompanyResource extends BaseResource {
             @QueryParam("scale") String scale,
 			@QueryParam("keyword") String keyword) throws ApiException {
 		LOGGER.debug("==================== enter CompanyResource exportCompanies ====================");
-		ListResponse<Company> res = getCompanies(null, null, verified, frozen, industry, type, scale, keyword);
+		ListResponse<Company> res = getCompanies(null, null, verified, frozen, industry, type, scale, keyword, null);
 		final List<Map<String, Object>> data = new LinkedList<>();
 		for (Company comp : res.getItems()) {
 			Map<String, Object> d = new HashMap<>();
@@ -224,9 +224,23 @@ public class CompanyResource extends BaseResource {
             @QueryParam("industry") String industry,
             @QueryParam("type") String type,
             @QueryParam("scale") String scale,
-			@QueryParam("keyword") String keyword) throws ApiException {
+			@QueryParam("keyword") String keyword,
+			@QueryParam("accountPhone") String accountPhone) throws ApiException {
         LOGGER.debug("==================== enter CompanyResource getCompanys ====================");
-        Company selector = new Company();
+		Company selector = new Company();
+		if (accountPhone != null) {
+			Account sel = new Account();
+			sel.setPhone(accountPhone);
+			sel.setRole(Account.Role.COMPANY);
+			try {
+				Account acc = accountService.getByMatcher(sel);
+				selector.setAccountId(acc.getId());
+			} catch (ServiceException ex) {
+				String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+				LOGGER.debug(devMsg);
+				handleServiceException(ex);
+			}
+		}
         selector.setVerified(verified);
         selector.setIndustry(industry);
         selector.setType(type);
@@ -274,7 +288,7 @@ public class CompanyResource extends BaseResource {
             scale = sub.get("scale");
         }
         LOGGER.debug("==================== leave PositionResource getSubscribedCompanies ====================");
-        return this.getCompanies(pageIndex, pageSize, verified, frozen, industry, type, scale, null);
+        return this.getCompanies(pageIndex, pageSize, verified, frozen, industry, type, scale, null, null);
     }
 
     @POST

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import thu.declan.xi.server.exception.ServiceException;
+import thu.declan.xi.server.mapper.AccountMapper;
 import thu.declan.xi.server.mapper.CompanyMapper;
 import thu.declan.xi.server.mapper.BaseMapper;
 import thu.declan.xi.server.mapper.PositionMapper;
@@ -25,10 +26,13 @@ public class CompanyServiceImpl extends BaseTableServiceImpl<Company> implements
 	private CompanyMapper companyMapper;
 	
 	@Autowired
-	PositionMapper positionMapper;
+	private PositionMapper positionMapper;
 	
 	@Autowired
-	RateMapper rateMapper;
+	private RateMapper rateMapper;
+	
+	@Autowired
+	private AccountMapper accountMapper;
 
 	@Override
 	protected BaseMapper getMapper() {
@@ -54,6 +58,7 @@ public class CompanyServiceImpl extends BaseTableServiceImpl<Company> implements
 		rsel.setCompanyId(comp.getId());
 		rsel.setDirection(Rate.Direction.STU_TO_COMP);
 		comp.setRateCnt(rateMapper.selectCount(rsel));
+		comp.setAccount(accountMapper.selectOne(comp.getAccountId()));
 	}
     
     @Async
