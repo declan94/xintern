@@ -137,17 +137,17 @@ public class PositionResource extends BaseResource {
 		compSel.setVerified(verified);
         if (industry.size() == 1) {
             compSel.setIndustry(industry.get(0));
-        } else {
+        } else if (industry.size() > 1){
             compSel.setQueryParam("industry", industry);
         }
 		if (type.size() == 1) {
             compSel.setType(type.get(0));
-        } else {
+        } else if (type.size() > 1) {
             compSel.setQueryParam("type", type);
         }
         if (ptype.size() == 1) {
             selector.setPtype(ptype.get(0));
-        } else {
+        } else if (ptype.size() > 1) {
             selector.setQueryParam("ptype", ptype);
         }
 		selector.setArea(area);

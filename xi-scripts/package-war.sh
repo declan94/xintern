@@ -13,7 +13,7 @@ if [[ -d xi-scripts ]]; then
 fi
 
 # SERVER=yegames.cn:8080
-SERVER=xiangshixi.cc
+SERVER=www.xiangshixi.com
 
 echo "[package war]"
 cd ../xi-server
