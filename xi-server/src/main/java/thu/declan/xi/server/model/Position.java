@@ -54,6 +54,16 @@ public class Position extends QueryModel {
         this.title = title;
     }
 
+    private String ptype;
+
+    public String getPtype() {
+        return ptype;
+    }
+
+    public void setPtype(String ptype) {
+        this.ptype = ptype;
+    }
+
     private String area;
 
     public String getArea() {

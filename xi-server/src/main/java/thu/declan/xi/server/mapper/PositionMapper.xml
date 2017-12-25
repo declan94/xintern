@@ -6,6 +6,7 @@
         <result property="id" column="p_id" />
         <result property="companyId" column="p_companyId" />
         <result property="title" column="p_title" />
+        <result property="ptype" column="p_ptype" />
         <result property="area" column="p_area" />
         <result property="addr" column="p_addr" />
         <result property="startDate" column="p_startDate" />
@@ -47,11 +48,11 @@
     </resultMap>
 	
     <sql id="insertBaseColumns" >
-        p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_active
+        p_companyId, p_title, p_ptype, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_active
     </sql>
     
     <sql id="selectBaseColumns" >
-        p_id, p_companyId, p_title, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime, p_active
+        p_id, p_companyId, p_title, p_ptype, p_area, p_addr, p_startDate, p_endDate, p_startTime, p_endTime, p_salary, p_stuSalary, p_unit, p_minDays, p_continuous, p_count, p_retention, p_intro, p_reqGender, p_reqEdu, p_reqGrade, p_reqMajor, p_reqLang, p_reqLangLevel, p_createTime, p_active
     </sql>
 	
     <sql id="selectExtColumns">
@@ -65,7 +66,7 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
         insert into xi_position (<include refid="insertBaseColumns" />) 
-        values (#{companyId}, #{title}, #{area}, #{addr}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{salary}, #{stuSalary}, #{unit}, #{minDays}, #{continuous}, #{count}, #{retention}, #{intro}, #{reqGender}, #{reqEdu}, #{reqGrade}, #{reqMajor}, #{reqLang}, #{reqLangLevel}, #{active})
+        values (#{companyId}, #{title}, #{ptype}, #{area}, #{addr}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{salary}, #{stuSalary}, #{unit}, #{minDays}, #{continuous}, #{count}, #{retention}, #{intro}, #{reqGender}, #{reqEdu}, #{reqGrade}, #{reqMajor}, #{reqLang}, #{reqLangLevel}, #{active})
     </insert>
     
     <insert id="collect">
@@ -86,6 +87,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="companyId != null"> p_companyId = #{companyId}, </if>
             <if test="title != null"> p_title = #{title}, </if>
+            <if test="ptype != null"> p_ptype = #{ptype}, </if>
             <if test="area != null"> p_area = #{area}, </if>
             <if test="addr != null"> p_addr = #{addr}, </if>
             <if test="startDate != null"> p_startDate = #{startDate}, </if>
@@ -134,6 +136,7 @@
 			<if test="companyId != null"> p_companyId = #{companyId} and </if>
 			<if test="active != null"> p_active = #{active} and </if>
             <if test="area != null"> p_area = #{area} and </if>
+            <if test="ptype != null"> p_ptype = #{ptype} and </if>
 			<if test="queryParams.searchKey != null">
 				(p_title LIKE concat('%', #{queryParams.searchKey}, '%')
 				or c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
