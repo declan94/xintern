@@ -51,16 +51,16 @@ public class PositionResource extends BaseResource {
 
 	@Autowired
 	private StudentService studentService;
-			
+
 	@Autowired
 	private PositionService positionService;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private ResumeService resumeService;
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ public class PositionResource extends BaseResource {
 		}
 		try {
 			positionService.add(position);
-            addPoint(PType.POSITION, position.getId());
+			addPoint(PType.POSITION, position.getId());
 		} catch (ServiceException ex) {
 			handleServiceException(ex);
 		}
@@ -136,21 +136,27 @@ public class PositionResource extends BaseResource {
 		selector.setActive(active);
 		Company compSel = new Company();
 		compSel.setVerified(verified);
-        if (industry.size() == 1) {
-            compSel.setIndustry(industry.get(0));
-        } else if (industry.size() > 1){
-            compSel.setQueryParam("industry", industry);
-        }
-		if (type.size() == 1) {
-            compSel.setType(type.get(0));
-        } else if (type.size() > 1) {
-            compSel.setQueryParam("type", type);
-        }
-        if (ptype.size() == 1) {
-            selector.setPtype(ptype.get(0));
-        } else if (ptype.size() > 1) {
-            selector.setQueryParam("ptype", ptype);
-        }
+		if (industry != null) {
+			if (industry.size() == 1) {
+				compSel.setIndustry(industry.get(0));
+			} else if (industry.size() > 1) {
+				compSel.setQueryParam("industry", industry);
+			}
+		}
+		if (type != null) {
+			if (type.size() == 1) {
+				compSel.setType(type.get(0));
+			} else if (type.size() > 1) {
+				compSel.setQueryParam("type", type);
+			}
+		}
+		if (ptype != null) {
+			if (ptype.size() == 1) {
+				selector.setPtype(ptype.get(0));
+			} else if (ptype.size() > 1) {
+				selector.setQueryParam("ptype", ptype);
+			}
+		}
 		selector.setArea(area);
 		selector.setCompany(compSel);
 		if (keyword != null) {
@@ -173,7 +179,7 @@ public class PositionResource extends BaseResource {
 		LOGGER.debug("==================== leave PositionResource getPositions ====================");
 		return new ListResponse(positions, pagination);
 	}
-	
+
 	@GET
 	@Path("/subscription")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -190,7 +196,7 @@ public class PositionResource extends BaseResource {
 		Boolean verified = null;
 		List<String> industry = null;
 		List<String> type = null;
-        List<String> ptype = null;
+		List<String> ptype = null;
 		String area = null;
 		Map<String, String> sub = null;
 		if (stu != null) {
@@ -198,17 +204,17 @@ public class PositionResource extends BaseResource {
 		}
 		if (sub != null) {
 			String industryStr = sub.get("industry");
-            if (industryStr != null) {
-                industry = Arrays.asList(industryStr.split("&"));
-            }
-            String typeStr = sub.get("type");
-            if (typeStr != null) {
-                type = Arrays.asList(typeStr.split("&"));
-            }
-            String ptypeStr = sub.get("ptype");
-            if (typeStr != null) {
-                ptype = Arrays.asList(ptypeStr.split("&"));
-            }
+			if (industryStr != null) {
+				industry = Arrays.asList(industryStr.split("&"));
+			}
+			String typeStr = sub.get("type");
+			if (typeStr != null) {
+				type = Arrays.asList(typeStr.split("&"));
+			}
+			String ptypeStr = sub.get("ptype");
+			if (typeStr != null) {
+				ptype = Arrays.asList(ptypeStr.split("&"));
+			}
 			area = sub.get("area");
 		}
 		LOGGER.debug("==================== leave PositionResource getSubscribedPositions ====================");
@@ -239,99 +245,99 @@ public class PositionResource extends BaseResource {
 		LOGGER.debug("==================== leave PositionResource getPosition ====================");
 		return position;
 	}
-	
+
 	@GET
 	@Path("/{positionId}/resumes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListResponse<Resume> getPositionResumes(@PathParam("positionId") int positionId,
-			@QueryParam("state") List<RState>states,
+			@QueryParam("state") List<RState> states,
 			@QueryParam("pageIndex") Integer pageIndex,
-            @QueryParam("pageSize") Integer pageSize) throws ApiException {
-        LOGGER.debug("==================== enter PositionResource getResumes ====================");
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+		LOGGER.debug("==================== enter PositionResource getResumes ====================");
 		LOGGER.debug(states.toString());
-        Resume selector = new Resume();
+		Resume selector = new Resume();
 		if (!states.isEmpty()) {
 			selector.setQueryStates(states);
 		}
 		selector.setPositionId(positionId);
-        List<Resume> resumes = null;
+		List<Resume> resumes = null;
 		Pagination pagination = new Pagination(pageSize, pageIndex);
-        try {
-            resumes = resumeService.getList(selector, pagination);
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave PositionResource getResumes ====================");
-        return new ListResponse(resumes, pagination);
-    }
+		try {
+			resumes = resumeService.getList(selector, pagination);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave PositionResource getResumes ====================");
+		return new ListResponse(resumes, pagination);
+	}
 
 	@POST
 	@Path("/{positionId}/collect")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_STUDENT})
 	public Position collectPosition(@PathParam("positionId") int positionId) throws ApiException {
-        LOGGER.debug("==================== enter PositionResource collectPosition ====================");
-        try {
+		LOGGER.debug("==================== enter PositionResource collectPosition ====================");
+		try {
 			Position pos = positionService.get(positionId);
 			positionService.collect(currentEntityId(), positionId);
 			pos.setCollected(true);
 			return pos;
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
-                throw new ApiException(403, devMsg, "已经收藏！");
-            }
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave PositionResource collectPosition ====================");
-        return null;
-    }
-	
+				throw new ApiException(403, devMsg, "已经收藏！");
+			}
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave PositionResource collectPosition ====================");
+		return null;
+	}
+
 	@DELETE
 	@Path("/{positionId}/collect")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_STUDENT})
 	public Position uncollectPosition(@PathParam("positionId") int positionId) throws ApiException {
-        LOGGER.debug("==================== enter PositionResource uncollectPosition ====================");
-        try {
+		LOGGER.debug("==================== enter PositionResource uncollectPosition ====================");
+		try {
 			Position pos = positionService.get(positionId);
 			positionService.uncollect(currentEntityId(), positionId);
 			pos.setCollected(false);
 			return pos;
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
 			LOGGER.debug(devMsg);
 			if (ex.getCode() == ServiceException.CODE_UK_CONSTRAINT) {
-                throw new ApiException(403, devMsg, "未收藏！");
-            }
-            handleServiceException(ex);
-        }
-        LOGGER.debug("==================== leave PositionResource uncollectPosition ====================");
-        return null;
-    }
-	
+				throw new ApiException(403, devMsg, "未收藏！");
+			}
+			handleServiceException(ex);
+		}
+		LOGGER.debug("==================== leave PositionResource uncollectPosition ====================");
+		return null;
+	}
+
 	@GET
 	@Path("/collect")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({Constant.ROLE_STUDENT})
 	public ListResponse<Position> collectedPositions(
 			@QueryParam("pageIndex") Integer pageIndex,
-            @QueryParam("pageSize") Integer pageSize) throws ApiException {
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
 		LOGGER.debug("==================== enter PositionResource collectedPositions ====================");
-        List<Position> positions = null;
+		List<Position> positions = null;
 		Pagination pagination = new Pagination(pageSize, pageIndex);
-        try {
-            positions = positionService.getCollectedList(currentEntityId(), pagination);
-        } catch (ServiceException ex) {
-            String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
-            LOGGER.debug(devMsg);
-            handleServiceException(ex);
-        }
+		try {
+			positions = positionService.getCollectedList(currentEntityId(), pagination);
+		} catch (ServiceException ex) {
+			String devMsg = "Service Exception [" + ex.getCode() + "] " + ex.getReason();
+			LOGGER.debug(devMsg);
+			handleServiceException(ex);
+		}
 		LOGGER.debug("==================== leave PositionResource collectedPositions ====================");
 		return new ListResponse(positions, pagination);
 	}
-	
+
 }
