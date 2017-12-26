@@ -74,6 +74,16 @@ public class Salary extends QueryModel {
 		this.stuId = stuId;
 	}
 
+	private String stuAccount;
+
+	public String getStuAccount() {
+		return stuAccount;
+	}
+
+	public void setStuAccount(String stuAccount) {
+		this.stuAccount = stuAccount;
+	}
+
 	private String month;
 
 	public String getMonth() {

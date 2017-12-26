@@ -340,6 +340,25 @@ public class StudentResource extends BaseResource {
 		LOGGER.debug("==================== leave StudentResource getResumes ====================");
 		return new ListResponse(resumes, pagination);
 	}
+	
+	@GET
+    @Path("/{studentId}/resumes/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public HashMap<String, Integer> getStudentResumesCount(@PathParam("studentId") int studentId) throws ApiException {
+        LOGGER.debug("==================== enter StudentResource getStudentResumesCount ====================");
+        if (studentId == 0) {
+            studentId = currentEntityId();
+        }
+		HashMap<String, Integer> cnts = new HashMap<>();
+        Resume selector = new Resume();
+		selector.setStuId(studentId);
+        for (Resume.RState st : Resume.RState.values()) {
+			selector.setState(st);
+			cnts.put(st.toString(), resumeService.getCount(selector));
+		}
+        LOGGER.debug("==================== leave StudentResource getStudentResumesCount ====================");
+        return cnts;
+    }
 
 	@GET
 	@Path("/{studentId}/salaries")

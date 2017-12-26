@@ -1,6 +1,11 @@
 package thu.declan.xi.server.resource;
 
+import com.sargeraswang.util.ExcelUtil.ExcelUtil;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.security.RolesAllowed;
@@ -11,7 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +27,7 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
+import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Salary;
@@ -46,13 +55,13 @@ public class SalaryResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListResponse<Salary> getSalaryList(
-			@QueryParam("pageIndex") Integer pageIndex,
-			@QueryParam("pageSize") Integer pageSize,
 			@QueryParam("month") String month,
 			@QueryParam("stuName") String stuName,
 			@QueryParam("compName") String compName,
 			@QueryParam("stuAccount") String stuAccount,
-			@QueryParam("state") List<Salary.SState> states) throws ApiException {
+			@QueryParam("state") List<Salary.SState> states,
+			@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
 		LOGGER.debug("==================== enter SalaryResource getSalaryes ====================");
 		Salary selector = new Salary();
 		selector.setMonth(month);
@@ -73,6 +82,62 @@ public class SalaryResource extends BaseResource {
 		}
 		LOGGER.debug("==================== leave SalaryResource getSalaryes ====================");
 		return new ListResponse(salaries, pagination);
+	}
+	
+	@GET
+	@Path("/export")
+	@Produces("application/xls")
+	@RolesAllowed({Constant.ROLE_ADMIN})
+	public Response exportSalaries(
+			@QueryParam("month") String month,
+			@QueryParam("stuName") String stuName,
+			@QueryParam("compName") String compName,
+			@QueryParam("stuAccount") String stuAccount,
+			@QueryParam("state") List<Salary.SState> states) throws ApiException {
+		LOGGER.debug("==================== enter SalaryResource exportSalaries ====================");
+		ListResponse<Salary> res = getSalaryList(month, stuName, compName, stuAccount, states, null, null);
+		final List<Map<String, Object>> data = new LinkedList<>();
+		for (Salary salary : res.getItems()) {
+			Map<String, Object> d = new HashMap<>();
+			d.put("id", salary.getId());
+			d.put("stuName", salary.getResume().getStudent().getName());
+			d.put("stuAccount", salary.getStuAccount());
+			d.put("compName", salary.getResume().getPosition().getCompany().getName());
+			d.put("position", salary.getResume().getPosition().getTitle());
+			d.put("month", salary.getMonth());
+			d.put("resumeState", salary.getResume().getState());
+			d.put("workDays", salary.getWorkDays());
+			d.put("value", salary.getValue());
+			d.put("stuValue", salary.getStuValue());
+			d.put("stuComment", salary.getStuComment());
+			d.put("state", salary.getState());
+			data.add(d);
+		}
+		final Map<String, String> titles = new LinkedHashMap<>();
+		titles.put("id", "ID");
+		titles.put("stuName", "学生姓名");
+		titles.put("stuAccount", "学生账号");
+		titles.put("compName", "实习公司");
+		titles.put("position", "实习职位");
+		titles.put("month", "月份");
+		titles.put("resumeState", "实习状态");
+		titles.put("workDays", "当月实习天数");
+		titles.put("value", "企业应付");
+		titles.put("stuValue", "学生到手工资");
+		titles.put("stuComment", "学生备注");
+		titles.put("state", "发放状态");
+		StreamingOutput stream = new StreamingOutput() {
+			@Override
+			public void write(OutputStream output) throws IOException, WebApplicationException {
+				try {
+					ExcelUtil.exportExcel(titles, data, output);
+					LOGGER.debug("==================== leave SalaryResource exportSalaries ====================");
+				} catch (Exception e) {
+					throw new WebApplicationException(e);
+				}
+			}
+		};
+		return Response.ok(stream).header("content-disposition", "attachment; filename = salaries_export.xls").build();
 	}
 
 	@GET
