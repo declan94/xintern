@@ -10,7 +10,7 @@ import thu.declan.xi.server.util.CustomJsonDateSerializer;
  *
  * @author declan
  */
-public class Salary {
+public class Salary extends QueryModel {
 	
 	public enum SState {
 		NEW_GENERATED,

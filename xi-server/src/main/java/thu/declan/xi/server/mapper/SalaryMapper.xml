@@ -25,6 +25,17 @@
     <sql id="selectBaseColumns" >
 		xi_salary.*
     </sql>
+	
+	<sql id="selectExtColumns" >
+		xi_salary.*, s_name, c_name, stu_account.a_phone
+    </sql>
+	
+	<sql id="joinedTable">
+		xi_salary
+		join xi_student on xi_student.s_id = xi_salary.s_stuId
+		join xi_company on xi_company.c_id = xi_salary.s_companyId
+		join xi_account stu_account on stu_account.a_id = xi_student.s_accountId
+	</sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Salary">
         insert into xi_salary (<include refid="insertBaseColumns" />) 
@@ -66,19 +77,29 @@
 				</foreach>
 				and 
 			</if>
+			<if test="queryParams.compName != null">
+				c_name = #{queryParams.compName} and
+			</if>
+			<if test="queryParams.stuName != null">
+				s_name = #{queryParams.stuName} and
+			</if>
+			<if test="queryParams.stuAccount != null">
+				stu_account.a_phone = #{queryParams.stuAccount} and
+			</if>
+				
         </trim>
 	</sql>
     	
     <select id="selectList" parameterType="Salary" resultMap="salaryResult">
-        select <include refid="selectBaseColumns" />
-        from xi_salary
+        select <include refid="selectExtColumns" />
+        from <include refid="joinedTable" />
         <include refid="whereList" />
 		order by s_createTime desc
     </select>
     
     <select id="selectCount" parameterType="Salary" resultType="int">
         select count(*)
-        from xi_salary
+        from <include refid="joinedTable" />
         <include refid="whereList" />
     </select>
 	

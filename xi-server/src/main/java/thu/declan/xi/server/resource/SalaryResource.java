@@ -32,7 +32,7 @@ import thu.declan.xi.server.service.WechatService;
  * @author declan
  */
 @Path("salaries")
-@RolesAllowed({Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
+@RolesAllowed({Constant.ROLE_ADMIN, Constant.ROLE_STUDENT, Constant.ROLE_COMPANY})
 public class SalaryResource extends BaseResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SalaryResource.class);
@@ -47,9 +47,21 @@ public class SalaryResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListResponse<Salary> getSalaryList(
 			@QueryParam("pageIndex") Integer pageIndex,
-			@QueryParam("pageSize") Integer pageSize) throws ApiException {
+			@QueryParam("pageSize") Integer pageSize,
+			@QueryParam("month") String month,
+			@QueryParam("stuName") String stuName,
+			@QueryParam("compName") String compName,
+			@QueryParam("stuAccount") String stuAccount,
+			@QueryParam("state") List<Salary.SState> states) throws ApiException {
 		LOGGER.debug("==================== enter SalaryResource getSalaryes ====================");
 		Salary selector = new Salary();
+		selector.setMonth(month);
+		selector.setQueryParam("stuName", stuName);
+		selector.setQueryParam("stuAccount", stuAccount);
+		selector.setQueryParam("compName", compName);
+		if (states != null && states.size() > 0) {
+			selector.setQueryStates(states);
+		}
 		Pagination pagination = new Pagination(pageSize, pageIndex);
 		List<Salary> salaries = null;
 		try {
