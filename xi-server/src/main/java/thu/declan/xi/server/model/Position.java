@@ -114,7 +114,7 @@ public class Position extends QueryModel {
         this.endDate = endDate;
     }
 
-	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
+//	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time startTime;
 
 	@JsonSerialize(using = CustomJsonTimeSerializer.class)
@@ -127,7 +127,7 @@ public class Position extends QueryModel {
         this.startTime = startTime;
     }
 
-	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
+//	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time endTime;
 
 	@JsonSerialize(using = CustomJsonTimeSerializer.class)

@@ -288,6 +288,9 @@ public class StudentResource extends BaseResource {
 		try {
 			if (studentId == 0) {
 				studentId = currentEntityId();
+				if (studentId == null) {
+					studentId = 0;
+				}
 				acc = accountService.get(currentAccountId());
 			}
 			student = studentService.get(studentId);

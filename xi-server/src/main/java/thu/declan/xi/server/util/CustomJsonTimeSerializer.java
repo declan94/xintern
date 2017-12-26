@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -17,7 +18,7 @@ public class CustomJsonTimeSerializer extends JsonSerializer<Time> {
 	@Override
 	public void serialize(Time value, JsonGenerator jgen, SerializerProvider serializers) throws IOException, JsonProcessingException {
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-		String formattedDate = formatter.format(value);
+		String formattedDate = formatter.format(new Date(value.getTime()));
 		jgen.writeString(formattedDate);
 	}
 	
