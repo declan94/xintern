@@ -3,10 +3,12 @@ package thu.declan.xi.server.model;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.sql.Time;
 import java.util.Date;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import thu.declan.xi.server.model.Student.Education;
 import thu.declan.xi.server.model.Student.Gender;
 import thu.declan.xi.server.model.Student.LangLevel;
 import thu.declan.xi.server.util.CustomJsonDateSerializer;
+import thu.declan.xi.server.util.SqlTimeAdapter;
 
 /**
  *
@@ -106,6 +108,7 @@ public class Position extends QueryModel {
         this.endDate = endDate;
     }
 
+	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time startTime;
 
     public Time getStartTime() {
@@ -116,6 +119,7 @@ public class Position extends QueryModel {
         this.startTime = startTime;
     }
 
+	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time endTime;
 
     public Time getEndTime() {
