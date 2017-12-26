@@ -1,5 +1,6 @@
 package thu.declan.xi.server.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.sql.Time;
 import java.util.Date;
@@ -7,11 +8,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import thu.declan.xi.server.model.Student.Education;
 import thu.declan.xi.server.model.Student.Gender;
 import thu.declan.xi.server.model.Student.LangLevel;
+import thu.declan.xi.server.util.CustomJsonDateDeserializer;
 import thu.declan.xi.server.util.CustomJsonDateSerializer;
+import thu.declan.xi.server.util.CustomJsonTimeDeserializer;
+import thu.declan.xi.server.util.CustomJsonTimeSerializer;
 import thu.declan.xi.server.util.SqlTimeAdapter;
 
 /**
- *
+ *	
  * @author declan
  */
 public class Position extends QueryModel {
@@ -93,6 +97,7 @@ public class Position extends QueryModel {
         return startDate;
     }
 
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -104,6 +109,7 @@ public class Position extends QueryModel {
         return endDate;
     }
 
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -111,10 +117,12 @@ public class Position extends QueryModel {
 	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time startTime;
 
+	@JsonSerialize(using = CustomJsonTimeSerializer.class)
     public Time getStartTime() {
         return startTime;
     }
 
+	@JsonDeserialize(using = CustomJsonTimeDeserializer.class)
     public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
@@ -122,10 +130,12 @@ public class Position extends QueryModel {
 	@XmlJavaTypeAdapter(SqlTimeAdapter.class)
     private Time endTime;
 
+	@JsonSerialize(using = CustomJsonTimeSerializer.class)
     public Time getEndTime() {
         return endTime;
     }
 
+	@JsonDeserialize(using = CustomJsonTimeDeserializer.class)
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
