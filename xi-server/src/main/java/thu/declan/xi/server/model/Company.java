@@ -250,6 +250,16 @@ public class Company extends QueryModel {
 	public void setFrozen(Boolean frozen) {
 		this.frozen = frozen;
 	}
+
+	private Integer priority;
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
 	
 	private Integer activePosCnt;
 

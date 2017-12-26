@@ -25,6 +25,7 @@
         <result property="verified" column="c_verified" />
         <result property="createTime" column="c_createTime" />
 		<result property="frozen" column="c_frozen" />
+		<result property="priority" column="c_priority" />
 		<association property="avgRate" javaType="AvgRate">
 			<result property="score1" column="c_score1" />
 			<result property="score2" column="c_score2" />
@@ -70,6 +71,7 @@
             <if test="avatar != null"> c_avatar = #{avatar}, </if>
             <if test="verified != null"> c_verified = #{verified}, </if>
 			<if test="frozen != null"> c_frozen = #{frozen}, </if>
+			<if test="priority != null"> c_priority = #{priority}, </if>
 			<if test="avgRate != null"> 
 				<if test="avgRate.score1 != null"> c_score1 = #{avgRate.score1}, </if>
 				<if test="avgRate.score2 != null"> c_score2 = #{avgRate.score2}, </if>
@@ -106,6 +108,7 @@
 				(c_name LIKE concat('%', #{queryParams.searchKey}, '%')) and
 			</if>
 		</trim>
+		order by c_priority DESC
 	</select>
     
 	<select id="selectCount" parameterType="Company" resultType="int">
