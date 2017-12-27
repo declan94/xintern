@@ -7,7 +7,7 @@
         <result property="resumeId" column="s_resumeId" />
 		<result property="companyId" column="s_companyId" />
 		<result property="stuId" column="s_stuId" />
-		<result property="stuAccount" column="stu_account.a_phone" />
+		<result property="stuAccount" column="a_phone" />
 		<result property="month" column="s_month" />
         <result property="workDays" column="s_workDays" />
         <result property="value" column="s_value" />
