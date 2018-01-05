@@ -27,7 +27,6 @@ import thu.declan.xi.server.Constant;
 import thu.declan.xi.server.exception.ApiException;
 import thu.declan.xi.server.exception.ServiceException;
 import thu.declan.xi.server.model.Account;
-import thu.declan.xi.server.model.Company;
 import thu.declan.xi.server.model.ListResponse;
 import thu.declan.xi.server.model.Notification;
 import thu.declan.xi.server.model.Salary;
@@ -93,9 +92,11 @@ public class SalaryResource extends BaseResource {
 			@QueryParam("stuName") String stuName,
 			@QueryParam("compName") String compName,
 			@QueryParam("stuAccount") String stuAccount,
-			@QueryParam("state") List<Salary.SState> states) throws ApiException {
+			@QueryParam("state") List<Salary.SState> states,
+			@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize) throws ApiException {
 		LOGGER.debug("==================== enter SalaryResource exportSalaries ====================");
-		ListResponse<Salary> res = getSalaryList(month, stuName, compName, stuAccount, states, null, null);
+		ListResponse<Salary> res = getSalaryList(month, stuName, compName, stuAccount, states, pageIndex, pageSize);
 		final List<Map<String, Object>> data = new LinkedList<>();
 		for (Salary salary : res.getItems()) {
 			Map<String, Object> d = new HashMap<>();
@@ -137,7 +138,8 @@ public class SalaryResource extends BaseResource {
 				}
 			}
 		};
-		return Response.ok(stream).header("content-disposition", "attachment; filename = salaries_export.xls").build();
+		String filename = pageIndex == null ? "salaries_export_all.xls" : String.format("salaries_export_page%d.xls", pageIndex);
+		return Response.ok(stream).header("content-disposition", "attachment; filename = " + filename).build();
 	}
 
 	@GET

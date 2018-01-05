@@ -177,9 +177,12 @@ public class AccountResource extends BaseResource {
             accountId = currentAccountId();
         }
         Account updater = new Account();
-		updater.setId(accountId);
 		updater.setUnionId(unionid);
 		updater.setOpenId(openid);
+		if (accountService.getCount(updater) > 0) {
+			throw new ApiException(403, "Duplicated wechat", "该账号已绑定其他微信号，请在PC端登录账号解除已绑定微信号后重新绑定，谢谢！");
+		}
+		updater.setId(accountId);
 		Account acc = null;
         try {
 			accountService.update(updater);

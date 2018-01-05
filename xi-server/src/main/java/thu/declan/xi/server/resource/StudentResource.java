@@ -136,17 +136,21 @@ public class StudentResource extends BaseResource {
 	@Produces("application/xls")
 	@RolesAllowed({Constant.ROLE_ADMIN})
 	public Response exportStudents(
+			@QueryParam("pageIndex") Integer pageIndex,
+			@QueryParam("pageSize") Integer pageSize,
 			@QueryParam("school") String school,
 			@QueryParam("name") String name,
 			@QueryParam("phone") String phone,
 			@QueryParam("frozen") Boolean frozen) throws ApiException {
 		LOGGER.debug("==================== enter StudentResource exportStudents ====================");
-		ListResponse<Student> res = getStudents(null, null, school, name, phone, frozen);
+		SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		ListResponse<Student> res = getStudents(pageIndex, pageSize, school, name, phone, frozen);
 		final List<Map<String, Object>> data = new LinkedList<>();
 		for (Student stu : res.getItems()) {
 			Map<String, Object> d = new HashMap<>();
 			d.put("id", stu.getId());
 			d.put("name", stu.getName());
+			d.put("gender", stu.getGender());
 			d.put("phone", stu.getPhone());
 			d.put("email", stu.getEmail());
 			d.put("area", stu.getArea());
@@ -159,11 +163,13 @@ public class StudentResource extends BaseResource {
 			d.put("workExp", stu.getWorkExp());
 			d.put("socialExp", stu.getSocialExp());
 			d.put("selfVal", stu.getSelfEval());
+			d.put("createTime", stu.getCreateTime() == null ? "" : format.format(stu.getCreateTime()));
 			data.add(d);
 		}
 		final Map<String, String> titles = new LinkedHashMap<>();
 		titles.put("id", "ID");
 		titles.put("name", "姓名");
+		titles.put("gender", "性别");
 		titles.put("phone", "电话");
 		titles.put("email", "邮箱");
 		titles.put("area", "地区");
@@ -176,6 +182,7 @@ public class StudentResource extends BaseResource {
 		titles.put("workExp", "工作经验");
 		titles.put("socialExp", "社会经验");
 		titles.put("selfVal", "自我评价");
+		titles.put("createTime", "注册时间");
 		StreamingOutput stream = new StreamingOutput() {
 			@Override
 			public void write(OutputStream output) throws IOException, WebApplicationException {
@@ -187,7 +194,8 @@ public class StudentResource extends BaseResource {
 				}
 			}
 		};
-		return Response.ok(stream).header("content-disposition", "attachment; filename = students_export.xls").build();
+		String filename = pageIndex == null ? "students_export_all.xls" : String.format("students_export_page%d.xls", pageIndex);
+		return Response.ok(stream).header("content-disposition", "attachment; filename = " + filename).build();
 	}
 
 	@GET

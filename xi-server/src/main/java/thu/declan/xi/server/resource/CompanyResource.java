@@ -158,6 +158,8 @@ public class CompanyResource extends BaseResource {
 	@Produces("application/xls")
 	@RolesAllowed({Constant.ROLE_ADMIN})
 	public Response exportCompanies(
+			@QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize,
 			@QueryParam("verified") Boolean verified,
 			@QueryParam("frozen") Boolean frozen,
             @QueryParam("industry") String industry,
@@ -165,7 +167,7 @@ public class CompanyResource extends BaseResource {
             @QueryParam("scale") String scale,
 			@QueryParam("keyword") String keyword) throws ApiException {
 		LOGGER.debug("==================== enter CompanyResource exportCompanies ====================");
-		ListResponse<Company> res = getCompanies(null, null, verified, frozen, industry, type, scale, keyword, null);
+		ListResponse<Company> res = getCompanies(pageIndex, pageSize, verified, frozen, industry, type, scale, keyword, null);
 		final List<Map<String, Object>> data = new LinkedList<>();
 		for (Company comp : res.getItems()) {
 			Map<String, Object> d = new HashMap<>();
@@ -183,6 +185,8 @@ public class CompanyResource extends BaseResource {
 			d.put("code", comp.getCode());
 			d.put("link", comp.getLink());
 			d.put("intro", comp.getIntro());
+			d.put("verified", comp.isVerified());
+			d.put("frozen", comp.isFrozen());
 			data.add(d);
 		}
 		final Map<String, String> titles = new LinkedHashMap<>();
@@ -200,6 +204,8 @@ public class CompanyResource extends BaseResource {
 		titles.put("code", "组织机构代码");
 		titles.put("link", "公司链接");
 		titles.put("intro", "公司简介");
+		titles.put("verified", "认证状态");
+		titles.put("frozen", "冻结状态");
 		StreamingOutput stream = new StreamingOutput() {
 			@Override
 			public void write(OutputStream output) throws IOException, WebApplicationException {
@@ -211,7 +217,8 @@ public class CompanyResource extends BaseResource {
 				}
 			}
 		};
-		return Response.ok(stream).header("content-disposition", "attachment; filename = cmpanies_export.xls").build();
+		String filename = pageIndex == null ? "companies_export_all.xls" : String.format("companies_export_page%d.xls", pageIndex);
+		return Response.ok(stream).header("content-disposition", "attachment; filename = " + filename).build();
 	}
 
     @GET

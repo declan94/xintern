@@ -33,7 +33,7 @@
     </sql>
     
     <sql id="selectBaseColumns" >
-        s_id, s_accountId, s_name, s_idNo, s_phone, s_gender, s_education, s_major, s_area, s_email, s_school, s_language, s_langLevel, s_grade, s_stuCard, s_certs, s_selfEval, s_socialExp, s_workExp, s_avatar, s_subscription, s_frozen
+        s_id, s_accountId, s_name, s_idNo, s_phone, s_gender, s_education, s_major, s_area, s_email, s_school, s_language, s_langLevel, s_grade, s_stuCard, s_certs, s_selfEval, s_socialExp, s_workExp, s_avatar, s_subscription, s_frozen, s_createTime
     </sql>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Student">
