@@ -31,6 +31,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="title != null"> n_title = #{title}, </if>
             <if test="content != null"> n_content = #{content}, </if>
+			<if test="authoer != null"> n_authoer = #{authoer}, </if>
             <if test="view != null"> n_view = #{view}, </if>
             <if test="star != null"> n_star = #{star}, </if>
             <if test="published != null"> n_published = #{published}, </if>
