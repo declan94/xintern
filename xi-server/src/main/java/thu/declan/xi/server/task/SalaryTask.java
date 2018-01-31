@@ -47,7 +47,7 @@ public class SalaryTask {
             LOGGER.info("Generate for resume " + r.getId());
             Salary s = new Salary();
             s.setCompanyId(r.getCompanyId());
-            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
             s.setMonth(format.format(ndaysBefore(1)));
             s.setResumeId(r.getId());
 			s.setStuId(r.getStuId());
@@ -68,8 +68,8 @@ public class SalaryTask {
         sel.setState(Resume.RState.WORKING);
         generateSalaries(sel);
         LOGGER.info("For last month ended resumes");
-        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        SimpleDateFormat format1 = new SimpleDateFormat("YYYY-MM-01 00:00:00");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-01 00:00:00");
         sel.setState(Resume.RState.ENDED);
         try {
             sel.setEndTime(format.parse(format1.format(lastDay)));
