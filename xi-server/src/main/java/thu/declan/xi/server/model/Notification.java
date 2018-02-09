@@ -23,6 +23,7 @@ public class Notification {
 	public final static String TPL_RESUME_JOIN2 = "恭喜，学生【%s】同意了 【%s】 职位的录用通知，请尽快联系入职吧。";
 	public final static String TPL_SALARY_CONFIRM = "您在【%s】工作的%s工资单已生成，请尽快确认。";
 	public final static String TPL_SALARY_GET = "您在【%s】工作的%s工资已到账，请登录查看账户余额。";
+	public final static String TPL_WITHDRAW_APPLY = "您已成功提交提现申请，请等待审核。";
 	public final static String TPL_WITHDRAW = "您的提现申请已通过，请查收。";
 	public final static String TPL_WITHDRAW_FAIL = "您的提现申请未通过，提现金额已退回账户余额。";
 	public final static String TPL_COMMENT = "实习结束啦，请及时对该公司进行评价。";
@@ -37,7 +38,7 @@ public class Notification {
     public final static String WX_TPL_ID_BIND = "uifypyPxvgSZii0k5sGLcU44xwyM6ZDgDHdv1HnJis0";
 	public final static String WX_TPL_ID_INTERVIEW = "iK71frKtJrHcQBUyK9eT1dhVrwLn0ydificjYlRVMkk";
 	public final static String WX_TPL_ID_RESUMERET = "7ALGPfxWH8keb-XexxIKAI-In0JDUMdGGGiYbwrlAxg";
-	public final static String WX_TPL_ID_WITHDRAW = "XcYl3o7b_4jotYJrC5Z0sO1F2l16f4BPzdQNUHHmSrw";
+	public final static String WX_TPL_ID_WITHDRAW = "K-a8HYsXq1qJmwA90Ov28B4ULWqcatlSkQMsrExRXTg";
 	public final static String WX_TPL_ID_WITHDRAW_SUC = "XcYl3o7b_4jotYJrC5Z0sO1F2l16f4BPzdQNUHHmSrw";
 	public final static String WX_TPL_ID_WITHDRAW_FAIL = "mosxDWmFetZxUmbhmGnCnsOxX393hr-mEepLH-Nr408";
 	public final static String WX_TPL_ID_SALARY = "9C8CEri8X_XF9ELVFGUUE--1tGXPzIHRpg6P-uKTlQw";

@@ -58,8 +58,8 @@ public class SalaryTask {
         }
     }
 	
-    // 每月1日0点
-	@Scheduled(cron = "0 0 0 1 * ? ")
+    // 每月1日1点
+	@Scheduled(cron = "0 1 0 1 * ? ")
 	public void generateSalaries() {
         LOGGER.info("******************************** Start Generate Salaries ********************************");
         LOGGER.info("For working resumes");

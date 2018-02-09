@@ -68,15 +68,16 @@ public class WithdrawResource extends BaseResource {
 			}
 			handleServiceException(ex);
 		}
+		Notification noti = addNoti(Notification.NType.WITHDRAW, withdraw.getId(), Notification.TPL_WITHDRAW);
 		Map<String, String> data = new HashMap<>();
-		data.put("first", "您好!您已成功申请了一笔提现");
-		data.put("keyword1", String.format("%.2f", withdraw.getValue()));
-		data.put("keyword2", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(new Date()));
-		data.put("remark", "请等待审核通过");
+		data.put("first", "提现金额约5-10个工作日发放至微信零钱，请等待到账通知");
+		data.put("keyword1", (new SimpleDateFormat("YYYY-MM-dd HH:mm")).format(new Date()));
+		data.put("keyword2", String.format("%.2f元", withdraw.getValue()));
+		data.put("remark", "如有疑问请查阅通过微信公众号与客服联系，感谢您的使用");
 		String openid = currentAccount().getOpenId();
 		if (openid != null) {
 			try {
-				wechatService.sendTemplateMessage(Notification.WX_TPL_ID_WITHDRAW, openid, (String) null, data);
+				wechatService.sendTemplateMessage(Notification.WX_TPL_ID_WITHDRAW, openid, noti, data);
 			} catch (ServiceException ex) {
 			}
 		}

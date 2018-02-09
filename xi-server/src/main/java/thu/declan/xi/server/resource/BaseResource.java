@@ -84,11 +84,11 @@ public class BaseResource {
         }
     }
 	
-	protected void addNoti(NType type, Integer refId, String tpl, Object ... args) {
+	protected Notification addNoti(NType type, Integer refId, String tpl, Object ... args) {
 		if (currentAccountId() == null || Role.ADMIN.equals(currentRole())) {
-            return;
+            return null;
         }
-		notiService.addNoti(currentAccountId(), type, refId, tpl, args);
+		return notiService.addNoti(currentAccountId(), type, refId, tpl, args);
 	}
 
 	protected void handleServiceException(ServiceException ex) throws ApiException {
